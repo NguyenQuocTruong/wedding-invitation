@@ -420,3 +420,62 @@ cảm giác thị giác; ảnh tham khảo không được sao chép thành tài
 
 12ui vẫn chưa có kết quả trực quan từ lần thử trước; mô tả này là định hướng
 bằng chữ, không phải bản render hoặc mẫu được trích từ Ngày Chung Đôi.
+
+## 14. Nguồn tham khảo bổ sung và thư viện mẫu được chỉ định
+
+### 14.1. Đường dẫn ưu tiên mới
+
+Người dùng chỉ định trực tiếp https://ngaychungdoi.com/mau-thiep.
+Đã thử GET đúng URL này: kết nối HTTPS bị từ chối tại proxy với thông báo
+“Tunnel connection failed: 403 Forbidden”. Đây là lỗi thiết lập tunnel trước
+khi nhận HTML; không phải bằng chứng website chặn bot hoặc từ chối người dùng.
+Đổi từ trang chủ sang /mau-thiep không thay đổi quyền truy cập hostname.
+
+Phiên công cụ hiện không cung cấp browser/search connector chuyên dụng.
+Đã dùng HTTP client để tìm nguồn, đọc HTML và README, tải preview và xem ảnh
+thật qua công cụ xem ảnh. Không tuyên bố đã duyệt thư viện Ngày Chung Đôi.
+
+### 14.2. Các nguồn thực sự tìm và đọc được
+
+Đã đọc HTML hai danh sách:
+https://github.com/topics/wedding-website và
+https://github.com/topics/wedding-invitation.
+Từ đó đọc README của bốn mẫu dưới đây và xem hai ảnh preview do tác giả công bố.
+Đây là nguồn tham khảo bố cục, không phải mã để đưa vào dự án.
+
+| Nguồn                                                                                | Đã xác minh                             | Nhận xét và ứng dụng                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------ | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Sakeenah](https://github.com/sakeenah-wedding/template)                             | README và ảnh public/preview.png        | Preview nền sáng, chữ serif lớn, điểm hồng/đỏ, nhiều khoảng trắng, các khối ngày giờ và quà mừng rõ. Gần brief nhẹ nhàng hơn mẫu tối; có thể học cách chia cấp chữ và gom thông tin. Hướng dự án sẽ dùng sage dịu hơn và ít hộp hơn. Không lấy họa tiết/ngôn ngữ tôn giáo, cá nhân hóa link, dashboard hay kiến trúc multi-tenant. |
+| [Undangan](https://github.com/dewanakl/undangan)                                     | README và ảnh assets/images/banner.webp | Preview ghép màn hình thiệp tối và dashboard, ảnh tròn, chữ script, thanh điều hướng dưới. Tham khảo khả năng đi nhanh đến section; nền tối, script dày và dashboard không phù hợp brief/nghiệp vụ dự án. Ảnh banner không chứng minh trải nghiệm chạy thực tế.                                                                    |
+| [Simple Wedding Invitation](https://github.com/daengdoang/simple-wedding-invitation) | README; chưa xem live/render            | Tác giả liệt kê Main Info, Countdown, Time/Place, Calendar, Map; font Rouge Script và Raleway. Tham khảo việc giữ các thông tin cần thiết gọn; chưa có căn cứ nhận xét màu hoặc chất lượng mobile. Không thay RSVP bằng gửi WhatsApp.                                                                                              |
+| [Wedding Website — Ram Patra](https://github.com/rampatra/wedding-website)           | README; chưa xem live/render            | Tác giả mô tả responsive, RSVP, calendar, maps. Có invite code, email alert và dịch vụ khác vượt phạm vi dự án: không áp dụng. Chỉ tham khảo thứ tự thông tin thực dụng; chưa đánh giá phong cách thị giác.                                                                                                                        |
+
+Ảnh đã xem:
+
+- https://raw.githubusercontent.com/sakeenah-wedding/template/main/public/preview.png
+- https://raw.githubusercontent.com/dewanakl/undangan/main/assets/images/banner.webp
+
+Ảnh chỉ tải tạm để quan sát, không thêm vào source hay dùng làm media cưới.
+Không gửi form, tạo tài khoản hoặc thử backend của các mẫu.
+
+### 14.3. Nguồn khác còn bị chặn
+
+Đã thử tìm kiếm Google và đọc các trang dưới đây; tất cả bị cùng lỗi tunnel 403,
+chưa nhận HTML. Đây là danh sách để khảo sát tiếp, không phải mẫu đã được đánh giá:
+
+- https://withjoy.com/wedding-website/
+- https://blissandbone.com/wedding-websites
+- https://www.minted.com/wedding-websites
+- https://www.paperlesspost.com/cards/group/wedding-invitations
+- https://www.wix.com/website/templates/html/events/weddings
+
+Đã bổ sung hostname của các nguồn này và Google vào draft mạng, giữ mọi domain
+đã lưu. Draft cần được review/lưu và publish môi trường trước khi kiểm tra runtime
+lại; không chỉnh proxy, TLS hoặc dùng dịch vụ trung gian để vượt chặn.
+
+### 14.4. Kết luận tham khảo hiện tại
+
+Giữ hướng Lời Mời Dịu Dàng, Pearl + Sage. Preview Sakeenah củng cố lựa chọn nền sáng,
+thứ bậc serif/sans và khoảng trắng; preview Undangan giúp loại hướng nền tối,
+ảnh tròn và script dày khỏi phương án ưu tiên. Chưa chốt mẫu cụ thể từ Ngày Chung
+Đôi cho đến khi mở được /mau-thiep. Không coi preview marketing là kiểm thử Safari.
