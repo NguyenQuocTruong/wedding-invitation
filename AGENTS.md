@@ -12,7 +12,7 @@ If implementation and documentation disagree, stop and report the conflict. Do n
 
 ## Current stage
 
-The repository is documentation-only. Do not scaffold or implement application code unless the user explicitly starts an implementation phase.
+Phase 1 is complete. Template 01 has an interactive, mock-only preview at /design-preview. Keep changes within the user-authorized phase; real Google Sheets integration and production deployment require separate authorization.
 
 ## Non-negotiable product decisions
 
@@ -42,7 +42,7 @@ The repository is documentation-only. Do not scaffold or implement application c
 
 ## Delivery workflow
 
-- Use a feature branch and pull request for implementation work.
+- Work directly on main and push verified changes there; the project owner explicitly authorizes direct integration and does not require feature branches or pull requests.
 - Keep `main` production-ready and protected by review/CI when repository settings permit.
 - Run lint, typecheck, tests, and build before claiming a phase is complete.
 - List changed files, verification evidence, decisions, and blockers in every handoff.

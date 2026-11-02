@@ -285,7 +285,7 @@ Secrets and environment-specific IDs belong in environment variables; public inv
 ### GitHub and Codex
 
 - GitHub is the single source of truth.
-- Codex Cloud works on `feature/*` branches and creates pull requests.
+- Per the project owner’s current instruction, Codex Cloud works directly on `main`; feature branches and pull requests are not required.
 - `main` represents production-ready source.
 - Important requirement changes must update this blueprint in the same pull request as related code.
 

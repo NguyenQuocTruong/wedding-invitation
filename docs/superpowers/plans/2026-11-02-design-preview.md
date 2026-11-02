@@ -3,14 +3,14 @@
 Goal: complete Template 01 at /design-preview without changing the root page.
 Spec: user-approved UI_UX_PROPOSAL.md section 15 and current interactive-preview brief.
 Architecture: exact-path lazy page, preview-only components and CSS, explicit Vercel rewrite.
-Constraints: no backend requests, persistence, real QR, autoplay, production deployment or main merge.
+Constraints: no backend requests, persistence, real QR, autoplay or production deployment. The owner subsequently authorized direct integration into main and main-only work.
 
 - [x] Test route resolution and countdown edge cases before implementation.
 - [x] Build configurable preview, original illustrated media, eight components and reveal composable.
 - [x] Verify mock form, envelope, image dialog, QR download and music demo in browser.
 - [x] Check 375/390/768/1440 widths, reduced motion, root isolation and console.
 - [x] Run lint, format, typecheck, tests and build.
-- [ ] Push feature branch and request PR; GitHub API access currently returns Forbidden.
+- [x] Feature branch pushed. Owner subsequently authorized integration directly into main and main-only work; no PR required.
       Review focus: false success, route isolation, countdown expiry, keyboard dialog, overflow and reduced motion.
 
 ## Evidence

@@ -97,4 +97,4 @@ remain pending; local success does not establish a remote Preview deployment.
 
 Independent review found no blocking issues. Replay focus was reproduced as a
 failing browser assertion, corrected and checked in the passing final browser run.
-No production deployment or main merge was performed.
+The project owner subsequently authorized direct main integration and main-only work. No production deployment command was run; the existing main Git-deployment guard remains disabled.

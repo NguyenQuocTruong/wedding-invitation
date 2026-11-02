@@ -11,7 +11,7 @@ This document preserves context between the product conversation, GitHub and Cod
 3. `docs/CODEX_SETUP_PROMPT.md` ƒ?" prompt for the first implementation phase.
 4. Pull request descriptions and accepted review comments ƒ?" task-specific decisions.
 
-When a requirement changes, update the blueprint in the same pull request as the implementation. Do not let chat-only decisions become the only record.
+When a requirement changes, update the blueprint in the same change as the implementation. Do not let chat-only decisions become the only record.
 
 ## Platform connections
 
@@ -42,22 +42,17 @@ Google Cloud, the service account, spreadsheet and secrets are external setup ta
 1. Open the repository-backed Codex Cloud environment.
 2. Start a task with a bounded phase and name the documents Codex must read.
 3. Codex confirms repository and base branch.
-4. Codex creates a `feature/*` branch.
+4. Codex works directly on `main`, as explicitly authorized by the project owner.
 5. Codex implements only the approved scope.
 6. Codex runs lint, typecheck, tests and build.
-7. Codex creates a pull request with verification evidence.
+7. Codex commits and pushes verified changes directly to `main`; no pull request is required.
 8. Review the diff and, after Vercel is connected, test the Preview URL on a phone.
-9. Merge only after approval and required checks.
+9. Preserve existing remote changes and complete required checks before pushing.
 10. Production deployment remains a separate, explicit decision.
 
-## Suggested branch naming
+## Branch policy
 
-- `docs/project-blueprint`
-- `feature/project-foundation`
-- `feature/invitation-experience`
-- `feature/rsvp-sheets`
-- `feature/gift-qr`
-- `chore/production-readiness`
+Work only on main, as instructed by the project owner. Feature branches and pull requests are not required. This does not authorize production deployment.
 
 ## First implementation task
 
@@ -72,7 +67,7 @@ Without account assistance or external approval, Codex can:
 - Implement UI, API boundaries and tests with mocks.
 - Create configuration examples that contain no secrets.
 - Run local lint, typecheck, test and build checks.
-- Create feature branches and pull requests through the authorized GitHub connection.
+- Commit and push verified changes directly to main through the authorized GitHub connection.
 - Prepare Vercel and Google setup instructions.
 
 ## Work that requires user involvement or approval
