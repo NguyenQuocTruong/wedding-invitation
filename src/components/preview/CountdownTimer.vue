@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { previewEvent as event } from '../../config/preview'
+import { useInvitation } from '../../composables/useInvitation'
+const { event, preview } = useInvitation()
 import { countdownParts } from '../../utils/preview'
 const now = ref(Date.now())
 const parts = computed(() => countdownParts(event.dateTime, now.value))
@@ -24,7 +25,11 @@ onUnmounted(() => clearInterval(timer))
     <div
       v-if="parts?.some(Boolean)"
       class="countdown"
-      aria-label="Thời gian còn lại đến ngày minh họa"
+      :aria-label="
+        preview
+          ? 'Thời gian còn lại đến ngày minh họa'
+          : 'Thời gian còn lại đến ngày cưới'
+      "
     >
       <div v-for="(value, index) in parts" :key="index">
         <span>{{ String(value).padStart(2, '0') }}</span
@@ -38,6 +43,8 @@ onUnmounted(() => clearInterval(timer))
           : 'Ngày cưới sẽ được cập nhật.'
       }}
     </p>
-    <p class="subtle">Ngày và giờ trong bản xem trước chỉ là dữ liệu mẫu.</p>
+    <p v-if="preview" class="subtle">
+      Ngày và giờ trong bản xem trước chỉ là dữ liệu mẫu.
+    </p>
   </section>
 </template>

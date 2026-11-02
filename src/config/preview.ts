@@ -5,7 +5,7 @@ interface PreviewPhoto {
   label: string
   group: 'light' | 'red'
 }
-interface PreviewEvent {
+export interface PreviewEvent {
   brideName: string
   groomName: string
   invitation: string

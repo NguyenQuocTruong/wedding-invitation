@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
-import { previewEvent as event } from '../../config/preview'
+import { useInvitation } from '../../composables/useInvitation'
+const { event, preview } = useInvitation()
 const selected = ref(0)
 const dialog = ref<HTMLDialogElement | null>(null)
 function open(index: number) {
@@ -28,11 +29,14 @@ async function close() {
         Thương nhau,<br /><em>qua từng khung hình.</em>
       </h2>
       <p>Một chút dịu dàng. Một chút rạng rỡ. Và thật nhiều thương.</p>
-      <small class="subtle"
+      <small v-if="preview" class="subtle"
         >Minh họa gốc cho ba nhóm ảnh · Sẽ thay bằng ảnh của hai bạn</small
       >
     </div>
-    <div class="gallery-grid">
+    <p v-if="!event.photos.length" class="section-heading subtle" role="status">
+      Album ảnh cưới đang được chuẩn bị. Hẹn bạn những khoảnh khắc thật đẹp.
+    </p>
+    <div v-else class="gallery-grid">
       <figure
         v-for="(photo, index) in event.photos"
         :key="photo.src"
@@ -69,6 +73,7 @@ async function close() {
       </figure>
     </div>
     <dialog
+      v-if="event.photos.length"
       ref="dialog"
       class="photo-dialog"
       aria-label="Xem ảnh lớn"

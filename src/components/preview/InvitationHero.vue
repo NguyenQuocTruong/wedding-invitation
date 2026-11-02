@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { previewEvent as event } from '../../config/preview'
+import { useInvitation } from '../../composables/useInvitation'
+const { event, preview } = useInvitation()
 </script>
 <template>
   <header id="invitation" class="preview-hero">
@@ -27,9 +28,18 @@ import { previewEvent as event } from '../../config/preview'
         width="800"
         height="1000"
         fetchpriority="high"
-        :alt="event.photos[0]!.alt"
+        :alt="
+          event.photos[0]?.alt ||
+          'Minh họa đôi uyên ương — ảnh cưới sẽ được cập nhật'
+        "
       />
-      <figcaption>01 / CHÚNG MÌNH, TỪ ĐÂY VỀ SAU</figcaption>
+      <figcaption>
+        {{
+          !preview && !event.photos.length
+            ? 'HÌNH MINH HỌA · ẢNH CƯỚI SẼ ĐƯỢC CẬP NHẬT'
+            : '01 / CHÚNG MÌNH, TỪ ĐÂY VỀ SAU'
+        }}
+      </figcaption>
       <span class="hero-stamp" aria-hidden="true"
         >a little love<br /><em>a lifetime together</em></span
       >

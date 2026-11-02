@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
-import { previewEvent as event } from '../../config/preview'
+import { useInvitation } from '../../composables/useInvitation'
+const { event, preview } = useInvitation()
 const playing = ref(false)
 const audio = ref<HTMLAudioElement | null>(null)
 const status = ref('')
 async function toggle() {
   if (!event.musicSrc) {
-    status.value = 'Nhạc demo chưa có tệp âm thanh. Không phát hoặc tải nhạc.'
+    status.value = preview
+      ? 'Nhạc demo chưa có tệp âm thanh. Không phát hoặc tải nhạc.'
+      : 'Nhạc nền sẽ được cập nhật.'
     return
   }
   if (playing.value) {
@@ -37,7 +40,15 @@ onUnmounted(() => audio.value?.pause())
     />
     <button type="button" :aria-pressed="playing" @click="toggle">
       <span aria-hidden="true">♫</span>
-      {{ event.musicSrc ? (playing ? 'Tắt nhạc' : 'Bật nhạc') : 'Nhạc · Demo' }}
+      {{
+        event.musicSrc
+          ? playing
+            ? 'Tắt nhạc'
+            : 'Bật nhạc'
+          : preview
+            ? 'Nhạc · Demo'
+            : 'Nhạc · Sắp có'
+      }}
     </button>
     <p v-if="status" class="music-status" role="status">{{ status }}</p>
   </div>

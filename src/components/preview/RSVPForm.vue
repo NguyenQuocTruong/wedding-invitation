@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, reactive, ref } from 'vue'
+import { useInvitation } from '../../composables/useInvitation'
+const { preview } = useInvitation()
 import type { Attendance, GuestSide } from '../../types/rsvp'
 const form = reactive({
   guestName: '',
@@ -11,6 +13,7 @@ const state = ref<'idle' | 'sending' | 'success'>('idle')
 const error = ref('')
 let timer: ReturnType<typeof setTimeout> | undefined
 function submit() {
+  if (!preview) return
   if (!form.guestName.trim() || !form.guestSide || !form.attendance) {
     error.value =
       'Bạn vui lòng điền tên, chọn nhà gái/nhà trai và phản hồi tham dự.'
@@ -39,7 +42,13 @@ onUnmounted(() => clearTimeout(timer))
         vui thêm ấm.
       </p>
       <span class="rsvp-flower" aria-hidden="true">✳︎</span>
-      <p class="demo-label">DEMO · Không ghi nhận đăng ký thật</p>
+      <p v-if="preview" class="demo-label">
+        DEMO · Không ghi nhận đăng ký thật
+      </p>
+      <p v-else class="privacy-copy" role="status">
+        Xác nhận tham dự chưa mở. Bạn vui lòng liên hệ trực tiếp với cô dâu hoặc
+        chú rể.
+      </p>
     </div>
     <form class="rsvp-form" @submit.prevent="submit">
       <p v-if="state === 'success'" class="mock-success" role="status">
@@ -47,10 +56,14 @@ onUnmounted(() => clearTimeout(timer))
         không có dữ liệu được gửi hoặc lưu.
       </p>
       <fieldset
-        :disabled="state === 'sending' || state === 'success'"
+        :disabled="!preview || state === 'sending' || state === 'success'"
         class="form-fields"
       >
-        <legend class="sr-only">Thông tin phản hồi demo</legend>
+        <legend class="sr-only">
+          {{
+            preview ? 'Thông tin phản hồi demo' : 'Thông tin xác nhận tham dự'
+          }}
+        </legend>
         <label for="guest-name"
           >Họ và tên <span aria-hidden="true">*</span></label
         ><input
@@ -124,12 +137,21 @@ onUnmounted(() => clearTimeout(timer))
           placeholder="Lời chúc của bạn…"
         />
         <p class="privacy-copy">
-          Bản demo chỉ xử lý trong bộ nhớ trang, không gửi backend và không lưu
-          thông tin. Bản chính thức sẽ chỉ dùng RSVP cho việc tổ chức lễ cưới.
+          {{
+            preview
+              ? 'Bản demo chỉ xử lý trong bộ nhớ trang, không gửi backend và không lưu thông tin. Bản chính thức sẽ chỉ dùng RSVP cho việc tổ chức lễ cưới.'
+              : 'Biểu mẫu hiện chưa thu thập thông tin. Khi được mở, phản hồi chỉ phục vụ tổ chức lễ cưới và được người chủ trì xem.'
+          }}
         </p>
         <p v-if="error" role="alert">{{ error }}</p>
         <button class="button" type="submit">
-          {{ state === 'sending' ? 'Đang mô phỏng…' : 'Gửi phản hồi demo' }}
+          {{
+            !preview
+              ? 'Chưa mở xác nhận'
+              : state === 'sending'
+                ? 'Đang mô phỏng…'
+                : 'Gửi phản hồi demo'
+          }}
           <span aria-hidden="true">↗</span>
         </button>
       </fieldset>

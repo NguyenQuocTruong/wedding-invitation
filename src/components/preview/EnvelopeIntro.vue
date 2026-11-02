@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
-import { previewEvent as event } from '../../config/preview'
+import { useInvitation } from '../../composables/useInvitation'
+const { event } = useInvitation()
 import { previewMotion } from '../../config/theme'
 const emit = defineEmits<{ opened: [] }>()
 const opening = ref(false)
@@ -29,7 +30,9 @@ onUnmounted(() => clearTimeout(timer))
   >
     <div class="intro-top">
       <span class="monogram">c<span>&amp;</span>c</span
-      ><span class="eyebrow">THE WEDDING · {{ event.year }}</span>
+      ><span class="eyebrow"
+        >THE WEDDING<span v-if="event.year"> · {{ event.year }}</span></span
+      >
     </div>
     <p class="eyebrow">MỘT NGÀY THẬT ĐẸP ĐANG ĐỢI</p>
     <h1 id="intro-title" tabindex="-1">

@@ -108,12 +108,12 @@ for (const width of [375, 390, 768, 1440]) {
   assert.equal(await page.locator('audio').count(), 0)
   assert.equal(api.length, 0)
   await page.goto(baseUrl + '/')
-  await page.getByText('Phase 1 — nền tảng kỹ thuật').waitFor()
-  assert.equal(await page.locator('.design-preview').count(), 0)
+  await page.getByRole('button', { name: 'Mở thiệp', exact: true }).waitFor()
+  assert.equal(await page.locator('.preview-banner').count(), 0)
   console.log(
     'PASS ' +
       width +
-      ': envelope, focus, layout, gallery, both RSVP sides/answers, download, music demo, no API, root unchanged',
+      ': envelope, focus, layout, gallery, both RSVP sides/answers, download, music demo, no API, production root isolated',
   )
   await context.close()
 }

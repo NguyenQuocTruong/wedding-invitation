@@ -383,3 +383,9 @@ The MVP is ready for production review when:
 - Google Cloud/service account/spreadsheet credentials.
 
 
+
+## 15. Production UI release — 2026-11-02
+
+The owner authorized implementing approved Template 01 on the production root and deploying the latest version to the existing wedding-invitation Vercel project. The root now shares the approved layout with /design-preview through typed context; the preview retains its sample content and simulations.
+
+Only the UI release is included. Real event information, wedding media, gift QR and Google Sheets setup remain outstanding. Production uses explicit pending states, no fabricated date/map/bank details, and a disabled RSVP form; the existing API continues returning 503 until a separately implemented and verified backend is available. This UI release is not a claim that the full MVP readiness criteria in section 13 have been met.
