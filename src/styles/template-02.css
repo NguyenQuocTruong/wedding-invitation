@@ -1,0 +1,434 @@
+@font-face {
+  font-family: PreviewLora;
+  src: url('/fonts/lora.ttf') format('truetype');
+  font-display: swap;
+}
+.clone-page {
+  min-height: 100vh;
+  background: #303b2b;
+  color: #35302f;
+  font-family: Georgia, serif;
+  overflow-x: clip;
+}
+.clone-page * {
+  box-sizing: border-box;
+}
+.clone-page button,
+.clone-page a {
+  touch-action: manipulation;
+}
+.clone-page button {
+  cursor: pointer;
+  font: inherit;
+}
+.clone-page :focus-visible {
+  outline: 3px solid #debd67;
+  outline-offset: 4px;
+}
+.clone-switch {
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  padding: 12px;
+  color: #f8f7f1;
+  font: 11px system-ui;
+  min-height: 48px;
+}
+.clone-switch a,
+.clone-switch button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  text-decoration: underline;
+}
+.clone-switch span {
+  font-size: 10px;
+  text-align: center;
+}
+.clone-shell {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  position: relative;
+}
+.clone-opening {
+  min-height: calc(100svh - 48px);
+  max-height: 1100px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 120px 28px 110px;
+  background: #fffef9;
+  color: #5d6a57;
+  text-align: center;
+  border-radius: 100px 100px 0 0;
+}
+.clone-small {
+  font: 10px system-ui;
+  letter-spacing: 3px;
+}
+.clone-opening h1 {
+  font-weight: 400;
+  font-size: clamp(38px, 8vw, 60px);
+  line-height: 1.25;
+  margin: 35px 0 22px;
+}
+.clone-opening h1 span {
+  display: block;
+  font-size: 28px;
+  font-style: italic;
+  margin: 12px;
+}
+.clone-opening h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 16px 0;
+}
+.clone-opening > p {
+  font-size: 14px;
+}
+.clone-opening .opening-date {
+  font-size: 19px;
+  margin: 25px 0 50px;
+}
+.opening-rule {
+  width: 130px;
+  height: 1px;
+  background: #aab2a0;
+  margin: auto;
+}
+.opening-flower {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  width: 95%;
+  left: 2.5%;
+  object-fit: contain;
+}
+.opening-flower.top {
+  top: -10px;
+  max-height: 250px;
+  object-position: top;
+  animation: flower-sway 6s ease-in-out infinite alternate;
+  transform-origin: top;
+}
+.opening-flower.bottom {
+  bottom: -20px;
+  max-height: 230px;
+  object-position: bottom;
+  animation: flower-sway 8s ease-in-out infinite alternate-reverse;
+  transform-origin: bottom;
+}
+.clone-open-button {
+  display: block;
+  margin: 42px auto 0;
+  padding: 15px 36px;
+  border: 0;
+  border-radius: 30px;
+  background: #5d6a57;
+  color: white;
+  min-height: 48px;
+}
+.clone-open-button span {
+  margin-left: 22px;
+}
+.clone-stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #f7f7f7;
+}
+.clone-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 430px;
+  height: 4567px;
+  transform-origin: top left;
+  background: #f7f7f7;
+  overflow: hidden;
+  outline: 0;
+}
+.clone-node {
+  position: absolute;
+}
+.clone-element {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+.clone-element p {
+  margin: 0;
+  white-space: pre-line;
+}
+.clone-element > a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.clone-element img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.clone-photo-button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: block;
+}
+.clone-calendar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  text-align: center;
+  align-items: center;
+}
+.clone-calendar span {
+  height: 25px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+.clone-calendar .wedding-day {
+  border: 2px solid #ef9d9b;
+  border-radius: 50%;
+  font-weight: 700;
+}
+.clone-countdown {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  gap: 12px;
+}
+.clone-countdown div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #424f33;
+}
+.clone-countdown strong {
+  font: 30px Georgia;
+}
+.clone-countdown small {
+  font: 11px Georgia;
+  margin-top: 7px;
+}
+.clone-rsvp {
+  text-align: center;
+  padding: 12px 10px;
+  font: 13px/1.6 Georgia;
+  color: #424f33;
+}
+.clone-rsvp h2 {
+  font-size: 21px;
+  margin: 0 0 10px;
+}
+.clone-rsvp p {
+  font-size: 12px;
+}
+.clone-rsvp label {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.clone-rsvp input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 12px;
+  border: 1px solid #c9ccbf;
+  border-radius: 5px;
+  background: #fff;
+}
+.clone-rsvp button {
+  border: 0;
+  background: #424f33;
+  color: white;
+  border-radius: 30px;
+  padding: 12px 8px;
+  width: 100%;
+  font-size: 12px;
+  opacity: 0.65;
+}
+.clone-rsvp small {
+  display: block;
+  font-size: 10px;
+  margin-top: 10px;
+}
+.clone-gifts {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  color: #424f33;
+  padding: 20px;
+}
+.clone-gifts > span {
+  font-size: 50px;
+}
+.clone-gifts p {
+  font-size: 17px;
+}
+.clone-gifts small {
+  font-size: 12px;
+}
+.clone-end {
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 22px 15px 90px;
+  font-size: 12px;
+}
+.clone-end a,
+.clone-end button {
+  color: #424f33;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  padding: 10px;
+}
+.clone-tools {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 80;
+  display: flex;
+  gap: 8px;
+  max-width: calc(100vw - 32px);
+  flex-wrap: wrap;
+}
+.clone-tools button,
+.clone-tools a {
+  padding: 12px 18px;
+  min-height: 44px;
+  border-radius: 30px;
+  background: #424f33;
+  color: white;
+  border: 1px solid #cbd0c1;
+  text-decoration: none;
+  font: 12px system-ui;
+}
+.clone-tools p {
+  background: #fff;
+  padding: 8px;
+  font: 12px system-ui;
+}
+.clone-photo-dialog {
+  max-width: 95vw;
+  max-height: 95vh;
+  padding: 0;
+  border: 0;
+  background: #252b23;
+}
+.clone-photo-dialog::backdrop {
+  background: #000c;
+}
+.clone-photo-dialog img {
+  display: block;
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+}
+.clone-photo-dialog button {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: white;
+  border-radius: 50%;
+  font-size: 30px;
+}
+.clone-page .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.clone-reveal {
+  transition:
+    opacity var(--enter-duration, 1s) var(--enter-delay, 0s),
+    translate var(--enter-duration, 1s) var(--enter-delay, 0s),
+    scale var(--enter-duration, 1s) var(--enter-delay, 0s);
+}
+.clone-reveal.reveal-wait {
+  opacity: 0;
+  translate: 0 25px;
+}
+.clone-reveal.reveal-wait[data-effect='slide-left'] {
+  translate: 25px 0;
+}
+.clone-reveal.reveal-wait[data-effect='slide-right'] {
+  translate: -25px 0;
+}
+.clone-reveal.reveal-wait[data-effect='scale-out'] {
+  scale: 0.9;
+}
+@keyframes flower-sway {
+  from {
+    rotate: -1deg;
+    translate: 0 0;
+  }
+  to {
+    rotate: 1deg;
+    translate: 0 6px;
+  }
+}
+.clone-page.motion-disabled * {
+  animation: none !important;
+  transition: none !important;
+}
+.clone-page.motion-disabled .reveal-wait {
+  opacity: 1;
+  translate: none;
+  scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clone-page * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .clone-page .reveal-wait {
+    opacity: 1;
+    translate: none;
+    scale: 1;
+  }
+}
+@media (min-width: 768px) {
+  .clone-shell {
+    box-shadow: 0 10px 100px #0004;
+  }
+  .clone-switch {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+}
+@media (max-width: 380px) {
+  .clone-switch span {
+    max-width: 140px;
+  }
+  .clone-opening {
+    padding-top: 100px;
+  }
+}

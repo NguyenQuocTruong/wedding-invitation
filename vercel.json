@@ -22,6 +22,14 @@
     {
       "source": "/design-preview/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/thiep-2",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/thiep-2/",
+      "destination": "/index.html"
     }
   ]
 }

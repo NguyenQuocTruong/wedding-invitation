@@ -19,7 +19,34 @@ const { event, preview } = useInvitation()
         thật đẹp.
       </p>
     </div>
-    <div class="event-card">
+    <div v-if="event.events?.length">
+      <article
+        v-for="activity in event.events"
+        :key="activity.id"
+        class="event-card"
+      >
+        <span class="small-flower" aria-hidden="true">✳︎</span>
+        <h3 class="eyebrow">{{ activity.title }}</h3>
+        <p>{{ activity.dateLabel }}</p>
+        <p>Âm lịch: {{ activity.lunarDate }}</p>
+        <p>
+          <time :datetime="activity.dateTime">{{ activity.time }}</time>
+          <span class="subtle">· Giờ Việt Nam</span>
+        </p>
+        <hr />
+        <h3>{{ activity.venue }}</h3>
+        <p>{{ activity.address }}</p>
+        <a
+          v-if="activity.mapUrl"
+          class="text-link"
+          :href="activity.mapUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Xem chỉ đường trên bản đồ ↗</a
+        >
+      </article>
+    </div>
+    <div v-else class="event-card">
       <span class="small-flower" aria-hidden="true">✳︎</span>
       <p class="eyebrow">
         LỄ THÀNH HÔN<span v-if="preview || event.sampleContent">

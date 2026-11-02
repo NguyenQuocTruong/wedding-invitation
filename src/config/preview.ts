@@ -5,7 +5,19 @@ interface PreviewPhoto {
   label: string
   group: 'light' | 'red'
 }
+export interface WeddingActivity {
+  id: string
+  title: string
+  time: string
+  dateTime: string
+  dateLabel: string
+  lunarDate: string
+  venue: string
+  address: string
+  mapUrl: string
+}
 export interface PreviewEvent {
+  events?: WeddingActivity[]
   sampleContent?: boolean
   families?: Record<
     GuestSide,

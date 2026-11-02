@@ -87,8 +87,8 @@ async function open() {
           >c<span>&amp;</span>c</a
         >
         <div>
-          <a href="#event">Ngày chung đôi</a><a href="#gallery">Album</a
-          ><a href="#rsvp">Lời hẹn</a>
+          <a href="/thiep-2">Thiệp 2</a><a href="#event">Ngày chung đôi</a
+          ><a href="#gallery">Album</a><a href="#rsvp">Lời hẹn</a>
         </div>
         <MusicControl />
       </nav>

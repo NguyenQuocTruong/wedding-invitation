@@ -35,7 +35,8 @@ const { event, preview } = useInvitation()
       />
       <figcaption>
         {{
-          !preview && !event.photos.length
+          !preview &&
+          (!event.photos.length || event.hero.startsWith('/design-preview/'))
             ? 'HÌNH MINH HỌA · ẢNH CƯỚI SẼ ĐƯỢC CẬP NHẬT'
             : '01 / CHÚNG MÌNH, TỪ ĐÂY VỀ SAU'
         }}
