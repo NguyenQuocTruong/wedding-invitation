@@ -1,0 +1,8 @@
+node_modules
+dist
+.vercel
+package-lock.json
+AGENTS.md
+docs/PROJECT_BLUEPRINT.md
+docs/CODEX_SETUP_PROMPT.md
+docs/CODEX_CLOUD_HANDOFF.md
