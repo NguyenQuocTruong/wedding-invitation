@@ -268,7 +268,7 @@ Các mục dưới đây là yêu cầu thiết kế/acceptance cho Phase 2.2, c
 | Công sức tinh chỉnh               | Thấp–vừa     | Vừa                   | Cao hơn                   |
 | Hợp khi chưa có nội dung thật     | Cao          | Vừa                   | Vừa                       |
 
-**Đề xuất A — Thư Hồng Đương Đại.** Phù hợp nhất với mục tiêu một thiệp cá nhân,
+**Đề xuất ban đầu, trước phản hồi mới: A — Thư Hồng Đương Đại.** Phù hợp nhất với mục tiêu một thiệp cá nhân,
 dễ dùng trên iPhone, triển khai nhẹ và chưa có bộ ảnh/nội dung chốt. Chữ serif,
 nền giấy và dấu niêm tạo cảm xúc mà không cần hiệu ứng nặng. Giữ trọn concept A,
 không trộn đồng thời lá của B và typography lớn của C.
@@ -305,7 +305,7 @@ dài và trạng thái form qua branch. Không convert thành frontend trong Pha
 
 ## 11. Cổng duyệt trước Phase 2.2
 
-Cần người dùng chọn A, B hoặc C và góp ý mức trang trọng, màu, font, nhịp ảnh.
+Theo phản hồi mới, ưu tiên hướng “Lời Mời Dịu Dàng” ở mục 13. Cần duyệt màu và màn hình đại diện trước Phase 2.2; ba concept ban đầu được giữ để đối chiếu.
 Không coi lựa chọn mặc định A là đã được phê duyệt.
 
 Phase 2.2 bắt đầu bằng một màn hình đại diện để duyệt: trạng thái phong bì đóng
@@ -324,3 +324,99 @@ nhạc và quyền sử dụng, QR thật. Không cần Google credentials cho k
 - Khảo sát hai website và ảnh 12ui còn bị chặn bởi mạng/xác thực như mục 2 và 10.
 - Tài liệu có thể được review để chọn hướng ngay; cần bổ sung quan sát thực tế
   và hình 12ui khi các điều kiện truy cập được giải quyết.
+
+## 13. Điều chỉnh theo phản hồi — Lời Mời Dịu Dàng
+
+**Brief mới từ người dùng:** trẻ trung, đơn giản, màu sắc nhẹ nhàng, sang trọng
+và lịch thiệp; tiếp tục tham khảo các mẫu tại https://ngaychungdoi.com/.
+
+Hướng này thay đề xuất ưu tiên A ban đầu. Đây là phương án do người thực hiện
+đề xuất dựa trên brief mới, chưa phải concept người dùng đã duyệt.
+Không chuyển sang triển khai Phase 2.2.
+
+### 13.1. Ngôn ngữ thị giác
+
+Một lời mời sáng, thoáng và gần gũi: nền ngọc trai, điểm màu sage, nhịp chữ nhẹ,
+ảnh chân thực và rất ít trang trí. Sự trang trọng đến từ khoảng cách đều, thứ bậc
+chữ và cách viết lời mời. Ưu tiên bố cục mở, không biến mọi section thành thẻ có viền.
+
+| Vai trò       | Màu đề xuất | Cách dùng                           |
+| ------------- | ----------- | ----------------------------------- |
+| Nền ngọc trai | #FAF9F6     | Nền chính                           |
+| Bề mặt trắng  | #FFFFFF     | Form, vùng QR                       |
+| Sage nhạt     | #E6EDE6     | Mảng chuyển section, nền phong bì   |
+| Sage đậm      | #465C50     | Nút chính, heading phụ              |
+| Hồng phấn     | #F2E5E3     | Điểm nhấn nhỏ, không phủ toàn trang |
+| Chữ than ấm   | #303733     | Nội dung trên nền sáng              |
+
+Màu pastel dùng cho nền và trang trí; chữ/nút dùng màu đậm để giữ độ rõ.
+Không dùng chữ hồng nhạt trên trắng. Kiểm tra WCAG AA khi dựng màn hình thật.
+
+Typography: **Lora 500** cho tên và heading, **Be Vietnam Pro 400/500/600** cho
+nội dung, form và nút; cần kiểm chứng font Vietnamese thực tế. Tên khoảng
+40–48px ở 390px, tự xuống dòng theo tên đầy đủ; body 17px/1.65.
+Có thể dùng chữ nghiêng cho một dòng lời mời ngắn. Không dùng font script dày đặc.
+
+### 13.2. Bố cục và tương tác
+
+- **Phong bì:** nền sage rất nhạt, một đường gấp tinh tế, tên cặp đôi và nút
+  “Mở lời mời”. Mở bằng tap, chuyển opacity/translate nhẹ trong khoảng 450ms.
+  Không có con dấu vàng lớn hoặc hoa rơi; có đường bỏ qua.
+- **Hero:** lời mời ngắn, hai tên serif thoáng, ảnh 4:5 có vùng an toàn cho khuôn mặt,
+  ngày cưới bên dưới và CTA “Thông tin lễ cưới”. Không đặt chữ trên khuôn mặt.
+  Ảnh là điểm nhấn cảm xúc chính, không cần khung trang trí cầu kỳ.
+- **Thông tin lễ cưới:** thời gian và địa điểm có label dễ quét; link bản đồ rõ.
+  Nền sáng, dùng khoảng trắng thay cho nhiều đường viền.
+- **Gallery:** một ảnh lớn mở đầu, tiếp theo lưới hai cột đều; khoảng cách 8–12px,
+  bo góc nhỏ 4–8px. Không xếp ảnh kiểu scrapbook, không carousel tự chạy.
+  Nhấn ảnh mở lightbox theo tiêu chuẩn tiếp cận ở mục 8.
+- **Countdown:** một hàng bốn số trên nền sage nhạt, nhãn tiếng Việt nhỏ nhưng rõ;
+  không đóng từng số trong hộp dày. Dùng số tabular, không animation lật.
+- **RSVP:** một cột, input cao tối thiểu 48px, label luôn hiện; radio có nhãn
+  “Nhà gái / Nhà trai” và “Có / Không”. Nút sage đậm trên nền trắng.
+  Giữ nguyên toàn bộ hợp đồng, trạng thái lỗi và quyền riêng tư ở mục 3.
+- **Hai QR:** hai thẻ trắng tách biệt, tiêu đề cô dâu/chú rể, cùng cấp bậc và cùng
+  kích thước; mobile xếp dọc, mỗi mã có nút lưu riêng. Không thu gọn bên nào theo RSVP.
+  Chưa có mã thật thì ghi “Chưa cập nhật”.
+- **Motion:** reveal tối đa 8px, 250–350ms, chỉ một lần; không cần parallax mobile.
+  Reduced motion hiển thị trực tiếp. Nhạc mặc định tắt, nút điều khiển riêng.
+- **Mobile:** lề 20–24px ở 390px, khoảng section 48–64px; CTA trong luồng nội dung.
+  Không để thanh nổi hoặc trang trí chiếm vùng thao tác của Safari.
+
+### 13.3. Ba biến thể màu để duyệt nhanh
+
+Giữ nguyên bố cục và typography, chỉ lựa chọn một sắc thái chủ đạo:
+
+| Biến thể               | Cảm giác                  | Phù hợp                                   |
+| ---------------------- | ------------------------- | ----------------------------------------- |
+| Pearl + Sage — đề xuất | Trẻ, tự nhiên, thanh lịch | Nhiều loại ảnh; ít cảm giác ngọt          |
+| Ivory + Blush          | Dịu dàng, lãng mạn        | Ảnh sáng, tông da và hoa nhẹ              |
+| White + Mist Blue      | Trong trẻo, hiện đại      | Ảnh biển, studio sáng hoặc ảnh trung tính |
+
+Không trộn cả ba bảng màu trong cùng trang. Đề xuất bắt đầu với Pearl + Sage,
+chỉ dùng blush như một điểm nhỏ. Cần duyệt cùng ảnh thật để tránh lệch tông.
+
+### 13.4. Ưu, nhược điểm và điều kiện duyệt
+
+**Ưu:** sát brief mới; bề mặt sáng, dễ đọc; ít hiệu ứng nên nhẹ trên Safari;
+không cần nhiều tài nguyên trang trí; giữ sự lịch thiệp với khách gia đình.
+
+**Nhược:** pastel dễ nhạt nếu thiếu ảnh và typography tốt; cần kiểm soát tương
+phản; sự khác biệt dựa nhiều vào crop ảnh, nhịp khoảng trắng và nội dung.
+
+Bước duyệt tiếp theo là ảnh concept/màn hình đại diện, không phải viết toàn bộ
+frontend. Chỉ khi được phê duyệt mới dựng envelope và hero cho Phase 2.2.
+
+### 13.5. Trạng thái tham khảo Ngày Chung Đôi
+
+Đã thử lại HTTPS theo phản hồi mới: proxy tiếp tục trả
+“Tunnel connection failed: 403 Forbidden”. Chưa quan sát được mẫu thực tế,
+không gán các lựa chọn sage, pastel, font hoặc bố cục trên cho website đó.
+
+Yêu cầu domain đã nằm trong draft môi trường nhưng runtime hiện chưa cho truy cập.
+Cần review/lưu và publish cấu hình mạng đã chuẩn bị, rồi khảo sát lại thư viện.
+Nếu chưa mở được mạng, người dùng có thể gửi ảnh chụp 2–3 mẫu yêu thích để đối chiếu
+cảm giác thị giác; ảnh tham khảo không được sao chép thành tài nguyên của sản phẩm.
+
+12ui vẫn chưa có kết quả trực quan từ lần thử trước; mô tả này là định hướng
+bằng chữ, không phải bản render hoặc mẫu được trích từ Ngày Chung Đôi.
