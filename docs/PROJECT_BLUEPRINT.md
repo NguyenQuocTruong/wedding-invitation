@@ -373,7 +373,7 @@ The MVP is ready for production review when:
 
 ## 14. Decisions still to supply later
 
-- Final visual theme.
+- Visual direction selected: Template 01 / “Lời Mời Dịu Dàng” (see docs/UI_UX_PROPOSAL.md, section 15). Pearl/white surfaces, warm charcoal typography and primary controls, very light sage accents. White-background wedding portraits and floral portraits lead; red Vietnamese traditional attire photos form a separate gallery group on a neutral surface. Final crops and color balance await actual photos.
 - Bride/groom names and invitation wording.
 - Wedding date, time, timezone, venue and map URL.
 - Wedding photos and album sequence.

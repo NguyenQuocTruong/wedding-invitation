@@ -1,6 +1,8 @@
 # Đề xuất UI/UX — Phase 2.1
 
-Ngày: 02/11/2026 · Trạng thái: chờ chọn concept, chưa phê duyệt triển khai.
+Ngày: 02/11/2026 · Trạng thái: đã chốt hướng Mẫu thiệp 01 theo mục 15; chưa triển khai Phase 2.2.
+
+Mục 15 là quyết định mới nhất. Các concept và cổng chọn ở mục trước được giữ làm lịch sử khám phá.
 
 ## 1. Phạm vi và nguồn quyết định
 
@@ -479,3 +481,85 @@ Giữ hướng Lời Mời Dịu Dàng, Pearl + Sage. Preview Sakeenah củng c�
 thứ bậc serif/sans và khoảng trắng; preview Undangan giúp loại hướng nền tối,
 ảnh tròn và script dày khỏi phương án ưu tiên. Chưa chốt mẫu cụ thể từ Ngày Chung
 Đôi cho đến khi mở được /mau-thiep. Không coi preview marketing là kiểm thử Safari.
+
+## 15. Mẫu thiệp 01 — Lời Mời Dịu Dàng, đã chốt hướng
+
+### 15.1. Quyết định và phạm vi phê duyệt
+
+Người dùng đồng ý chốt hướng được đề xuất thành **Mẫu thiệp 01**: trẻ trung,
+đơn giản, màu nhẹ, thanh thoát, sang trọng và lịch thiệp. Đây là lựa chọn hướng
+thị giác; không phải duyệt một bản render đã có hay cho phép deploy production.
+
+Người dùng cung cấp mô tả ba nhóm ảnh:
+
+1. Phông trắng, cô dâu váy trắng và chú rể vest đen.
+2. Cùng trang phục, nền trắng có hoa và tường họa tiết trắng.
+3. Cổ phục Việt Nam đỏ, nền đỏ.
+
+Chưa nhận hoặc xem tệp ảnh thật. Cách bố trí dưới đây dựa trên mô tả, crop và
+độ ấm màu cuối cùng cần đối chiếu ảnh trước khi duyệt màn hình đại diện.
+
+### 15.2. Bảng màu thống nhất
+
+| Vai trò               | Màu     | Quy tắc                                                                           |
+| --------------------- | ------- | --------------------------------------------------------------------------------- |
+| Nền ngọc trai         | #FAF9F6 | Nền xuyên suốt; không ngả vàng rõ để tránh làm ảnh váy trắng trông lạnh hoặc xanh |
+| Bề mặt trắng          | #FFFFFF | Form, QR và khoảng đệm cạnh ảnh                                                   |
+| Chữ/nút chính than ấm | #303733 | Liên kết cả vest đen, ảnh trắng và ảnh đỏ; chữ nút màu trắng                      |
+| Chữ phụ               | #626760 | Nội dung phụ; kiểm tra contrast theo cỡ chữ                                       |
+| Sage rất nhạt         | #E6EDE6 | Điểm nền nhỏ ở intro/countdown, không phủ toàn trang                              |
+| Viền trung tính       | #DEDCD5 | Đường phân cách nhẹ, không dùng thay viền focus cần tương phản rõ                 |
+
+Sage được giảm vai trò so với mục 13: nút chính chuyển sang than ấm để không
+tạo cặp xanh–đỏ đối chọi với bộ cổ phục. Hồng phấn không còn là màu nhấn mặc định,
+vì chưa biết màu hoa trong ảnh. Màu đỏ nổi bật đến từ ảnh cổ phục, chưa thêm
+đỏ UI hoặc vàng kim để cạnh tranh với ảnh.
+
+Phần lớn bề mặt là trắng/ngọc trai. Cảm giác sang trọng đến từ font, nhịp khoảng
+trắng và ảnh; không từ viền vàng, đổ bóng dày hoặc họa tiết phủ trang.
+Mọi màu đều là token cấu hình khi triển khai, không khóa cứng vào từng component.
+
+### 15.3. Phối ba nhóm ảnh
+
+| Nhóm                            | Vị trí ưu tiên                               | Cách trình bày                                                                                                                                     |
+| ------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phông trắng, váy trắng/vest đen | Hero                                         | Chọn ảnh thấy rõ cả hai, nền sạch; đặt tên trên vùng nền riêng, không đè lên váy. Tỉ lệ gợi ý 4:5, quyết định sau khi xem khung gốc.               |
+| Nền trắng có hoa/tường họa tiết | Album đầu, đoạn chuyển gần thông tin lễ cưới | Giữ mảng sáng và chi tiết hoa; giảm trang trí UI vì bản thân ảnh đã có họa tiết. Dùng nhịp ảnh lớn rồi cặp ảnh nhỏ, không che tường/hoa bằng text. |
+| Cổ phục đỏ, nền đỏ              | Cụm album riêng sau hai nhóm sáng            | Đặt trên nền ngọc trai với khoảng nghỉ trước/sau; một ảnh mở đầu lớn rồi ảnh phụ nếu có. Ảnh mang sắc đỏ, section và chữ vẫn trung tính.           |
+
+Thứ tự cảm xúc đề xuất: mở nhẹ → chân dung trắng/đen thanh lịch → hoa và chi tiết
+dịu → điểm nhấn cổ phục Việt Nam → trở về nền sáng cho countdown, RSVP và QR.
+
+Không xếp xen kẽ đỏ–trắng–đỏ ở các ô liền nhau. Không để một ảnh đỏ nhỏ chen giữa
+cụm ảnh sáng làm mất cân bằng; gom theo nhóm, nhưng giữ một hệ lề và typography
+để cả album vẫn là một câu chuyện thống nhất.
+
+Ảnh nền trắng có thể hòa vào bề mặt sáng: ưu tiên khoảng đệm hoặc viền trung tính
+rất mảnh khi cần nhận ra khung; không tăng tương phản hay đổ bóng mạnh quanh váy.
+Không phủ gradient lên mặt người, không làm nhạt màu đỏ cổ phục, không dùng filter
+chung khiến da người/áo trắng đổi màu. Giữ ảnh gốc và xuất bản tối ưu riêng.
+
+### 15.4. Typography, chi tiết và motion
+
+- Lora 500 cho tên/heading, Be Vietnam Pro cho body/form. Tên không quá dày,
+  tránh tracking lớn với tiếng Việt; kiểm tra dấu và tên dài trên 320px.
+- Lề mobile gợi ý 20–24px; khoảng section 48–64px; nhịp tiêu đề nhất quán.
+- Phong bì ngọc trai/sage rất nhạt, một đường gấp; mở bằng tap và chuyển nhẹ.
+  Không cần hoa minh họa dày vì album đã có hoa thật.
+- Gallery không dùng hiệu ứng kéo ngang bắt buộc hoặc khung giả Polaroid nhiều góc.
+- Countdown và RSVP nền sáng, chữ than ấm; QR giữ nền trắng, hai thẻ luôn độc lập.
+- Motion ưu tiên opacity và dịch tối đa 8px; bỏ motion khi reduced motion.
+  Giữ quy tắc audio, khả năng tiếp cận và Safari tại mục 8.
+
+### 15.5. Điều kiện nghiệm thu thiết kế tiếp theo
+
+Bước tiếp theo của Phase 2.2 là màn hình đại diện dùng ảnh thật: phong bì và hero,
+kèm một đoạn chuyển album sáng sang album đỏ để kiểm tra hòa màu.
+Không cần tạo lại vòng chọn ba concept; chỉ hiệu chỉnh trong Mẫu thiệp 01.
+
+Cần kiểm tra ảnh gốc trước khi chốt object-position/crop; không cắt đầu, tay hoặc
+chi tiết cổ phục quan trọng. Duyệt đồng thời màn hình 390px và 320px, tên đầy đủ,
+contrast, reduced motion, các ảnh trắng sát nền và điểm chuyển sang bộ ảnh đỏ.
+
+Chưa có mockup 12ui hoặc render mới trong lần chốt này. Không cần Google credentials,
+không thay nghiệp vụ RSVP và không có phê duyệt deploy production.
