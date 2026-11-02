@@ -23,10 +23,13 @@ export function useReveal(root: Ref<HTMLElement | null>) {
       root,
       (elementRoot) => {
         observer?.disconnect()
-        elementRoot?.querySelectorAll('[data-reveal]').forEach((element) => {
-          element.classList.add('reveal-wait')
-          observer?.observe(element)
-        })
+        elementRoot
+          ?.querySelectorAll<HTMLElement>('[data-reveal]')
+          .forEach((element, index) => {
+            element.style.setProperty('--reveal-delay', `${(index % 3) * 80}ms`)
+            element.classList.add('reveal-wait')
+            observer?.observe(element)
+          })
       },
       { immediate: true, flush: 'post' },
     )

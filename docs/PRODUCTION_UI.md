@@ -23,3 +23,7 @@ Run browser scripts with `PLAYWRIGHT_MODULE` pointing to an external Playwright 
 ## Release
 
 Push verified main, then create a production deployment from its exact commit SHA using the Vercel connection. Keep automatic Git deployments disabled as configured; this request authorizes this release. Inspect READY state and assigned domain before reporting the link.
+
+## Sample content and motion update
+
+The owner subsequently requested sample content first. The root now explicitly labels fictional names, parents, family addresses, venue and date, and shows the existing original illustration album. Family records live in event.ts; no real personal information or bank data was inferred from the reference. Eight original CSS leaves, staggered scroll reveal and hero entry add motion; a stop/restart button and prefers-reduced-motion disable it. The production browser test now covers both families, sample date, gallery and motion controls in addition to disabled RSVP and absent QR/map actions. Earlier pending-date assertions describe the initial release only.

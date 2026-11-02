@@ -5,10 +5,13 @@ import { event as productionEvent } from '../config/event'
 import { previewEvent } from '../config/preview'
 const props = defineProps<{ preview?: boolean }>()
 const preview = props.preview === true
+const event = preview ? previewEvent : productionEvent
+const motionPaused = ref(false)
 provide(invitationKey, {
-  event: preview ? previewEvent : productionEvent,
+  event,
   preview,
 })
+import FamilyDetails from '../components/preview/FamilyDetails.vue'
 import EnvelopeIntro from '../components/preview/EnvelopeIntro.vue'
 import InvitationHero from '../components/preview/InvitationHero.vue'
 import EventDetails from '../components/preview/EventDetails.vue'
@@ -49,13 +52,32 @@ async function open() {
       ...previewTheme,
       '--reveal-duration': previewMotion.revealMs + 'ms',
     }"
-    :class="{ 'motion-disabled': !previewMotion.enabled }"
+    :class="{ 'motion-disabled': !previewMotion.enabled || motionPaused }"
   >
     <div v-if="preview" class="preview-banner">
       MẪU THIỆP 01 <span>·</span> Bản xem trước tương tác — thông tin &amp; hình
       minh họa
     </div>
-    <EnvelopeIntro v-if="!opened" @opened="open" />
+    <div v-if="!preview && event.sampleContent" class="sample-banner">
+      BẢN NỘI DUNG MẪU · Tên, gia đình, địa chỉ và ngày cưới đều là thông tin
+      minh họa.
+    </div>
+    <div class="ambient-leaves" aria-hidden="true">
+      <span v-for="n in 8" :key="n" :style="{ '--leaf-index': n }"></span>
+    </div>
+    <button
+      class="motion-toggle"
+      type="button"
+      :aria-pressed="motionPaused"
+      @click="motionPaused = !motionPaused"
+    >
+      {{ motionPaused ? 'Bật hiệu ứng' : 'Tắt hiệu ứng' }}
+    </button>
+    <EnvelopeIntro
+      v-if="!opened"
+      :motion-disabled="motionPaused"
+      @opened="open"
+    />
     <div v-else ref="content" class="opened-invitation">
       <a class="skip-link" href="#rsvp">{{
         preview ? 'Đến phần xác nhận demo' : 'Đến phần xác nhận tham dự'
@@ -71,7 +93,7 @@ async function open() {
         <MusicControl />
       </nav>
       <main>
-        <InvitationHero /><EventDetails /><PhotoGallery /><CountdownTimer /><RSVPForm />
+        <InvitationHero /><FamilyDetails /><EventDetails /><PhotoGallery /><CountdownTimer /><RSVPForm />
         <section
           id="gifts"
           class="preview-section gift-section"
@@ -94,7 +116,9 @@ async function open() {
         <small>{{
           preview
             ? 'MẪU THIỆP 01 · DEMO · KHÔNG THU THẬP RSVP'
-            : 'TRÂN TRỌNG KÍNH MỜI'
+            : event.sampleContent
+              ? 'THÔNG TIN MẪU · CHƯA PHẢI THIỆP MỜI CHÍNH THỨC'
+              : 'TRÂN TRỌNG KÍNH MỜI'
         }}</small
         ><button class="text-button" type="button" @click="replay">
           Xem lại phong bì ↗

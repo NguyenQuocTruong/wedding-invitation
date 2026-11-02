@@ -1160,3 +1160,186 @@
   transition: none !important;
   scroll-behavior: auto !important;
 }
+
+/* Original motion inspired by the reference's gentle floral opening. */
+.sample-banner {
+  position: relative;
+  z-index: 12;
+  padding: 10px 20px;
+  background: #e6ede6;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+}
+.ambient-leaves {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+.ambient-leaves span {
+  position: absolute;
+  top: -40px;
+  left: calc(var(--leaf-index) * 12%);
+  width: 9px;
+  height: 17px;
+  border: 1px solid #82937b55;
+  border-radius: 90% 0 90% 0;
+  background: #bac9ac44;
+  animation: invitation-leaf calc(14s + var(--leaf-index) * 1.6s) linear
+    infinite;
+  animation-delay: calc(var(--leaf-index) * -3.7s);
+}
+@keyframes invitation-leaf {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.55;
+  }
+  75% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(-65px, 105vh, 0) rotate(250deg);
+    opacity: 0;
+  }
+}
+.motion-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 15;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: #faf9f6f5;
+  color: var(--ink);
+  font-size: 11px !important;
+  box-shadow: 0 3px 16px #3037330d;
+}
+.family-section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.family-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px;
+  margin-top: 44px;
+}
+.family-card {
+  padding: 42px 24px;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.family-flower {
+  display: block;
+  color: #829375;
+  margin: 20px auto;
+  font-size: 32px;
+}
+.parent-name {
+  font-family: var(--font-heading);
+  font-size: 21px;
+  line-height: 1.6;
+}
+.family-address {
+  max-width: 290px;
+  margin: 18px auto 32px !important;
+  color: var(--muted);
+  font-size: 12px;
+}
+.family-card h3 {
+  margin-top: 14px;
+  font-size: clamp(26px, 3vw, 36px);
+  overflow-wrap: anywhere;
+}
+.sample-note {
+  text-align: center;
+  margin-top: 26px !important;
+  color: var(--muted);
+  font-size: 11px;
+}
+.event-date-stamp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 22px auto;
+}
+.event-date-stamp > span {
+  font-family: var(--font-heading);
+  font-size: 64px;
+  line-height: 1;
+}
+.event-date-stamp > div {
+  border-left: 1px solid var(--line);
+  padding-left: 18px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-align: left;
+}
+.design-preview [data-reveal] {
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.design-preview .reveal-wait {
+  transform: translateY(22px);
+}
+.hero-copy > * {
+  animation: hero-bloom 800ms both;
+}
+.hero-copy > :nth-child(2) {
+  animation-delay: 80ms;
+}
+.hero-copy > :nth-child(3) {
+  animation-delay: 160ms;
+}
+.hero-copy > :nth-child(4) {
+  animation-delay: 240ms;
+}
+.hero-copy > :nth-child(5) {
+  animation-delay: 320ms;
+}
+@keyframes hero-bloom {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.design-preview.motion-disabled .ambient-leaves {
+  display: none;
+}
+@media (max-width: 767px) {
+  .family-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .family-section {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+  .sample-banner {
+    font-size: 9px;
+    padding: 9px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-leaves,
+  .motion-toggle {
+    display: none;
+  }
+  .design-preview .reveal-wait {
+    opacity: 1;
+    transform: none;
+  }
+}

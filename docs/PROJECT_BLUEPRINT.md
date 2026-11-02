@@ -389,3 +389,7 @@ The MVP is ready for production review when:
 The owner authorized implementing approved Template 01 on the production root and deploying the latest version to the existing wedding-invitation Vercel project. The root now shares the approved layout with /design-preview through typed context; the preview retains its sample content and simulations.
 
 Only the UI release is included. Real event information, wedding media, gift QR and Google Sheets setup remain outstanding. Production uses explicit pending states, no fabricated date/map/bank details, and a disabled RSVP form; the existing API continues returning 503 until a separately implemented and verified backend is available. This UI release is not a claim that the full MVP readiness criteria in section 13 have been met.
+
+## 16. Sample family content and motion — 2026-11-02
+
+The owner requested additional motion inspiration from https://ngaychungdoi.com/w/zsl1gxdmebcc and explicitly chose fictional data first. Production now shows a persistent sample-content disclosure, fictional couple and parent names, two family addresses, sample wedding date/time/venue, and the existing original illustration album. The separate family section is typed public configuration. No reference assets or code are imported. Original drifting leaves and staggered entry supplement the approved Template 01 motion, with a stop control and reduced-motion fallback. Bank QR, real RSVP persistence and real media remain pending.

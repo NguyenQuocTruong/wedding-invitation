@@ -6,6 +6,16 @@ interface PreviewPhoto {
   group: 'light' | 'red'
 }
 export interface PreviewEvent {
+  sampleContent?: boolean
+  families?: Record<
+    GuestSide,
+    {
+      label: string
+      fullName: string
+      parents: string[]
+      address: string
+    }
+  >
   brideName: string
   groomName: string
   invitation: string

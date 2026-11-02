@@ -3,6 +3,7 @@ import { onUnmounted, ref } from 'vue'
 import { useInvitation } from '../../composables/useInvitation'
 const { event } = useInvitation()
 import { previewMotion } from '../../config/theme'
+const props = defineProps<{ motionDisabled?: boolean }>()
 const emit = defineEmits<{ opened: [] }>()
 const opening = ref(false)
 let timer: ReturnType<typeof setTimeout> | undefined
@@ -14,6 +15,7 @@ function open() {
   if (opening.value) return
   opening.value = true
   if (
+    props.motionDisabled ||
     !previewMotion.enabled ||
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )

@@ -43,8 +43,8 @@ onUnmounted(() => clearInterval(timer))
           : 'Ngày cưới sẽ được cập nhật.'
       }}
     </p>
-    <p v-if="preview" class="subtle">
-      Ngày và giờ trong bản xem trước chỉ là dữ liệu mẫu.
+    <p v-if="preview || event.sampleContent" class="subtle">
+      Ngày và giờ hiển thị chỉ là dữ liệu mẫu.
     </p>
   </section>
 </template>

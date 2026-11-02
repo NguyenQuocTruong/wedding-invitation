@@ -29,7 +29,7 @@ async function close() {
         Thương nhau,<br /><em>qua từng khung hình.</em>
       </h2>
       <p>Một chút dịu dàng. Một chút rạng rỡ. Và thật nhiều thương.</p>
-      <small v-if="preview" class="subtle"
+      <small v-if="preview || event.sampleContent" class="subtle"
         >Minh họa gốc cho ba nhóm ảnh · Sẽ thay bằng ảnh của hai bạn</small
       >
     </div>

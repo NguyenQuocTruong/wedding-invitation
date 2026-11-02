@@ -22,8 +22,14 @@ const { event, preview } = useInvitation()
     <div class="event-card">
       <span class="small-flower" aria-hidden="true">✳︎</span>
       <p class="eyebrow">
-        LỄ THÀNH HÔN<span v-if="preview"> · THÔNG TIN MẪU</span>
+        LỄ THÀNH HÔN<span v-if="preview || event.sampleContent">
+          · THÔNG TIN MẪU</span
+        >
       </p>
+      <div v-if="event.dateTime" class="event-date-stamp" aria-hidden="true">
+        <span>{{ event.day }}</span>
+        <div>{{ event.monthLabel }}<br />{{ event.year }}</div>
+      </div>
       <h3>{{ event.dateLabel }}</h3>
       <p>{{ event.timeLabel }} <span class="subtle">· Giờ Việt Nam</span></p>
       <hr />
