@@ -1,69 +1,33 @@
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  ref,
-  type CSSProperties,
-} from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import sourceLayout from '../data/template-02-layout.json'
 import assetManifest from '../data/template-02-assets.json'
 import wedding from '../data/wedding.json'
 import { countdownParts } from '../utils/preview'
 import { useReveal } from '../composables/useReveal'
 import '../styles/template-02.css'
-interface NodeProps {
-  top: number
-  left: number
-  width: number
-  height: number
-  rotation?: number
-  zIndex?: number
-  opacity?: number
-  text?: string
-  fallbackText?: string
-  semanticField?: string
-  imgKey?: string
-  maskShapeImg?: string
-  materialType?: string
-  color?: string
-  backgroundColor?: string
-  fontSize?: number
-  fontFamily?: string
-  fontWeight?: string
-  fontStyle?: string
-  textAlign?: string
-  lineHeight?: string | number
-  letterSpacing?: string | number
-  textTransform?: string
-  padding?: number[]
-  borderRadius?: number[]
-  borderSize?: number
-  borderColor?: string
-  flipX?: boolean
-  flipY?: boolean
-  transition?: {
-    effectType: string
-    effectEnabled: boolean
-    effectDuration: number
-    effectDelay: number
-  }
-}
-interface LayoutNode {
-  id: string
-  type: string
-  props: NodeProps
-}
+import {
+  asset,
+  nodeStyle,
+  elementStyle,
+  getCanvasScale,
+  type LayoutNode,
+} from '../utils/template-02'
+import '../styles/template-02-fonts.css'
+import '../styles/template-02-opening.css'
 const nodes = sourceLayout as LayoutNode[]
 const assets: Record<string, string> = assetManifest
 const shell = ref<HTMLElement | null>(null)
 const content = ref<HTMLElement | null>(null)
 const opened = ref(false)
+const opening = ref(false)
+let openingTimer: ReturnType<typeof setTimeout> | undefined
 const paused = ref(false)
 const scale = ref(1)
 const photoDialog = ref<HTMLDialogElement | null>(null)
 const selectedPhoto = ref('')
+const rsvpDialog = ref<HTMLDialogElement | null>(null)
+const giftsDialog = ref<HTMLDialogElement | null>(null)
 const audio = ref<HTMLAudioElement | null>(null)
 const playing = ref(false)
 const musicStatus = ref('')
@@ -88,59 +52,18 @@ function displayedText(node: LayoutNode): string {
   }
   return confirmed[node.id] || node.props.text || ''
 }
-function asset(key = '') {
-  return assets[key] || 'https://assets.ngaychungdoi.com/' + key
-}
-function nodeStyle(p: NodeProps): CSSProperties {
-  return {
-    top: p.top + 'px',
-    left: p.left + 'px',
-    width: p.width + 'px',
-    height: p.height + 'px',
-    zIndex: p.zIndex || 0,
-    opacity: p.opacity ?? 1,
-    transform: `rotate(${p.rotation || 0}deg)`,
-    borderRadius: p.borderRadius?.map((x) => x + 'px').join(' '),
-  }
-}
-function elementStyle(p: NodeProps): CSSProperties {
-  const style: CSSProperties = {
-    backgroundColor: p.backgroundColor?.startsWith('#')
-      ? p.backgroundColor
-      : 'transparent',
-    color: p.color,
-    fontSize: (p.fontSize || 16) + 'px',
-    fontFamily: (p.fontFamily || 'Georgia') + ', PreviewLora, Georgia, serif',
-    fontWeight: p.fontWeight,
-    fontStyle: p.fontStyle,
-    textAlign: p.textAlign as CSSProperties['textAlign'],
-    lineHeight: p.lineHeight || 'normal',
-    letterSpacing:
-      typeof p.letterSpacing === 'number'
-        ? p.letterSpacing + 'px'
-        : p.letterSpacing,
-    textTransform: p.textTransform as CSSProperties['textTransform'],
-    padding: p.padding?.map((x) => x + 'px').join(' '),
-    borderRadius: p.borderRadius?.map((x) => x + 'px').join(' '),
-    border: p.borderSize
-      ? `${p.borderSize}px solid ${p.borderColor}`
-      : undefined,
-    '--enter-duration': `${p.transition?.effectDuration || 1}s`,
-    '--enter-delay': `${p.transition?.effectDelay || 0}s`,
-  }
-  if (p.maskShapeImg) {
-    style.maskImage = `url("${asset(p.maskShapeImg)}")`
-    style.maskSize = '100% 100%'
-  }
-  if (p.materialType === 'svg') {
-    style.backgroundColor = p.color
-    style.maskImage = `url("${asset(p.imgKey)}")`
-    style.maskSize = '100% 100%'
-  }
-  return style
-}
 async function open() {
+  if (opening.value) return
+  opening.value = true
+  const reduced =
+    paused.value ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!reduced)
+    await new Promise<void>((resolve) => {
+      openingTimer = setTimeout(resolve, 900)
+    })
   opened.value = true
+  opening.value = false
   await nextTick()
   content.value?.focus({ preventScroll: true })
   window.scrollTo({ top: 0, behavior: 'instant' })
@@ -175,7 +98,7 @@ async function toggleMusic() {
 }
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
-    scale.value = entries[0]!.contentRect.width / 430
+    scale.value = getCanvasScale(entries[0]!.contentRect.width)
   })
   if (shell.value) observer.observe(shell.value)
   clock = setInterval(() => (now.value = Date.now()), 1000)
@@ -183,63 +106,281 @@ onMounted(() => {
 onUnmounted(() => {
   observer?.disconnect()
   clearInterval(clock)
+  clearTimeout(openingTimer)
   audio.value?.pause()
 })
 </script>
 <template>
   <div class="clone-page" :class="{ 'motion-disabled': paused }">
-    <nav class="clone-switch" aria-label="Chọn mẫu thiệp">
-      <a href="/">Thiệp 1</a><span>Thiệp 2 · Quốc Trưởng &amp; Lâm Oanh</span
-      ><button type="button" :aria-pressed="paused" @click="paused = !paused">
-        {{ paused ? 'Bật hiệu ứng' : 'Tắt hiệu ứng' }}
-      </button>
-    </nav>
+    <button
+      class="clone-motion-toggle"
+      type="button"
+      :aria-pressed="paused"
+      @click="paused = !paused"
+    >
+      {{ paused ? 'Bật hiệu ứng' : 'Tắt hiệu ứng' }}
+    </button>
     <div ref="shell" class="clone-shell">
-      <section
+      <div
         v-if="!opened"
-        class="clone-opening"
-        aria-labelledby="second-intro"
+        class="slr-root"
+        :class="{ 'is-opening': opening }"
+        style="
+          position: fixed;
+          inset: 0;
+          z-index: 999999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          background: linear-gradient(
+            to bottom right,
+            #364131,
+            #2c3528,
+            #22291f
+          );
+        "
       >
-        <img
-          class="opening-flower top"
-          :src="
-            asset(
-              'card-assets/opening-effect/opening-cards/themes/nature/flower_top.webp',
-            )
-          "
-          alt=""
-          aria-hidden="true"
-        />
-        <p class="clone-small">TRÂN TRỌNG KÍNH MỜI</p>
-        <h1 id="second-intro" tabindex="-1">
-          {{ wedding.couple.groomName }}<span>&amp;</span
-          >{{ wedding.couple.brideName }}
-        </h1>
-        <div class="opening-rule"></div>
-        <p class="opening-date">14 tháng 11, 2026</p>
-        <p>Kính mời</p>
-        <h2>Bạn &amp; người thương</h2>
-        <p>đến dự buổi tiệc chung vui cùng gia đình</p>
-        <button class="clone-open-button" type="button" @click="open">
-          Mở thiệp <span aria-hidden="true">↗</span>
-        </button>
-        <img
-          class="opening-flower bottom"
-          :src="
-            asset(
-              'card-assets/opening-effect/opening-cards/themes/nature/flower_paralax.webp',
-            )
-          "
-          alt=""
-          aria-hidden="true"
-        />
-      </section>
+        <div class="slr-floating-layer" aria-hidden="true">
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 29.0318%;
+              color: rgb(255, 193, 7);
+              font-size: 10.4945px;
+              --sway: 14.6151px;
+              animation: 12.3933s ease-in-out -2.5s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 40.4105%;
+              color: rgb(255, 193, 7);
+              font-size: 15.2178px;
+              --sway: 0.7711px;
+              animation: 17.258s ease-in-out -2.2s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 62.3539%;
+              color: rgb(255, 215, 0);
+              font-size: 12.9533px;
+              --sway: -4.5127px;
+              animation: 12.2138s ease-in-out -1.9s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 58.5176%;
+              color: rgb(255, 215, 0);
+              font-size: 12.0958px;
+              --sway: -7.5454px;
+              animation: 14.2745s ease-in-out -1.6s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 21.2178%;
+              color: rgb(255, 193, 7);
+              font-size: 15.7111px;
+              --sway: 18.7097px;
+              animation: 18.2817s ease-in-out -1.3s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 49.4994%;
+              color: rgb(255, 215, 0);
+              font-size: 17.687px;
+              --sway: -4.778px;
+              animation: 16.9206s ease-in-out -1s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 10.1181%;
+              color: rgb(255, 107, 107);
+              font-size: 19.6038px;
+              --sway: 2.9281px;
+              animation: 20.0456s ease-in-out -0.7s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 19.879%;
+              color: rgb(255, 107, 107);
+              font-size: 20.5409px;
+              --sway: -25.5909px;
+              animation: 20.0737s ease-in-out -0.4s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 64.8679%;
+              color: rgb(255, 107, 107);
+              font-size: 13.509px;
+              --sway: 20.9986px;
+              animation: 21.7806s ease-in-out -0.1s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 13.423%;
+              color: rgb(255, 107, 107);
+              font-size: 22.3905px;
+              --sway: 14.1615px;
+              animation: 19.6522s ease-in-out 0.2s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 55.6376%;
+              color: rgb(255, 193, 7);
+              font-size: 18.5154px;
+              --sway: 18.2974px;
+              animation: 16.8704s ease-in-out 0.5s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+          <div
+            class="slr-floating-symbol"
+            style="
+              left: 14.3642%;
+              color: rgb(255, 193, 7);
+              font-size: 23.6123px;
+              --sway: 0.3592px;
+              animation: 18.2179s ease-in-out 0.8s infinite ambient-rise;
+            "
+          >
+            囍
+          </div>
+        </div>
+        <div class="slr-content-layer" style="position: relative; z-index: 10">
+          <div
+            class="slr-ui-frame slr-ui-frame--responsive"
+            data-slr-theme="vuonxuan-green"
+            style="
+              --slr-font-display:
+                'UNI Chu truyen thong', 'Baskerville', 'Times New Roman', serif;
+              --slr-card-glow-rgb: 105, 122, 98;
+              --slr-open-button-shadow-rgb: 93, 106, 87;
+              --slr-guest-badge-bg: rgba(93, 106, 87, 0.1);
+              --slr-text-color: #5d6a57;
+              --slr-open-button-bg: #5d6a57;
+              --slr-open-button-text-color: #ffffff;
+            "
+          >
+            <div class="slr-ui-seal">
+              <svg
+                class="slr-ui-seal-heart"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                ></path>
+              </svg>
+            </div>
+            <div class="slr-ui-card-shadow">
+              <div class="slr-ui-card">
+                <img
+                  src="/template-02/2be37cb2e976db19.webp"
+                  alt=""
+                  aria-hidden="true"
+                  class="slr-ui-art slr-ui-vxg-flower-top"
+                /><img
+                  src="/template-02/9ae458b6b007e3ae.webp"
+                  alt=""
+                  aria-hidden="true"
+                  class="slr-ui-art slr-ui-vxg-flower-bottom"
+                />
+                <div class="slr-ui-text-wrap">
+                  <h1
+                    id="second-intro"
+                    tabindex="-1"
+                    class="slr-ui-couple-name"
+                  >
+                    <span>{{ wedding.couple.groomName }}</span
+                    ><span class="slr-ui-couple-and">&amp;</span
+                    ><span>{{ wedding.couple.brideName }}</span>
+                  </h1>
+                  <div class="slr-ui-divider">
+                    <div
+                      class="slr-ui-divider-line slr-ui-divider-line--left"
+                    ></div>
+                    <span>❦</span>
+                    <div
+                      class="slr-ui-divider-line slr-ui-divider-line--right"
+                    ></div>
+                  </div>
+                  <div class="slr-ui-date"><span>14 tháng 11, 2026</span></div>
+                  <div class="slr-ui-invitation">
+                    <p class="slr-ui-invitation-label"><span>Kính mời</span></p>
+                    <div class="slr-ui-guest-badge">
+                      <h2>Bạn &amp; người thương</h2>
+                    </div>
+                    <p class="slr-ui-invitation-text">
+                      <span class="slr-ui-invitation-text-content"
+                        >đến dự buổi tiệc chung vui cùng gia đình</span
+                      >
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    class="slr-ui-open-button"
+                    :disabled="opening"
+                    @click="open"
+                  >
+                    <span>Mở thiệp</span>
+                    <div
+                      class="slr-ui-open-button-shine"
+                      aria-hidden="true"
+                    ></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-else class="clone-stage" :style="{ height: 4567 * scale + 'px' }">
         <main
           ref="content"
           tabindex="-1"
           class="clone-canvas"
-          :style="{ transform: `scale(${scale})` }"
+          :style="{ transform: `scale(${scale})`, '--canvas-scale': scale }"
           aria-label="Thiệp cưới Quốc Trưởng và Lâm Oanh"
         >
           <h1 class="sr-only">
@@ -258,7 +399,8 @@ onUnmounted(() => {
                 node.props.transition?.effectEnabled ? '' : undefined
               "
               :data-effect="node.props.transition?.effectType"
-              :style="elementStyle(node.props)"
+              :data-continuous="node.props.continuousAnimation?.type"
+              :style="elementStyle(node.props, node.type)"
             >
               <template v-if="node.type === 'TextBox'">
                 <a
@@ -330,21 +472,31 @@ onUnmounted(() => {
                 </div>
               </div>
               <div v-else-if="node.type === 'PluginRsvp'" class="clone-rsvp">
-                <h2>Xác nhận tham dự</h2>
-                <p>Vui lòng liên hệ cô dâu hoặc chú rể để xác nhận.</p>
-                <label
-                  >Họ và tên<input
-                    disabled
-                    placeholder="Họ và tên của bạn" /></label
-                ><button disabled type="button">
-                  Chưa mở xác nhận trực tuyến</button
-                ><small>Biểu mẫu chưa thu thập thông tin.</small>
+                <div class="rsvp-head">
+                  <span class="rsvp-eng">R.S.V.P.</span>
+                  <h2>Xác nhận tham dự</h2>
+                </div>
+                <p>
+                  Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới được
+                  thuận lợi và trọn vẹn nhất.
+                </p>
+                <button type="button" @click="rsvpDialog?.showModal()">
+                  ♧ Gửi xác nhận
+                </button>
               </div>
-              <div v-else-if="node.type === 'PluginQrBox'" class="clone-gifts">
-                <span aria-hidden="true">♡</span>
-                <p>Sự hiện diện của bạn là món quà quý giá.</p>
-                <small>Thông tin mừng cưới sẽ được cập nhật.</small>
-              </div>
+              <button
+                v-else-if="node.type === 'PluginQrBox'"
+                class="clone-gifts-button"
+                type="button"
+                aria-label="Gửi quà mừng"
+                @click="giftsDialog?.showModal()"
+              >
+                <img
+                  :src="asset(node.props.imgKey)"
+                  alt="Hộp quà mừng cưới"
+                  loading="lazy"
+                />
+              </button>
             </div>
           </div>
         </main>
@@ -374,6 +526,32 @@ onUnmounted(() => {
       loop
       @pause="playing = false"
     />
+    <dialog
+      ref="rsvpDialog"
+      class="clone-form-dialog"
+      aria-label="Xác nhận tham dự"
+    >
+      <h2>Xác nhận tham dự</h2>
+      <p>
+        Xác nhận trực tuyến chưa mở. Bạn vui lòng liên hệ trực tiếp cô dâu hoặc
+        chú rể.
+      </p>
+      <label>Họ và tên<input disabled placeholder="Họ và tên của bạn" /></label
+      ><button type="button" @click="rsvpDialog?.close()">Đóng</button>
+    </dialog>
+    <dialog
+      ref="giftsDialog"
+      class="clone-form-dialog"
+      aria-label="Thông tin mừng cưới"
+    >
+      <h2>Hộp quà yêu thương</h2>
+      <p>Sự hiện diện của bạn là món quà quý giá.</p>
+      <h3>Cô dâu</h3>
+      <p>Thông tin mừng cưới sẽ được cập nhật.</p>
+      <h3>Chú rể</h3>
+      <p>Thông tin mừng cưới sẽ được cập nhật.</p>
+      <button type="button" @click="giftsDialog?.close()">Đóng</button>
+    </dialog>
     <dialog
       ref="photoDialog"
       class="clone-photo-dialog"

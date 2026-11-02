@@ -1,0 +1,76 @@
+/* Fonts from the owner-supplied invitation reference. */
+@font-face {
+  font-family: 'Chillatos';
+  src:
+    url('/template-02/0144a4c50abda881.woff2') format('woff2'),
+    url('https://assets.ngaychungdoi.com/fonts/webfonts/chillatos/chillatos.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chetta Vissto';
+  src: url('/template-02/a00f1f03705bf395.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arcittya Begatri';
+  src:
+    url('/template-02/8c30d7cfefa3f3c9.woff2') format('woff2'),
+    url('https://assets.ngaychungdoi.com/fonts/webfonts/arcittya-begatri/arcittya-begatri.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Moon Light';
+  src:
+    url('/template-02/3063843334f6e2d5.woff2') format('woff2'),
+    url('https://assets.ngaychungdoi.com/fonts/webfonts/moon-light/moon-light.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: scarlet-bradley.regular;
+  src: url('https://assets.ngaychungdoi.com/fonts/webfonts/scarlet-bradleyregular/scarlet-bradleyregular.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Abbassy Script';
+  src:
+    url('/template-02/2bb9f08f163bd402.woff2') format('woff2'),
+    url('https://assets.ngaychungdoi.com/fonts/webfonts/abbassy-script/abbassy-script.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BrikeyMoura Regular';
+  src: url('/template-02/3b9a0c9e9830f3c3.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HoaTay1';
+  src:
+    url('/template-02/6b9a0a83f678634e.woff2') format('woff2'),
+    url('https://assets.ngaychungdoi.com/fonts/webfonts/hoatay1/hoatay1.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
