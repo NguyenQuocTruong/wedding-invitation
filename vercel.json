@@ -4,6 +4,24 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": { "api/rsvp.ts": { "maxDuration": 10 } },
-  "git": { "deploymentEnabled": { "main": false } }
+  "functions": {
+    "api/rsvp.ts": {
+      "maxDuration": 10
+    }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": false
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/design-preview",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/design-preview/",
+      "destination": "/index.html"
+    }
+  ]
 }

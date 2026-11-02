@@ -10,6 +10,7 @@ export default ts.config(
   ...vue.configs['flat/recommended'],
   {
     files: ['**/*.vue'],
+    rules: { 'no-undef': 'off' }, // TypeScript checks identifiers in script setup, including DOM types.
     languageOptions: { parserOptions: { parser: ts.parser } },
   },
   prettier,

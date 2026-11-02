@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000"><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f4f0e7"/><stop offset="1" stop-color="#dcded2"/></linearGradient><linearGradient id="dress" x2="1" y2="1"><stop stop-color="#fffef9"/><stop offset="1" stop-color="#d5d9d1"/></linearGradient></defs><rect width="800" height="1000" fill="#8d3039"/><circle cx="400" cy="420" r="290" fill="#a8484c"/><path d="M80 50V950H720V50Z" fill="none" stroke="#c77b71" stroke-width="2" opacity=".6"/><ellipse cx="415" cy="907" rx="235" ry="26" fill="#652832" opacity=".08"/>
+<path d="M451 446 Q536 413 588 466 L626 846 L568 887 L456 867 L422 599Z" fill="#652832"/>
+<path d="M483 440 L522 560 L552 439" fill="#bd6b57"/><path d="M512 448 L523 449 L532 524 L518 539 L508 522Z" fill="#19251e"/>
+<path d="M462 460 L494 444 L511 605 L467 554 L481 527Z" fill="#963e46"/><path d="M554 447 L582 468 L557 523 L572 548 L536 606Z" fill="#903f43"/>
+<path d="M476 830 L515 831 L508 964 L470 964Z M535 829 L574 827 L588 964 L549 964Z" fill="#652832"/>
+<path d="M462 963 L510 963 L514 979 L449 979Z M548 963 L591 963 L610 978 L549 978Z" fill="#202923"/>
+<path d="M485 376 L534 376 L540 449 Q514 470 481 439Z" fill="#d2ad95"/>
+<ellipse cx="511" cy="340" rx="47" ry="61" fill="#ddbaa1"/>
+<path d="M463 344 Q444 274 502 268 Q563 264 562 330 L550 356 L542 319 Q486 333 474 310 L471 352Z" fill="#30332d"/>
+<path d="M270 424 Q322 409 373 433 L399 570 L437 909 Q328 953 187 909 L249 572Z" fill="#bf5554"/>
+<path d="M275 427 L321 484 L371 433 Q351 402 330 417 Q302 401 275 427Z" fill="#d57b6c"/>
+<path d="M277 432 L238 530 L203 643 Q206 658 225 648 L277 552 L302 478Z" fill="#dfbda7"/>
+<path d="M366 437 L402 524 L461 564 Q473 582 454 587 L382 544 L342 480Z" fill="#dfbda7"/>
+<path d="M292 369 L334 369 L348 426 Q324 449 289 424Z" fill="#dfbda7"/>
+<path d="M266 329 Q263 263 313 257 Q373 253 367 331 L358 384 L268 389Z" fill="#3d3c31"/>
+<ellipse cx="315" cy="330" rx="43" ry="57" fill="#e6c8b1"/>
+<path d="M269 328 Q261 272 316 265 Q363 267 366 321 Q329 319 312 287 Q296 322 269 328Z" fill="#414136"/>
+<path d="M280 280 Q215 338 230 499 L255 568 L290 398Z M341 276 Q399 329 408 452 L386 491 L348 382Z" fill="#fffef9" opacity=".53"/>
+<path d="M271 599 Q254 737 229 892 M322 572 Q304 743 313 918 M363 597 Q384 778 399 900" fill="none" stroke="#e9b092" stroke-width="3" opacity=".6"/>
+<path d="M410 541 Q408 583 397 633" stroke="#728667" stroke-width="8"/>
+<g fill="#fffdf2" stroke="#d5dbc9" stroke-width="2"><circle cx="393" cy="531" r="24"/><circle cx="423" cy="531" r="26"/><circle cx="405" cy="507" r="24"/><circle cx="439" cy="509" r="20"/><circle cx="375" cy="510" r="19"/></g>
+<g fill="#8b9c78"><ellipse cx="369" cy="543" rx="13" ry="28" transform="rotate(-45 369 543)"/><ellipse cx="445" cy="543" rx="12" ry="29" transform="rotate(38 445 543)"/></g><path d="M287 610 Q325 555 366 615 M286 642 Q328 580 375 646" stroke="#e9bc83" fill="none" stroke-width="3"/><path d="M482 597 Q521 557 564 597" stroke="#e9bc83" fill="none" stroke-width="3"/><text x="40" y="965" fill="#f4d8d0" font-family="serif" font-size="13" letter-spacing="3">ILLUSTRATION · MẪU THIỆP 01</text></svg>
