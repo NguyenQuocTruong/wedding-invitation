@@ -80,8 +80,8 @@ defineProps<{ events: WeddingActivity[] }>()
   max-width: 720px;
   margin: 0 auto;
   padding: 72px 24px 64px;
-  color: #465640;
-  background: #fafbf7;
+  color: var(--timeline-color, #465640);
+  background: var(--timeline-bg, #fafbf7);
   text-align: center;
   font-family: Georgia, 'Times New Roman', serif;
 }
@@ -90,7 +90,7 @@ defineProps<{ events: WeddingActivity[] }>()
 }
 .wedding-timeline .timeline-eyebrow {
   margin: 0 0 12px;
-  color: #819474;
+  color: var(--timeline-accent, #819474);
   font:
     11px/1.5 system-ui,
     sans-serif;
@@ -120,7 +120,7 @@ defineProps<{ events: WeddingActivity[] }>()
   bottom: 12px;
   left: 50%;
   width: 1px;
-  background: #bfc9b8;
+  background: var(--timeline-line, #bfc9b8);
 }
 .timeline-event {
   position: relative;
@@ -136,8 +136,8 @@ defineProps<{ events: WeddingActivity[] }>()
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  border: 1px solid #8b9c7f;
-  background: #fafbf7;
+  border: 1px solid var(--timeline-accent, #8b9c7f);
+  background: var(--timeline-dot-bg, #fafbf7);
 }
 .timeline-card {
   display: flex;
@@ -151,10 +151,11 @@ defineProps<{ events: WeddingActivity[] }>()
   display: block;
   font-size: 16px;
   font-variant-numeric: tabular-nums;
+  color: var(--timeline-accent, inherit);
 }
 .timeline-card h3 {
   margin: 6px 0 0;
-  color: #565d50;
+  color: var(--timeline-color, #565d50);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -163,6 +164,7 @@ defineProps<{ events: WeddingActivity[] }>()
   flex-shrink: 0;
   width: 40px;
   height: 40px;
+  color: var(--timeline-accent, #819474);
 }
 .timeline-event:nth-child(even) {
   justify-content: flex-end;

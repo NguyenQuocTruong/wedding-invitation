@@ -142,8 +142,8 @@ onUnmounted(() => clearInterval(timer))
   height: 66px;
   border-radius: 3px;
   gap: 6px;
-  background: #424f33;
-  color: #fff;
+  background: var(--countdown-cell-bg, #424f33);
+  color: var(--countdown-cell-color, #fff);
 }
 .wedding-countdown--compact .countdown-value {
   font:

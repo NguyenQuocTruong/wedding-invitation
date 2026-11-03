@@ -5,7 +5,7 @@
 }
 .clone-page {
   min-height: 100vh;
-  background: #303b2b;
+  background: var(--theme-outer-bg, #303b2b);
   color: #35302f;
   font-family: Georgia, serif;
   overflow-x: clip;
@@ -145,7 +145,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #f7f7f7;
+  background: var(--theme-canvas-bg, #f7f7f7);
 }
 .clone-canvas {
   position: absolute;
@@ -154,7 +154,7 @@
   width: 430px;
   height: 4567px;
   transform-origin: top left;
-  background: #f7f7f7;
+  background: var(--theme-canvas-bg, #f7f7f7);
   overflow: hidden;
   outline: 0;
 }
@@ -208,7 +208,8 @@
   font-size: 12px;
 }
 .clone-calendar .wedding-day {
-  border: 2px solid #ef9d9b;
+  border: 2px solid var(--theme-badge-border, #ef9d9b);
+  color: var(--theme-badge-color, inherit);
   border-radius: 50%;
   font-weight: 700;
 }
@@ -262,13 +263,13 @@
 }
 .clone-rsvp button {
   border: 0;
-  background: #424f33;
+  background: var(--theme-primary, #424f33);
   color: white;
   border-radius: 30px;
   padding: 12px 8px;
   width: 100%;
   font-size: 12px;
-  opacity: 0.65;
+  opacity: 0.9;
 }
 .clone-rsvp small {
   display: block;
@@ -296,7 +297,7 @@
   font-size: 12px;
 }
 .clone-end {
-  background: #f7f7f7;
+  background: var(--theme-canvas-bg, #f7f7f7);
   display: flex;
   justify-content: center;
   gap: 20px;
@@ -305,7 +306,7 @@
 }
 .clone-end a,
 .clone-end button {
-  color: #424f33;
+  color: var(--theme-primary, #424f33);
   background: none;
   border: 0;
   text-decoration: underline;
@@ -707,4 +708,102 @@
   padding: 10px 18px;
   min-height: 40px;
   font-size: 14px;
+}
+
+/* Theme presets for Template 2 */
+.clone-page.theme-sage {
+  --theme-outer-bg: #edf2eb;
+  --theme-canvas-bg: #fdfbf7;
+  --theme-primary: #557352;
+  --theme-primary-text: #ffffff;
+  --theme-accent: #364e34;
+  --theme-card-bg: #557352;
+  --theme-badge-border: #c5a869;
+  --theme-badge-color: #364e34;
+  --countdown-cell-bg: #557352;
+  --timeline-bg: #fdfbf7;
+  --timeline-color: #2b3828;
+  --timeline-accent: #557352;
+  --timeline-line: #d1dccd;
+  --timeline-dot-bg: #c5a869;
+  --timeline-card-bg: #ffffff;
+  --timeline-card-border: #e2ebe0;
+  --timeline-time-color: #557352;
+  --timeline-icon-color: #557352;
+  --slr-open-button-bg: #557352;
+  --slr-open-button-text-color: #ffffff;
+  --slr-text-color: #557352;
+  --slr-seal-base: #557352;
+}
+
+.clone-page.theme-peach {
+  --theme-outer-bg: #fbf0ed;
+  --theme-canvas-bg: #fffdfc;
+  --theme-primary: #c46d75;
+  --theme-primary-text: #ffffff;
+  --theme-accent: #73323a;
+  --theme-card-bg: #c46d75;
+  --theme-badge-border: #e09389;
+  --theme-badge-color: #73323a;
+  --countdown-cell-bg: #c46d75;
+  --timeline-bg: #fffdfc;
+  --timeline-color: #4a3537;
+  --timeline-accent: #c46d75;
+  --timeline-line: #f2d9d6;
+  --timeline-dot-bg: #e09389;
+  --timeline-card-bg: #ffffff;
+  --timeline-card-border: #f8e5e3;
+  --timeline-time-color: #c46d75;
+  --timeline-icon-color: #c46d75;
+  --slr-open-button-bg: #c46d75;
+  --slr-open-button-text-color: #ffffff;
+  --slr-text-color: #c46d75;
+  --slr-seal-base: #c46d75;
+}
+
+/* Theme Switcher Widget */
+.clone-theme-switcher {
+  position: fixed;
+  z-index: 1000001;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 20px;
+  padding: 3px 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+}
+.clone-theme-switcher .switcher-tag {
+  font-size: 10px;
+  color: #777;
+  padding: 0 4px;
+  font-weight: 500;
+  user-select: none;
+}
+.clone-theme-switcher button {
+  border: 0;
+  background: transparent;
+  padding: 4px 7px;
+  border-radius: 12px;
+  font-size: 11px;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.clone-theme-switcher button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.clone-theme-switcher button.is-active {
+  background: var(--theme-primary, #424f33);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }

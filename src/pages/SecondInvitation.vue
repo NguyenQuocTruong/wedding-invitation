@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, type CSSProperties } from 'vue'
 import sourceLayout from '../data/template-02-layout.json'
 import FloatingActions from '../components/shared/FloatingActions.vue'
 import InvitationFrame from '../components/shared/InvitationFrame.vue'
@@ -20,12 +20,58 @@ import {
   type LayoutNode,
   type NodeProps,
 } from '../utils/template-02'
+import {
+  TEMPLATE_02_THEMES,
+  type ThemeId,
+} from '../config/template-02-themes'
 import '../styles/template-02-fonts.css'
 import '../styles/template-02-opening.css'
 const nodes = sourceLayout as LayoutNode[]
 const TOP_STAGE_HEIGHT = 3470
 const BOTTOM_OFFSET = 3410
 const BOTTOM_STAGE_HEIGHT = 4567 - BOTTOM_OFFSET
+
+const currentTheme = ref<ThemeId>('original')
+
+function setTheme(id: ThemeId) {
+  currentTheme.value = id
+  try {
+    localStorage.setItem('wedding_invitation_theme', id)
+  } catch {
+    // ignore
+  }
+}
+
+function themedNodeStyle(node: LayoutNode): CSSProperties {
+  const base = elementStyle(node.props, node.type)
+  if (currentTheme.value === 'original') return base
+
+  const themeVars = TEMPLATE_02_THEMES[currentTheme.value]
+  const styled: CSSProperties = { ...base }
+
+  // Map text colors
+  if (node.props.color === '#1c491f') {
+    styled.color = themeVars.accent
+  } else if (node.props.color === 'rgba(66, 79, 51, 0.9521047930931825)') {
+    styled.color = themeVars.primary
+  }
+
+  // Map background colors
+  if (node.props.backgroundColor === '#424f33') {
+    styled.backgroundColor = themeVars.cardBg
+  } else if (node.props.backgroundColor === '#1c491f') {
+    styled.backgroundColor = themeVars.primary
+  }
+
+  // Map SVGs
+  if (node.props.materialType === 'svg') {
+    if (node.props.color === '#1c491f' || node.props.color === '#424f33') {
+      styled.backgroundColor = themeVars.primary
+    }
+  }
+
+  return styled
+}
 
 const countdownIndex = nodes.findIndex((n) => n.type === 'PluginCountDown')
 const countdownNode = nodes[countdownIndex]!
@@ -96,6 +142,14 @@ function showPhoto(key: string) {
   photoDialog.value?.showModal()
 }
 onMounted(() => {
+  try {
+    const saved = localStorage.getItem('wedding_invitation_theme') as ThemeId | null
+    if (saved && (saved in TEMPLATE_02_THEMES)) {
+      currentTheme.value = saved
+    }
+  } catch {
+    // ignore
+  }
   observer = new ResizeObserver((entries) => {
     scale.value = getCanvasScale(entries[0]!.contentRect.width)
   })
@@ -108,7 +162,20 @@ onUnmounted(() => {
 </script>
 <template>
   <InvitationFrame ref="frame">
-    <div class="clone-page">
+    <div class="clone-page" :class="'theme-' + currentTheme">
+      <!-- Theme Switcher Widget -->
+      <aside class="clone-theme-switcher" aria-label="Bộ màu thiệp">
+        <span class="switcher-tag">Màu:</span>
+        <button
+          v-for="item in TEMPLATE_02_THEMES"
+          :key="item.id"
+          type="button"
+          :class="{ 'is-active': currentTheme === item.id }"
+          @click="setTheme(item.id)"
+        >
+          {{ item.icon }} {{ item.name }}
+        </button>
+      </aside>
       <div ref="shell" class="clone-shell">
         <div
           v-if="!opened"
@@ -412,7 +479,7 @@ onUnmounted(() => {
                   "
                   :data-effect="node.props.transition?.effectType"
                   :data-continuous="node.props.continuousAnimation?.type"
-                  :style="elementStyle(node.props, node.type)"
+                  :style="themedNodeStyle(node)"
                 >
                   <template v-if="node.type === 'TextBox'">
                     <a
@@ -513,7 +580,7 @@ onUnmounted(() => {
                   "
                   :data-effect="node.props.transition?.effectType"
                   :data-continuous="node.props.continuousAnimation?.type"
-                  :style="elementStyle(node.props, node.type)"
+                  :style="themedNodeStyle(node)"
                 >
                   <template v-if="node.type === 'TextBox'">
                     <p>{{ displayedText(node) }}</p>
