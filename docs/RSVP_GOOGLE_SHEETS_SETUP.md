@@ -34,3 +34,9 @@ Responses are routed by `guestSide`. Text is written with RAW input and formula-
 After the owner configures the account and shares the file, verify authenticated access and an actual test submission to each destination before considering live delivery complete. A success message appears only after Google acknowledges a write or the same submission UUID is already present. Remove clearly marked test records after verification. Do not infer successful storage from availability alone.
 
 If setup fails, check API enablement, the exact shared service-account email, Editor access, all three Production bindings, and a redeployment. Google error details and credentials are never sent to guests; the popup keeps the entered information and supports retry with the same UUID.
+
+## Private connection verification
+
+The optional server-side build utility `scripts/verify-rsvp-production.mjs` is idle unless `RSVP_VERIFY_PROBES` is set. During a requested connection test, that temporary Production configuration contains only the two synthetic submission/client UUID pairs. The utility authenticates inside the Vercel build, reads the two fixed RSVP tabs, validates exact marked probe identities and reports only safe counts. It never changes or clears spreadsheet cells, deletes rows, or exposes credentials, spreadsheet contents or a public read/delete endpoint. Safe diagnostic logs identify only the failing Google stage/status and approved non-sensitive reason codes. Remove the temporary flag after verification; normal builds then skip all Google requests.
+
+Automatic cleanup by earlier row coordinates is unsafe if the owner sorts, inserts or deletes rows concurrently. After verification, the owner can remove the clearly marked synthetic records directly in Sheets. Do not automatically clear production rows by saved coordinates.
