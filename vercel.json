@@ -6,7 +6,7 @@
   "outputDirectory": "dist",
   "functions": {
     "api/rsvp.ts": {
-      "maxDuration": 10
+      "maxDuration": 30
     }
   },
   "git": {

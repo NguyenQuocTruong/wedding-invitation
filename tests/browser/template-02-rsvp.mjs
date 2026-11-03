@@ -30,8 +30,20 @@ try {
     page.on('pageerror', (error) => errors.push(error.message))
     let submissions = 0
     page.on('request', (request) => {
-      if (request.url().includes('/api/rsvp')) submissions++
+      if (request.url().includes('/api/rsvp') && request.method() === 'POST')
+        submissions++
     })
+    await page.route('**/api/rsvp', (route) =>
+      route.fulfill({
+        status: route.request().method() === 'OPTIONS' ? 200 : 503,
+        contentType: 'application/json',
+        body: JSON.stringify(
+          route.request().method() === 'OPTIONS'
+            ? { enabled: false }
+            : { error: 'RSVP_NOT_CONFIGURED' },
+        ),
+      }),
+    )
     await page.goto(base + '/thiep-2')
     const chair = page.getByRole('button', {
       name: 'Xác nhận tham dự',
@@ -158,6 +170,145 @@ try {
       `PASS ${width}x${height}: chair + in-page popup, editable fields/choices, modal fit, draft/focus, honest unavailable submission, corrected source times`,
     )
   }
+  // Exercise the actual Vue form and fetch client; only the unavailable Google boundary is mocked.
+  const ready = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    reducedMotion: 'reduce',
+  })
+  ready.setDefaultTimeout(8000)
+  ready.on('pageerror', (error) => errors.push(error.message))
+  let enabled = true
+  const posts = []
+  let releaseFirst
+  let firstSeenResolve
+  const firstSeen = new Promise((resolve) => {
+    firstSeenResolve = resolve
+  })
+  const firstGate = new Promise((resolve) => {
+    releaseFirst = resolve
+  })
+  await ready.route('**/api/rsvp', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ enabled }),
+      })
+      return
+    }
+    posts.push(route.request().postDataJSON())
+    if (posts.length === 1) {
+      firstSeenResolve()
+      await firstGate
+    }
+    await route.fulfill({
+      status: posts.length < 3 ? 503 : 200,
+      contentType: 'application/json',
+      body: JSON.stringify(
+        posts.length < 3 ? { error: 'RSVP_UNAVAILABLE' } : { ok: true },
+      ),
+    })
+  })
+  await ready.goto(base + '/thiep-2')
+  const chair = ready.getByRole('button', {
+    name: 'Xác nhận tham dự',
+    exact: true,
+  })
+  await chair.click()
+  const modal = ready.getByRole('dialog', {
+    name: 'Xác nhận tham dự',
+    exact: true,
+  })
+  const name = modal.getByRole('textbox', { name: /Họ và tên/ })
+  const message = modal.getByRole('textbox', { name: /Lời nhắn/ })
+  await ready.waitForFunction(
+    () => !globalThis.document.querySelector('.rsvp-submit').disabled,
+  )
+  await name.fill('   ')
+  await modal.getByRole('radio', { name: 'Nhà trai', exact: true }).check()
+  await modal.getByRole('radio', { name: 'Mình sẽ đến', exact: true }).check()
+  await modal.locator('.rsvp-submit').click()
+  assert.equal(posts.length, 0, 'invalid trimmed name must not be submitted')
+  await name.fill('Khách kiểm tra')
+  await message.fill('Chúc hai bạn hạnh phúc!')
+  await modal.locator('.rsvp-submit').click()
+  await firstSeen
+  assert.equal(await modal.locator('.rsvp-submit').isDisabled(), true)
+  assert.equal(await name.isDisabled(), true)
+  assert.equal(
+    await modal.getByText(/Đã gửi xác nhận thành công/).count(),
+    0,
+    'no success before server acknowledgment',
+  )
+  await modal
+    .getByRole('button', { name: 'Đóng xác nhận', exact: true })
+    .click()
+  releaseFirst()
+  await chair.click()
+  await modal.getByRole('alert').waitFor()
+  assert.equal(await name.inputValue(), 'Khách kiểm tra')
+  await modal.locator('.rsvp-submit').click()
+  await ready.waitForFunction(
+    () => globalThis.document.querySelector('.rsvp-error') !== null,
+  )
+  assert.equal(posts.length, 2)
+  assert.equal(
+    posts[0].submissionId,
+    posts[1].submissionId,
+    'unchanged retry keeps the request ID',
+  )
+  assert.equal(posts[0].clientId, posts[1].clientId)
+  enabled = false
+  await modal
+    .getByRole('button', { name: 'Đóng xác nhận', exact: true })
+    .click()
+  await chair.click()
+  await modal
+    .getByRole('button', { name: 'Kiểm tra lại', exact: true })
+    .waitFor()
+  assert.equal(
+    (await modal.innerText()).includes(
+      'Thông tin bạn điền chưa được gửi hoặc lưu.',
+    ),
+    false,
+    'an ambiguous write must not be described as unsaved',
+  )
+  enabled = true
+  await modal.getByRole('button', { name: 'Kiểm tra lại', exact: true }).click()
+  await ready.waitForFunction(
+    () => !globalThis.document.querySelector('.rsvp-submit').disabled,
+  )
+  await message.fill('Lời chúc đã chỉnh sửa')
+  await modal.locator('.rsvp-submit').click()
+  await modal.getByText(/Đã gửi xác nhận thành công/).waitFor()
+  assert.equal(posts.length, 3)
+  assert.notEqual(
+    posts[2].submissionId,
+    posts[1].submissionId,
+    'edited failed response starts a new request',
+  )
+  assert.equal(posts[2].clientId, posts[1].clientId)
+  assert.equal(await modal.locator('.rsvp-submit').isDisabled(), true)
+  assert.equal(
+    await modal
+      .getByRole('status')
+      .evaluate((el) => el === globalThis.document.activeElement),
+    true,
+  )
+  assert.deepEqual(
+    await ready.evaluate(() => Object.keys(globalThis.localStorage)),
+    ['wedding-rsvp-client-id'],
+    'only device UUID is persisted',
+  )
+  await modal
+    .getByRole('button', { name: 'Gửi xác nhận mới', exact: true })
+    .click()
+  assert.equal(await name.inputValue(), '')
+  assert.equal(await message.inputValue(), '')
+  await ready.close()
+  console.log(
+    'PASS live form flow: validation, pending acknowledgment, safe retry IDs, edited retry IDs, private unavailable state and success/reset',
+  )
   const page = await browser.newPage()
   await page.goto(base + '/')
   assert.equal(

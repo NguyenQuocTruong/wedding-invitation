@@ -1,16 +1,158 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref, watch } from 'vue'
+import {
+  getRsvpAvailability,
+  RsvpApiError,
+  sendRsvp,
+} from '../../services/rsvpApi'
 import type { Attendance, GuestSide } from '../../types/rsvp'
 
 const dialog = ref<HTMLDialogElement | null>(null)
+const formElement = ref<HTMLFormElement | null>(null)
+const nameInput = ref<HTMLInputElement | null>(null)
+const successNotice = ref<HTMLParagraphElement | null>(null)
 const form = reactive({
   guestName: '',
   guestSide: '' as GuestSide | '',
   attendance: '' as Attendance | '',
   message: '',
+  website: '',
 })
+const availability = ref<'checking' | 'ready' | 'unavailable'>('unavailable')
+const checking = ref(false)
+const submission = ref<'idle' | 'sending' | 'success' | 'error'>('idle')
+const attemptedSubmission = ref(false)
+const errorMessage = ref('')
+const locked = computed(
+  () => submission.value === 'sending' || submission.value === 'success',
+)
+let submissionId: string | undefined
+let memoryClientId: string | undefined
+
+function createUuid(): string {
+  if (typeof crypto.randomUUID === 'function') return crypto.randomUUID()
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  bytes[6] = (bytes[6]! & 0x0f) | 0x40
+  bytes[8] = (bytes[8]! & 0x3f) | 0x80
+  const hex = Array.from(bytes, (byte) =>
+    byte.toString(16).padStart(2, '0'),
+  ).join('')
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+}
+
+function getClientId(): string {
+  if (memoryClientId) return memoryClientId
+  try {
+    const stored = localStorage.getItem('wedding-rsvp-client-id')
+    if (
+      stored &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        stored,
+      )
+    ) {
+      memoryClientId = stored
+      return stored
+    }
+  } catch {
+    // Private browsing may block local storage. Keep only the device ID in memory.
+  }
+  memoryClientId = createUuid()
+  try {
+    localStorage.setItem('wedding-rsvp-client-id', memoryClientId)
+  } catch {
+    // The form and all guest data remain in page memory.
+  }
+  return memoryClientId
+}
+
+watch(
+  form,
+  () => {
+    nameInput.value?.setCustomValidity('')
+    if (submission.value === 'error') {
+      submissionId = undefined
+      submission.value = 'idle'
+      errorMessage.value = ''
+    }
+  },
+  { flush: 'sync' },
+)
+
+async function checkAvailability() {
+  if (checking.value) return
+  checking.value = true
+  availability.value = 'checking'
+  try {
+    availability.value = (await getRsvpAvailability()) ? 'ready' : 'unavailable'
+  } catch {
+    availability.value = 'unavailable'
+  } finally {
+    checking.value = false
+  }
+}
+
 function open() {
-  if (!dialog.value?.open) dialog.value?.showModal()
+  if (!dialog.value || dialog.value.open) return
+  dialog.value.showModal()
+  void checkAvailability()
+}
+
+async function submit() {
+  if (locked.value || availability.value !== 'ready') return
+  const guestName = form.guestName.trim()
+  nameInput.value?.setCustomValidity(
+    guestName.length < 2 || guestName.length > 100
+      ? 'Bạn vui lòng nhập họ tên từ 2 đến 100 ký tự.'
+      : '',
+  )
+  if (!formElement.value?.reportValidity()) return
+  if (!form.guestSide || !form.attendance || form.message.length > 500) return
+
+  submission.value = 'sending'
+  errorMessage.value = ''
+  try {
+    submissionId ??= createUuid()
+    const input = {
+      submissionId,
+      clientId: getClientId(),
+      guestName,
+      guestSide: form.guestSide,
+      attendance: form.attendance,
+      message: form.message,
+      website: form.website,
+    }
+    attemptedSubmission.value = true
+    await sendRsvp(input)
+    submission.value = 'success'
+    await nextTick()
+    if (dialog.value?.open) successNotice.value?.focus()
+  } catch (error) {
+    submission.value = 'error'
+    if (error instanceof RsvpApiError && error.code === 'RSVP_NOT_CONFIGURED') {
+      availability.value = 'unavailable'
+    }
+    errorMessage.value =
+      error instanceof RsvpApiError &&
+      ['INVALID_RSVP', 'INVALID_JSON', 'PAYLOAD_TOO_LARGE'].includes(error.code)
+        ? 'Thông tin chưa hợp lệ. Bạn vui lòng kiểm tra họ tên và lời nhắn rồi gửi lại.'
+        : 'Chưa xác nhận được kết quả gửi. Bạn vui lòng thử lại. Thông tin đã điền vẫn được giữ.'
+  }
+}
+
+async function newResponse() {
+  submission.value = 'idle'
+  submissionId = undefined
+  attemptedSubmission.value = false
+  errorMessage.value = ''
+  Object.assign(form, {
+    guestName: '',
+    guestSide: '',
+    attendance: '',
+    message: '',
+    website: '',
+  })
+  await nextTick()
+  if (dialog.value?.open) nameInput.value?.focus()
 }
 defineExpose({ open })
 </script>
@@ -36,13 +178,19 @@ defineExpose({ open })
       <h2 id="rsvp-dialog-title">Xác nhận tham dự</h2>
       <p id="rsvp-dialog-intro">Có bạn, niềm vui thêm trọn vẹn.</p>
     </header>
-    <form class="rsvp-dialog-form" @submit.prevent>
+    <form
+      ref="formElement"
+      class="rsvp-dialog-form"
+      :aria-busy="submission === 'sending'"
+      @submit.prevent="submit"
+    >
       <div class="rsvp-input-group">
         <label for="rsvp-popup-name"
           >Họ và tên <span aria-hidden="true">*</span></label
         >
         <input
           id="rsvp-popup-name"
+          ref="nameInput"
           v-model="form.guestName"
           name="guestName"
           type="text"
@@ -51,10 +199,11 @@ defineExpose({ open })
           maxlength="100"
           required
           autofocus
+          :disabled="locked"
           placeholder="Tên thân thương của bạn"
         />
       </div>
-      <fieldset class="rsvp-options">
+      <fieldset class="rsvp-options" :disabled="locked">
         <legend>Bạn là khách của <span aria-hidden="true">*</span></legend>
         <div>
           <label :class="{ selected: form.guestSide === 'BRIDE' }"
@@ -77,7 +226,7 @@ defineExpose({ open })
           >
         </div>
       </fieldset>
-      <fieldset class="rsvp-options">
+      <fieldset class="rsvp-options" :disabled="locked">
         <legend>
           Bạn sẽ đến chung vui chứ? <span aria-hidden="true">*</span>
         </legend>
@@ -112,20 +261,96 @@ defineExpose({ open })
           name="message"
           maxlength="500"
           rows="3"
+          :disabled="locked"
           placeholder="Gửi đôi lời thương đến chúng mình…"
         ></textarea>
       </div>
-      <p id="rsvp-availability" class="rsvp-availability" role="status">
-        Xác nhận trực tuyến chưa mở. Bạn vui lòng liên hệ trực tiếp cô dâu hoặc
-        chú rể. Thông tin bạn điền chưa được gửi hoặc lưu.
+      <input
+        v-model="form.website"
+        type="text"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        hidden
+        :disabled="locked"
+      />
+      <p class="rsvp-privacy">
+        Thông tin xác nhận chỉ dùng để tổ chức hôn lễ và được gửi riêng đến cô
+        dâu, chú rể.
       </p>
+      <p
+        v-if="submission === 'success'"
+        id="rsvp-availability"
+        ref="successNotice"
+        class="rsvp-availability"
+        role="status"
+        tabindex="-1"
+      >
+        Đã gửi xác nhận thành công. Cảm ơn bạn đã dành tình cảm cho chúng mình!
+      </p>
+      <p
+        v-else-if="submission === 'sending'"
+        id="rsvp-availability"
+        class="rsvp-availability"
+        role="status"
+      >
+        Đang gửi xác nhận… Bạn vui lòng chờ trong giây lát.
+      </p>
+      <p
+        v-else-if="availability === 'checking'"
+        id="rsvp-availability"
+        class="rsvp-availability"
+        role="status"
+      >
+        Đang kiểm tra khả năng gửi xác nhận…
+        <template v-if="attemptedSubmission">
+          Thông tin đã điền vẫn được giữ trong trang này.
+        </template>
+        <template v-else>Thông tin bạn điền chưa được gửi.</template>
+      </p>
+      <p
+        v-else-if="availability !== 'ready'"
+        id="rsvp-availability"
+        class="rsvp-availability"
+        role="status"
+      >
+        Xác nhận trực tuyến chưa mở. Bạn vui lòng liên hệ trực tiếp cô dâu hoặc
+        chú rể.
+        <template v-if="attemptedSubmission">
+          Thông tin đã điền vẫn được giữ trong trang này. Nếu bạn đã thử gửi,
+          kết quả trước đó chưa được xác nhận.
+        </template>
+        <template v-else> Thông tin bạn điền chưa được gửi hoặc lưu. </template>
+      </p>
+      <p v-if="errorMessage" class="rsvp-availability rsvp-error" role="alert">
+        {{ errorMessage }}
+      </p>
+      <button
+        v-if="availability === 'unavailable' && !locked"
+        class="rsvp-retry"
+        type="button"
+        @click="checkAvailability"
+      >
+        Kiểm tra lại
+      </button>
       <button
         class="rsvp-submit"
         type="submit"
-        disabled
-        aria-describedby="rsvp-availability"
+        :disabled="availability !== 'ready' || locked"
+        :aria-describedby="
+          availability !== 'ready' || locked ? 'rsvp-availability' : undefined
+        "
       >
-        Gửi xác nhận
+        {{
+          submission === 'sending'
+            ? 'Đang gửi…'
+            : submission === 'success'
+              ? 'Đã gửi xác nhận'
+              : submission === 'error'
+                ? 'Thử gửi lại'
+                : 'Gửi xác nhận'
+        }}
         <svg
           width="16"
           height="16"
@@ -139,6 +364,14 @@ defineExpose({ open })
         >
           <path d="M7 17 17 7M7 7h10v10" />
         </svg>
+      </button>
+      <button
+        v-if="submission === 'success'"
+        class="rsvp-retry"
+        type="button"
+        @click="newResponse"
+      >
+        Gửi xác nhận mới
       </button>
     </form>
   </dialog>
@@ -302,6 +535,31 @@ defineExpose({ open })
   color: #627058;
   font-size: 11px;
   line-height: 1.7;
+}
+.rsvp-privacy {
+  margin: 0;
+  color: #627058;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.rsvp-error {
+  background: #f8ece8;
+  color: #7a3d2d;
+}
+.rsvp-retry {
+  justify-self: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #aebba3;
+  border-radius: 999px;
+  background: transparent;
+  color: #405737;
+  font: inherit;
+  cursor: pointer;
+}
+.rsvp-dialog input:disabled,
+.rsvp-dialog textarea:disabled {
+  opacity: 0.8;
 }
 .rsvp-dialog .rsvp-submit {
   display: flex;
