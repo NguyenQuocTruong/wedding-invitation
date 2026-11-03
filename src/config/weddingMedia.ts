@@ -27,3 +27,7 @@ export const weddingPhotos: PreviewEvent['photos'] = album.map(
   }),
 )
 export const weddingHero = weddingPhotos[0]!.src
+
+// Start paused; both invitations use the same user-controlled track.
+export const weddingMusic =
+  assets['mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3'] || null

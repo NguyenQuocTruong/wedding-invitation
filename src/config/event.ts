@@ -1,5 +1,5 @@
 import type { PreviewEvent } from './preview'
-import { weddingHero, weddingPhotos } from './weddingMedia'
+import { weddingHero, weddingPhotos, weddingMusic } from './weddingMedia'
 import wedding from '../data/wedding.json'
 
 const ceremony = wedding.events[1]!
@@ -21,7 +21,7 @@ export const event: PreviewEvent & { rsvpEnabled: false } = {
   mapUrl: ceremony.mapUrl,
   events: wedding.events,
   hero: weddingHero,
-  musicSrc: null,
+  musicSrc: weddingMusic,
   photos: weddingPhotos,
   rsvpEnabled: false,
   families: wedding.families,

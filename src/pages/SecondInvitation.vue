@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import sourceLayout from '../data/template-02-layout.json'
-import assetManifest from '../data/template-02-assets.json'
+import FloatingActions from '../components/shared/FloatingActions.vue'
+import { weddingMusic } from '../config/weddingMedia'
 import wedding from '../data/wedding.json'
 import { countdownParts } from '../utils/preview'
 import { useReveal } from '../composables/useReveal'
@@ -16,21 +17,16 @@ import {
 import '../styles/template-02-fonts.css'
 import '../styles/template-02-opening.css'
 const nodes = sourceLayout as LayoutNode[]
-const assets: Record<string, string> = assetManifest
 const shell = ref<HTMLElement | null>(null)
 const content = ref<HTMLElement | null>(null)
 const opened = ref(false)
 const opening = ref(false)
 let openingTimer: ReturnType<typeof setTimeout> | undefined
-const paused = ref(false)
 const scale = ref(1)
 const photoDialog = ref<HTMLDialogElement | null>(null)
 const selectedPhoto = ref('')
 const rsvpDialog = ref<HTMLDialogElement | null>(null)
 const giftsDialog = ref<HTMLDialogElement | null>(null)
-const audio = ref<HTMLAudioElement | null>(null)
-const playing = ref(false)
-const musicStatus = ref('')
 const now = ref(Date.now())
 const ceremony = wedding.events.find((item) => item.id === 'ceremony')!
 const countdown = computed(
@@ -55,9 +51,7 @@ function displayedText(node: LayoutNode): string {
 async function open() {
   if (opening.value) return
   opening.value = true
-  const reduced =
-    paused.value ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (!reduced)
     await new Promise<void>((resolve) => {
       openingTimer = setTimeout(resolve, 900)
@@ -78,24 +72,6 @@ function showPhoto(key: string) {
   selectedPhoto.value = asset(key)
   photoDialog.value?.showModal()
 }
-async function toggleMusic() {
-  if (!assets['mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3']) {
-    musicStatus.value = 'Nhạc nền chưa sẵn sàng.'
-    return
-  }
-  if (playing.value) {
-    audio.value?.pause()
-    playing.value = false
-    return
-  }
-  try {
-    await audio.value?.play()
-    playing.value = true
-    musicStatus.value = ''
-  } catch {
-    musicStatus.value = 'Chưa phát được nhạc. Bạn vui lòng thử lại.'
-  }
-}
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
     scale.value = getCanvasScale(entries[0]!.contentRect.width)
@@ -107,19 +83,10 @@ onUnmounted(() => {
   observer?.disconnect()
   clearInterval(clock)
   clearTimeout(openingTimer)
-  audio.value?.pause()
 })
 </script>
 <template>
-  <div class="clone-page" :class="{ 'motion-disabled': paused }">
-    <button
-      class="clone-motion-toggle"
-      type="button"
-      :aria-pressed="paused"
-      @click="paused = !paused"
-    >
-      {{ paused ? 'Bật hiệu ứng' : 'Tắt hiệu ứng' }}
-    </button>
+  <div class="clone-page">
     <div ref="shell" class="clone-shell">
       <div
         v-if="!opened"
@@ -506,26 +473,7 @@ onUnmounted(() => {
         ><button type="button" @click="replay">Xem lại mở thiệp</button>
       </footer>
     </div>
-    <div class="clone-tools">
-      <button type="button" :aria-pressed="playing" @click="toggleMusic">
-        {{ playing ? 'Tắt nhạc' : 'Bật nhạc' }} ♫</button
-      ><a
-        v-if="opened"
-        :href="ceremony.mapUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Chỉ đường ↗</a
-      >
-      <p v-if="musicStatus" role="status">{{ musicStatus }}</p>
-    </div>
-    <audio
-      v-if="assets['mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3']"
-      ref="audio"
-      :src="assets['mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3']"
-      preload="none"
-      loop
-      @pause="playing = false"
-    />
+    <FloatingActions :music-src="weddingMusic" :map-url="ceremony.mapUrl" />
     <dialog
       ref="rsvpDialog"
       class="clone-form-dialog"

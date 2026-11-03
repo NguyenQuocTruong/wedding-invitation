@@ -6,11 +6,11 @@ import { previewEvent } from '../config/preview'
 const props = defineProps<{ preview?: boolean }>()
 const preview = props.preview === true
 const event = preview ? previewEvent : productionEvent
-const motionPaused = ref(false)
 provide(invitationKey, {
   event,
   preview,
 })
+import FloatingActions from '../components/shared/FloatingActions.vue'
 import PetalField from '../components/effects/PetalField.vue'
 import FamilyDetails from '../components/preview/FamilyDetails.vue'
 import EnvelopeIntro from '../components/preview/EnvelopeIntro.vue'
@@ -53,7 +53,7 @@ async function open() {
       ...previewTheme,
       '--reveal-duration': previewMotion.revealMs + 'ms',
     }"
-    :class="{ 'motion-disabled': !previewMotion.enabled || motionPaused }"
+    :class="{ 'motion-disabled': !previewMotion.enabled }"
   >
     <div v-if="preview" class="preview-banner">
       MẪU THIỆP 01 <span>·</span> Bản xem trước tương tác — thông tin &amp; hình
@@ -67,17 +67,9 @@ async function open() {
     <div v-else class="ambient-leaves" aria-hidden="true">
       <span v-for="n in 8" :key="n" :style="{ '--leaf-index': n }"></span>
     </div>
-    <button
-      class="motion-toggle"
-      type="button"
-      :aria-pressed="motionPaused"
-      @click="motionPaused = !motionPaused"
-    >
-      {{ motionPaused ? 'Bật hiệu ứng' : 'Tắt hiệu ứng' }}
-    </button>
     <EnvelopeIntro
       v-if="!opened"
-      :motion-disabled="motionPaused"
+      :motion-disabled="!previewMotion.enabled"
       @opened="open"
     />
     <div v-else ref="content" class="opened-invitation">
@@ -92,7 +84,7 @@ async function open() {
           <a href="/thiep-2">Thiệp 2</a><a href="#event">Ngày chung đôi</a
           ><a href="#gallery">Album</a><a href="#rsvp">Lời hẹn</a>
         </div>
-        <MusicControl />
+        <MusicControl v-if="preview" />
       </nav>
       <main>
         <InvitationHero /><FamilyDetails /><EventDetails /><PhotoGallery /><CountdownTimer /><RSVPForm />
@@ -127,5 +119,10 @@ async function open() {
         </button>
       </footer>
     </div>
+    <FloatingActions
+      v-if="!preview"
+      :music-src="event.musicSrc"
+      :map-url="event.mapUrl"
+    />
   </div>
 </template>

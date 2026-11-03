@@ -125,9 +125,7 @@ try {
       .evaluate((p) => globalThis.getComputedStyle(p).animationName),
     'wedding-petal-fall',
   )
-  await page.getByRole('button', { name: 'Tắt hiệu ứng', exact: true }).click()
-  assert.equal(await page.locator('.ambient-petals').isVisible(), false)
-  await page.getByRole('button', { name: 'Bật hiệu ứng', exact: true }).click()
+  assert.equal(await page.getByRole('button', { name: /hiệu ứng/ }).count(), 0)
   assert.equal(await page.locator('.ambient-petals').isVisible(), true)
   await page.goto(baseUrl + '/design-preview')
   await page.getByRole('button', { name: 'Mở thiệp', exact: true }).waitFor()
@@ -139,7 +137,7 @@ try {
   await page.close()
   assert.deepEqual(problems, [])
   console.log(
-    'PASS peach/rose petals, mobile particle cap, pause/restart, route isolation; no errors',
+    'PASS peach/rose petals, mobile particle cap, no effects button, route isolation; no errors',
   )
 } finally {
   await browser.close()

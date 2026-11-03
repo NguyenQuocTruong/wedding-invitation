@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
 import { useInvitation } from '../../composables/useInvitation'
-const { event } = useInvitation()
+const { event, preview } = useInvitation()
 import { previewMotion } from '../../config/theme'
 const props = defineProps<{ motionDisabled?: boolean }>()
 const emit = defineEmits<{ opened: [] }>()
@@ -58,7 +58,7 @@ onUnmounted(() => clearTimeout(timer))
       {{ opening ? 'Đang mở lời mời…' : 'Mở thiệp' }}
       <span aria-hidden="true">↗</span>
     </button>
-    <button class="text-button" type="button" @click="finish">
+    <button v-if="preview" class="text-button" type="button" @click="finish">
       Bỏ qua hiệu ứng
     </button>
     <p class="intro-note">DÀNH MỘT CHÚT THỜI GIAN, CÙNG CHÚNG MÌNH NHÉ.</p>

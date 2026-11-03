@@ -46,7 +46,12 @@ it('never offers sample payment QR or an unconfigured RSVP submission', () => {
     expect(event.gifts[side].bank).toBe('')
     expect(event.gifts[side].recipient).toBe('')
   }
-  expect(event.musicSrc).toBeNull()
+  expect(event.musicSrc).toBe(
+    (sourceAssets as Record<string, string>)[
+      'mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3'
+    ],
+  )
+  expect(existsSync(resolve('public', event.musicSrc!.slice(1)))).toBe(true)
   expect(event.photos.length).toBe(9)
 })
 
