@@ -22,15 +22,17 @@ const problems = []
 const commonStyles = new Map()
 
 async function verifyDock(page, width) {
-  const dock = page.getByRole('complementary', { name: 'Nhạc và chỉ đường' })
+  const dock = page.getByRole('complementary', {
+    name: 'Nhạc, gửi quà và chỉ đường',
+  })
   assert.equal(await dock.count(), 1)
-  assert.equal(await dock.locator('.floating-action').count(), 2)
+  assert.equal(await dock.locator('.floating-action').count(), 3)
   const box = await dock.boundingBox()
   assert.ok(box.x >= 0 && box.x + box.width <= width)
   assert.ok(box.y >= 0 && box.y + box.height <= 900)
   assert.ok(width - box.x - box.width <= 17)
   assert.ok(900 - box.y - box.height <= 19)
-  const [musicBox, mapBox] = await dock
+  const [musicBox, giftBox, mapBox] = await dock
     .locator('.floating-action')
     .evaluateAll((buttons) =>
       buttons.map((button) => {
@@ -38,22 +40,29 @@ async function verifyDock(page, width) {
         return { x, y, width, height }
       }),
     )
-  assert.equal(musicBox.x, mapBox.x)
+  assert.equal(musicBox.y, giftBox.y)
+  assert.equal(giftBox.y, mapBox.y)
   assert.equal(musicBox.width, mapBox.width)
-  assert.ok(musicBox.y + musicBox.height < mapBox.y)
+  assert.ok(musicBox.x + musicBox.width < giftBox.x)
+  assert.ok(giftBox.x + giftBox.width < mapBox.x)
+  const viewport = await page.locator('.invitation-viewport').boundingBox()
+  assert.ok(viewport.y + viewport.height <= box.y + 1)
   assert.ok(musicBox.height >= 44)
-  const styles = await dock.locator('button').evaluate((button) => {
-    const style = globalThis.getComputedStyle(button)
-    return [
-      style.backgroundImage,
-      style.border,
-      style.borderRadius,
-      style.backdropFilter,
-      style.font,
-      style.padding,
-      style.minHeight,
-    ]
-  })
+  const styles = await dock
+    .locator('button')
+    .first()
+    .evaluate((button) => {
+      const style = globalThis.getComputedStyle(button)
+      return [
+        style.backgroundImage,
+        style.border,
+        style.borderRadius,
+        style.backdropFilter,
+        style.font,
+        style.padding,
+        style.minHeight,
+      ]
+    })
   if (commonStyles.has(width)) assert.deepEqual(styles, commonStyles.get(width))
   else commonStyles.set(width, styles)
   assert.equal(await page.getByRole('button', { name: /hiệu ứng/ }).count(), 0)
@@ -155,7 +164,9 @@ try {
       await page
         .locator(route === '/' ? '.preview-hero' : '.clone-stage')
         .waitFor()
-      await page.evaluate(() => globalThis.scrollTo(0, 1400))
+      await page
+        .locator('.invitation-viewport')
+        .evaluate((el) => el.scrollTo(0, 1400))
       await page.waitForTimeout(150)
       assert.deepEqual(await verifyDock(page, width), originalBox)
       assert.equal(
@@ -174,7 +185,7 @@ try {
       }
       await page.close()
       console.log(
-        `PASS ${route} ${width}: vertical safe dock, shared glass styles, paused audio, directions, no effects button, no overflow`,
+        `PASS ${route} ${width}: reserved compact dock, shared glass styles, paused audio, directions, no effects button, no overflow`,
       )
     }
     const page = await browser.newPage({

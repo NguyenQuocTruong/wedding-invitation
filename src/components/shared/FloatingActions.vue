@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue'
 const props = defineProps<{ musicSrc: string | null; mapUrl: string }>()
+const emit = defineEmits<{ gifts: [] }>()
 const audio = ref<HTMLAudioElement | null>(null)
 const playing = ref(false)
 const loading = ref(false)
@@ -36,7 +37,7 @@ function musicError() {
 onUnmounted(() => audio.value?.pause())
 </script>
 <template>
-  <aside class="floating-actions" aria-label="Nhạc và chỉ đường">
+  <aside class="floating-actions" aria-label="Nhạc, gửi quà và chỉ đường">
     <p v-if="status" class="floating-actions-status" role="status">
       {{ status }}
     </p>
@@ -53,7 +54,32 @@ onUnmounted(() => audio.value?.pause())
       <span class="sound-signal" aria-hidden="true"
         ><i v-for="bar in 4" :key="bar" :style="{ '--signal-bar': bar }"></i
       ></span>
-      <span>{{ musicLabel }}</span>
+      <span class="action-label">{{ playing ? 'Tắt nhạc' : 'Nhạc' }}</span>
+    </button>
+    <button
+      class="floating-action"
+      type="button"
+      aria-label="Gửi quà"
+      @click="emit('gifts')"
+    >
+      <svg
+        class="direction-icon"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 10h16v11H4zM3 6h18v4H3zM12 6v15" />
+        <path
+          d="M12 6H8.5a2.5 2.5 0 1 1 2.4-3.2L12 6Zm0 0h3.5a2.5 2.5 0 1 0-2.4-3.2L12 6Z"
+        />
+      </svg>
+      <span class="action-label">Gửi quà</span>
     </button>
     <a
       v-if="mapUrl"
@@ -78,7 +104,7 @@ onUnmounted(() => audio.value?.pause())
         <path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" />
         <circle cx="12" cy="10" r="2.7" />
       </svg>
-      <span>Chỉ đường</span>
+      <span class="action-label">Chỉ đường</span>
     </a>
     <audio
       v-if="musicSrc"
@@ -95,54 +121,56 @@ onUnmounted(() => audio.value?.pause())
 </template>
 <style>
 .floating-actions {
-  position: fixed;
-  right: max(16px, env(safe-area-inset-right));
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  position: relative;
   z-index: 1000001;
+  box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  width: max-content;
-  max-width: calc(100vw - 32px);
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  height: var(--actions-height);
+  padding: 7px max(14px, env(safe-area-inset-right))
+    calc(7px + env(safe-area-inset-bottom));
+  border-top: 1px solid #dce2d780;
+  background: linear-gradient(120deg, #f5f7f2eb, #e4eadee6);
+  -webkit-backdrop-filter: blur(36px) saturate(150%);
+  backdrop-filter: blur(36px) saturate(150%);
+  box-shadow: 0 -4px 20px #26352309;
   isolation: isolate;
 }
 .floating-actions .floating-action {
   position: relative;
+  box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  min-width: 124px;
-  min-height: 48px;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  width: 64px;
+  height: 56px;
   margin: 0;
-  padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 999px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.88),
-    rgba(239, 245, 239, 0.72)
-  );
-  color: #283b30;
+  padding: 7px 4px;
+  border: 1px solid #ffffffb8;
+  border-radius: 21px;
+  background: linear-gradient(145deg, #ffffff9e, #c8d2c188);
+  color: #34452f;
   box-shadow:
-    0 5px 22px #253c2c1a,
-    inset 0 1px 0 #ffffffed,
-    inset 0 -1px 0 #50634c16;
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-  backdrop-filter: blur(22px) saturate(160%);
+    0 2px 7px #30422a0c,
+    inset 0 1px 0 #ffffffcc;
+  -webkit-backdrop-filter: blur(30px) saturate(140%);
+  backdrop-filter: blur(30px) saturate(140%);
   font:
-    500 12px/1.2 -apple-system,
+    500 10px/1.2 -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
     sans-serif;
-  letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition:
     background 160ms ease,
-    box-shadow 160ms ease,
     transform 160ms ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -151,19 +179,19 @@ onUnmounted(() => audio.value?.pause())
   position: absolute;
   inset: 2px;
   border-radius: inherit;
-  border-top: 1px solid #ffffffa6;
+  border-top: 1px solid #ffffff99;
   pointer-events: none;
 }
 .floating-actions .floating-action:active {
   transform: scale(0.96);
 }
 .floating-actions .floating-action:focus-visible {
-  outline: 2px solid #48614e;
-  outline-offset: 4px;
+  outline: 2px solid #48613e;
+  outline-offset: 2px;
 }
 .floating-actions .floating-action:disabled {
   cursor: wait;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 .floating-actions .sound-signal {
   display: flex;
@@ -171,6 +199,7 @@ onUnmounted(() => audio.value?.pause())
   align-items: flex-end;
   justify-content: center;
   gap: 3px;
+  box-sizing: border-box;
   width: 20px;
   height: 20px;
   padding: 2px 0;
@@ -192,16 +221,16 @@ onUnmounted(() => audio.value?.pause())
 }
 .floating-actions-status {
   position: absolute;
-  right: 0;
-  bottom: calc(100% + 10px);
-  width: 240px;
+  right: 14px;
+  bottom: calc(100% + 8px);
+  width: 220px;
   max-width: calc(100vw - 32px);
   margin: 0;
   padding: 12px 15px;
   border: 1px solid #ffffffb8;
   border-radius: 18px;
-  color: #283b30;
-  background: #f9fcf8f0;
+  color: #34452f;
+  background: #f4f8eff5;
   box-shadow: 0 5px 22px #253c2c1a;
   font:
     12px/1.5 system-ui,
@@ -217,24 +246,7 @@ onUnmounted(() => audio.value?.pause())
 }
 @media (hover: hover) {
   .floating-actions .floating-action:hover {
-    background: linear-gradient(135deg, #fffffff0, #f0f6efde);
-    box-shadow:
-      0 7px 26px #253c2c24,
-      inset 0 1px 0 #fff;
-  }
-}
-@media (max-width: 479px) {
-  .floating-actions {
-    right: max(12px, env(safe-area-inset-right));
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    gap: 8px;
-  }
-  .floating-actions .floating-action {
-    min-width: 108px;
-    min-height: 46px;
-    padding: 11px 13px;
-    gap: 8px;
-    font-size: 11px;
+    background: linear-gradient(145deg, #ffffffd9, #d4decae6);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -248,8 +260,11 @@ onUnmounted(() => audio.value?.pause())
 @supports not (
   (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
 ) {
+  .floating-actions {
+    background: #edf1e8;
+  }
   .floating-actions .floating-action {
-    background: #f4f8f3f5;
+    background: #dfe7d7;
   }
 }
 </style>

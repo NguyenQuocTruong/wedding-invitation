@@ -1,50 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useInvitation } from '../../composables/useInvitation'
+import WeddingCountdown from '../shared/WeddingCountdown.vue'
 const { event, preview } = useInvitation()
-import { countdownParts } from '../../utils/preview'
-const now = ref(Date.now())
-const parts = computed(() => countdownParts(event.dateTime, now.value))
-const labels = ['Ngày', 'Giờ', 'Phút', 'Giây']
-let timer: ReturnType<typeof setInterval> | undefined
-onMounted(() => {
-  timer = setInterval(() => {
-    now.value = Date.now()
-  }, 1000)
-})
-onUnmounted(() => clearInterval(timer))
 </script>
 <template>
-  <section
-    class="countdown-section"
-    aria-labelledby="countdown-title"
+  <WeddingCountdown
+    :date-time="event.dateTime"
+    :date-label="event.dateLabel"
+    :time-label="event.timeLabel"
+    :sample="preview || event.sampleContent"
     data-reveal
-  >
-    <p class="eyebrow">ĐẾM TỪNG KHOẢNH KHẮC</p>
-    <h2 id="countdown-title">Ngày mình có nhau</h2>
-    <div
-      v-if="parts?.some(Boolean)"
-      class="countdown"
-      :aria-label="
-        preview
-          ? 'Thời gian còn lại đến ngày minh họa'
-          : 'Thời gian còn lại đến ngày cưới'
-      "
-    >
-      <div v-for="(value, index) in parts" :key="index">
-        <span>{{ String(value).padStart(2, '0') }}</span
-        ><small>{{ labels[index] }}</small>
-      </div>
-    </div>
-    <p v-else>
-      {{
-        parts
-          ? 'Ngày vui đã đến. Cảm ơn bạn đã ở đây!'
-          : 'Ngày cưới sẽ được cập nhật.'
-      }}
-    </p>
-    <p v-if="preview || event.sampleContent" class="subtle">
-      Ngày và giờ hiển thị chỉ là dữ liệu mẫu.
-    </p>
-  </section>
+  />
 </template>
