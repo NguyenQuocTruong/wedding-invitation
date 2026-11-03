@@ -777,7 +777,10 @@
   border-radius: 20px;
   padding: 3px 5px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 11px;
 }
 .clone-theme-switcher .switcher-tag {

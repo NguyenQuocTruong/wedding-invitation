@@ -20,10 +20,7 @@ import {
   type LayoutNode,
   type NodeProps,
 } from '../utils/template-02'
-import {
-  TEMPLATE_02_THEMES,
-  type ThemeId,
-} from '../config/template-02-themes'
+import { TEMPLATE_02_THEMES, type ThemeId } from '../config/template-02-themes'
 import '../styles/template-02-fonts.css'
 import '../styles/template-02-opening.css'
 const nodes = sourceLayout as LayoutNode[]
@@ -143,8 +140,10 @@ function showPhoto(key: string) {
 }
 onMounted(() => {
   try {
-    const saved = localStorage.getItem('wedding_invitation_theme') as ThemeId | null
-    if (saved && (saved in TEMPLATE_02_THEMES)) {
+    const saved = localStorage.getItem(
+      'wedding_invitation_theme',
+    ) as ThemeId | null
+    if (saved && saved in TEMPLATE_02_THEMES) {
       currentTheme.value = saved
     }
   } catch {
