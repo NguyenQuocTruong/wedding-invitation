@@ -152,7 +152,9 @@ onUnmounted(() => clearInterval(timer))
 }
 .wedding-countdown--compact .countdown-unit {
   color: #fff;
-  font-size: 11px;
+  /* Compensate for the template canvas scale so labels stay ~12.5px on phones. */
+  font-size: calc(12.5px / var(--canvas-scale, 1));
+  letter-spacing: 0.04em;
 }
 .wedding-countdown--compact .countdown-message {
   margin: 0;

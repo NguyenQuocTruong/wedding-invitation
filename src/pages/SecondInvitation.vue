@@ -39,8 +39,38 @@ function setTheme(id: ThemeId) {
   }
 }
 
+// Readability overrides (canvas px, before mobile scale-down). The source layout
+// used 12.9–13.8px for several lines, which renders below 10px on 320px phones.
+const READABLE_FONT_SIZES: Record<string, number> = {
+  // Calendar weekday labels
+  tCMzAdDXCw: 14.5,
+  ZivaOByuCH: 14.5,
+  pwYWzzxcwB: 14.5,
+  rCUQNnGdaW: 14.5,
+  'ucS-7K2sSF': 14.5,
+  'sNW5-RzUm4': 14.5,
+  ZADmDXCmdX: 14.5,
+  // Couplet
+  wHG0JRLvlM: 14.5,
+  '6VDnXLZvKc': 14.5,
+  // Parents and hometowns
+  Ed3xk9f3C6: 16,
+  '78T5hdX33j': 16,
+  QckHkpXeK6: 15.5,
+  HTOuYYjmCZ: 15.5,
+  // "Vào hồi" labels
+  YWfFy7Hwzq: 16,
+  'paUgPUc-Ix': 16,
+  // Map links
+  'oxea_sD-us': 17,
+  bAEsnUsTek: 17,
+}
+
 function themedNodeStyle(node: LayoutNode): CSSProperties {
-  const base = elementStyle(node.props, node.type)
+  const readable = READABLE_FONT_SIZES[node.id]
+  const base: CSSProperties = readable
+    ? { ...elementStyle(node.props, node.type), fontSize: readable + 'px' }
+    : elementStyle(node.props, node.type)
   if (currentTheme.value === 'original') return base
 
   const themeVars = TEMPLATE_02_THEMES[currentTheme.value]
@@ -142,6 +172,7 @@ function displayedText(node: LayoutNode): string {
     XJnZfJxoBp: wedding.couple.brideName,
     Ed3xk9f3C6: wedding.families.BRIDE.parents.join('\n'),
     '78T5hdX33j': wedding.families.GROOM.parents.join('\n'),
+    tCMzAdDXCw: 'Mon',
   }
   return confirmed[node.id] || node.props.text || ''
 }

@@ -205,7 +205,8 @@
   height: 25px;
   display: grid;
   place-items: center;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 600;
 }
 .clone-calendar .wedding-day {
   border: 2px solid var(--theme-badge-border, #ef9d9b);
@@ -302,7 +303,7 @@
   justify-content: center;
   gap: 20px;
   padding: 22px 15px 90px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .clone-end a,
 .clone-end button {
@@ -310,7 +311,8 @@
   background: none;
   border: 0;
   text-decoration: underline;
-  padding: 10px;
+  padding: 12px;
+  min-height: 44px;
 }
 .clone-tools {
   position: fixed;
@@ -706,8 +708,8 @@
 .clone-rsvp button {
   margin: 0 auto;
   padding: 10px 18px;
-  min-height: 40px;
-  font-size: 14px;
+  min-height: 44px;
+  font-size: 0.95em;
 }
 
 /* Theme presets for Template 2 */
@@ -739,26 +741,26 @@
 .clone-page.theme-peach {
   --theme-outer-bg: #fbf0ed;
   --theme-canvas-bg: #fffdfc;
-  --theme-primary: #c46d75;
+  --theme-primary: #ad5560;
   --theme-primary-text: #ffffff;
   --theme-accent: #73323a;
-  --theme-card-bg: #c46d75;
+  --theme-card-bg: #ad5560;
   --theme-badge-border: #ffffff;
   --theme-badge-color: #ffffff;
-  --countdown-cell-bg: #c46d75;
+  --countdown-cell-bg: #ad5560;
   --timeline-bg: #fffdfc;
   --timeline-color: #4a3537;
-  --timeline-accent: #c46d75;
+  --timeline-accent: #ad5560;
   --timeline-line: #f2d9d6;
   --timeline-dot-bg: #e09389;
   --timeline-card-bg: #ffffff;
   --timeline-card-border: #f8e5e3;
-  --timeline-time-color: #c46d75;
-  --timeline-icon-color: #c46d75;
-  --slr-open-button-bg: #c46d75;
+  --timeline-time-color: #ad5560;
+  --timeline-icon-color: #ad5560;
+  --slr-open-button-bg: #ad5560;
   --slr-open-button-text-color: #ffffff;
-  --slr-text-color: #c46d75;
-  --slr-seal-base: #c46d75;
+  --slr-text-color: #ad5560;
+  --slr-seal-base: #ad5560;
 }
 
 /* Opening screen theme integration */

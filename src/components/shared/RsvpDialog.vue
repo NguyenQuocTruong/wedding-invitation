@@ -417,8 +417,8 @@ defineExpose({ open })
 .rsvp-dialog-eyebrow {
   margin: 0 0 10px;
   color: #627058;
-  font-size: 8px;
-  letter-spacing: 0.17em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 .rsvp-dialog h2 {
   margin: 0;
@@ -429,7 +429,7 @@ defineExpose({ open })
 .rsvp-dialog-header > p:last-child {
   margin: 10px 0 0;
   color: #627058;
-  font-size: 12px;
+  font-size: 14px;
 }
 .rsvp-dialog-form {
   display: grid;
@@ -442,11 +442,11 @@ defineExpose({ open })
 }
 .rsvp-input-group > label,
 .rsvp-options legend {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 .rsvp-input-group small {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   color: #627058;
 }
@@ -471,7 +471,7 @@ defineExpose({ open })
 .rsvp-dialog input::placeholder,
 .rsvp-dialog textarea::placeholder {
   color: #68765e;
-  font-size: 12px;
+  font-size: 14px;
 }
 .rsvp-options {
   min-width: 0;
@@ -498,7 +498,7 @@ defineExpose({ open })
   border-radius: 12px;
   background: #fff;
   color: #66745b;
-  font-size: 11px;
+  font-size: 13px;
   cursor: pointer;
 }
 .rsvp-options label.selected {
@@ -519,13 +519,13 @@ defineExpose({ open })
   border-radius: 12px;
   background: #eef1e9;
   color: #627058;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.7;
 }
 .rsvp-privacy {
   margin: 0;
   color: #627058;
-  font-size: 11px;
+  font-size: 12.5px;
   line-height: 1.7;
 }
 .rsvp-error {
@@ -578,7 +578,7 @@ defineExpose({ open })
   }
   .rsvp-options label {
     padding: 8px;
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 </style>

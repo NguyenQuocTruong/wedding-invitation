@@ -92,7 +92,7 @@ defineProps<{ events: WeddingActivity[] }>()
   margin: 0 0 12px;
   color: var(--timeline-accent, #819474);
   font:
-    11px/1.5 system-ui,
+    12.5px/1.5 system-ui,
     sans-serif;
   letter-spacing: 0.2em;
 }
@@ -104,8 +104,8 @@ defineProps<{ events: WeddingActivity[] }>()
 }
 .wedding-timeline .timeline-date {
   margin: 12px 0 0;
-  color: #747c6f;
-  font-size: 13px;
+  color: #6a7265;
+  font-size: 14px;
 }
 .timeline-list {
   position: relative;
@@ -179,8 +179,8 @@ defineProps<{ events: WeddingActivity[] }>()
   line-height: 1.8;
 }
 .timeline-venue span {
-  color: #7b8274;
-  font-size: 12px;
+  color: #6a7265;
+  font-size: 13.5px;
 }
 @media (max-width: 479px) {
   .wedding-timeline {
