@@ -251,20 +251,6 @@ defineExpose({ open })
           >
         </div>
       </fieldset>
-      <div class="rsvp-input-group">
-        <label for="rsvp-popup-message"
-          >Lời nhắn <small>(không bắt buộc)</small></label
-        >
-        <textarea
-          id="rsvp-popup-message"
-          v-model="form.message"
-          name="message"
-          maxlength="500"
-          rows="3"
-          :disabled="locked"
-          placeholder="Gửi đôi lời thương đến chúng mình…"
-        ></textarea>
-      </div>
       <input
         v-model="form.website"
         type="text"
