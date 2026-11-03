@@ -136,6 +136,11 @@
 .clone-open-button span {
   margin-left: 22px;
 }
+.clone-main {
+  width: 100%;
+  position: relative;
+  outline: 0;
+}
 .clone-stage {
   position: relative;
   width: 100%;

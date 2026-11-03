@@ -18,10 +18,28 @@ import {
   elementStyle,
   getCanvasScale,
   type LayoutNode,
+  type NodeProps,
 } from '../utils/template-02'
 import '../styles/template-02-fonts.css'
 import '../styles/template-02-opening.css'
 const nodes = sourceLayout as LayoutNode[]
+const TOP_STAGE_HEIGHT = 3470
+const BOTTOM_OFFSET = 3410
+const BOTTOM_STAGE_HEIGHT = 4567 - BOTTOM_OFFSET
+
+const countdownIndex = nodes.findIndex((n) => n.type === 'PluginCountDown')
+const countdownNode = nodes[countdownIndex]!
+
+const topNodes = nodes.filter(
+  (n) => n.id === countdownNode.id || n.props.top < countdownNode.props.top,
+)
+const bottomNodes = nodes.filter(
+  (n) => n.id !== countdownNode.id && n.props.top >= countdownNode.props.top,
+)
+
+function bottomNodeStyle(p: NodeProps) {
+  return nodeStyle({ ...p, top: p.top - BOTTOM_OFFSET })
+}
 const shell = ref<HTMLElement | null>(null)
 const content = ref<HTMLElement | null>(null)
 const opened = ref(false)
@@ -356,138 +374,223 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        <div
+        <main
           v-else
-          class="clone-stage"
-          :style="{ height: 4567 * scale + 'px' }"
+          ref="content"
+          tabindex="-1"
+          class="clone-main"
+          aria-label="Thiệp cưới Quốc Trưởng và Lâm Oanh"
         >
-          <main
-            ref="content"
-            tabindex="-1"
-            class="clone-canvas"
-            :style="{ transform: `scale(${scale})`, '--canvas-scale': scale }"
-            aria-label="Thiệp cưới Quốc Trưởng và Lâm Oanh"
+          <h1 class="sr-only">
+            Lễ thành hôn Quốc Trưởng và Lâm Oanh · 14 tháng 11 năm 2026
+          </h1>
+          <div
+            class="clone-stage"
+            :style="{ height: TOP_STAGE_HEIGHT * scale + 'px' }"
           >
-            <h1 class="sr-only">
-              Lễ thành hôn Quốc Trưởng và Lâm Oanh · 14 tháng 11 năm 2026
-            </h1>
             <div
-              v-for="node in nodes"
-              :key="node.id"
-              class="clone-node"
-              :style="nodeStyle(node.props)"
+              class="clone-canvas"
+              :style="{
+                height: TOP_STAGE_HEIGHT + 'px',
+                transform: `scale(${scale})`,
+                '--canvas-scale': scale,
+              }"
             >
               <div
-                class="clone-element"
-                :class="{
-                  'clone-reveal': node.props.transition?.effectEnabled,
-                }"
-                :data-reveal="
-                  node.props.transition?.effectEnabled ? '' : undefined
-                "
-                :data-effect="node.props.transition?.effectType"
-                :data-continuous="node.props.continuousAnimation?.type"
-                :style="elementStyle(node.props, node.type)"
+                v-for="node in topNodes"
+                :key="node.id"
+                class="clone-node"
+                :style="nodeStyle(node.props)"
               >
-                <template v-if="node.type === 'TextBox'">
-                  <a
-                    v-if="node.props.semanticField === 'venueMapLink'"
-                    :href="ceremony.mapUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >{{ displayedText(node) }}</a
-                  >
-                  <p v-else>{{ displayedText(node) }}</p>
-                </template>
-                <p v-else-if="node.type === 'PluginDynamicText'">
-                  {{ node.props.fallbackText }}
-                </p>
-                <template
-                  v-else-if="
-                    node.type === 'PhotoBox' ||
-                    (node.type === 'MaterialBox' &&
-                      node.props.materialType !== 'svg')
+                <div
+                  class="clone-element"
+                  :class="{
+                    'clone-reveal': node.props.transition?.effectEnabled,
+                  }"
+                  :data-reveal="
+                    node.props.transition?.effectEnabled ? '' : undefined
                   "
+                  :data-effect="node.props.transition?.effectType"
+                  :data-continuous="node.props.continuousAnimation?.type"
+                  :style="elementStyle(node.props, node.type)"
                 >
-                  <button
-                    v-if="
-                      node.props.semanticField === 'weddingPhoto' &&
-                      node.props.imgKey?.startsWith('uploads/')
+                  <template v-if="node.type === 'TextBox'">
+                    <a
+                      v-if="node.props.semanticField === 'venueMapLink'"
+                      :href="ceremony.mapUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >{{ displayedText(node) }}</a
+                    >
+                    <p v-else>{{ displayedText(node) }}</p>
+                  </template>
+                  <p v-else-if="node.type === 'PluginDynamicText'">
+                    {{ node.props.fallbackText }}
+                  </p>
+                  <template
+                    v-else-if="
+                      node.type === 'PhotoBox' ||
+                      (node.type === 'MaterialBox' &&
+                        node.props.materialType !== 'svg')
                     "
+                  >
+                    <button
+                      v-if="
+                        node.props.semanticField === 'weddingPhoto' &&
+                        node.props.imgKey?.startsWith('uploads/')
+                      "
+                      type="button"
+                      class="clone-photo-button"
+                      aria-label="Xem ảnh cưới lớn"
+                      @click="showPhoto(node.props.imgKey!)"
+                    >
+                      <img
+                        :src="asset(node.props.imgKey)"
+                        alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
+                        :loading="node.props.top > 900 ? 'lazy' : 'eager'"
+                        :style="{
+                          transform: `scale(${node.props.flipX ? -1 : 1},${node.props.flipY ? -1 : 1})`,
+                        }"
+                      />
+                    </button>
+                    <img
+                      v-else
+                      :src="asset(node.props.imgKey)"
+                      alt=""
+                      aria-hidden="true"
+                      :loading="node.props.top > 900 ? 'lazy' : 'eager'"
+                    />
+                  </template>
+                  <div
+                    v-else-if="node.type === 'PluginCalendar'"
+                    class="clone-calendar"
+                    aria-label="Lịch tháng 11 năm 2026, ngày cưới 14 tháng 11"
+                  >
+                    <span
+                      v-for="(day, index) in calendarDays"
+                      :key="index"
+                      :class="{ 'wedding-day': day === '14' }"
+                      >{{ day }}</span
+                    >
+                  </div>
+                  <WeddingCountdown
+                    v-else-if="node.type === 'PluginCountDown'"
+                    :date-time="ceremony.dateTime"
+                    compact
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <WeddingTimeline :events="wedding.events" />
+
+          <div
+            class="clone-stage"
+            :style="{ height: BOTTOM_STAGE_HEIGHT * scale + 'px' }"
+          >
+            <div
+              class="clone-canvas"
+              :style="{
+                height: BOTTOM_STAGE_HEIGHT + 'px',
+                transform: `scale(${scale})`,
+                '--canvas-scale': scale,
+              }"
+            >
+              <div
+                v-for="node in bottomNodes"
+                :key="node.id"
+                class="clone-node"
+                :style="bottomNodeStyle(node.props)"
+              >
+                <div
+                  class="clone-element"
+                  :class="{
+                    'clone-reveal': node.props.transition?.effectEnabled,
+                  }"
+                  :data-reveal="
+                    node.props.transition?.effectEnabled ? '' : undefined
+                  "
+                  :data-effect="node.props.transition?.effectType"
+                  :data-continuous="node.props.continuousAnimation?.type"
+                  :style="elementStyle(node.props, node.type)"
+                >
+                  <template v-if="node.type === 'TextBox'">
+                    <p>{{ displayedText(node) }}</p>
+                  </template>
+                  <template
+                    v-else-if="
+                      node.type === 'PhotoBox' ||
+                      (node.type === 'MaterialBox' &&
+                        node.props.materialType !== 'svg')
+                    "
+                  >
+                    <button
+                      v-if="
+                        node.props.semanticField === 'weddingPhoto' &&
+                        node.props.imgKey?.startsWith('uploads/')
+                      "
+                      type="button"
+                      class="clone-photo-button"
+                      aria-label="Xem ảnh cưới lớn"
+                      @click="showPhoto(node.props.imgKey!)"
+                    >
+                      <img
+                        :src="asset(node.props.imgKey)"
+                        alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
+                        loading="lazy"
+                        :style="{
+                          transform: `scale(${node.props.flipX ? -1 : 1},${node.props.flipY ? -1 : 1})`,
+                        }"
+                      />
+                    </button>
+                    <img
+                      v-else
+                      :src="asset(node.props.imgKey)"
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                    />
+                  </template>
+                  <div
+                    v-else-if="node.type === 'PluginRsvp'"
+                    class="clone-rsvp"
+                  >
+                    <div class="rsvp-head">
+                      <span class="rsvp-eng">R.S.V.P.</span>
+                      <h2>Xác nhận tham dự</h2>
+                    </div>
+                    <p>
+                      Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới
+                      được thuận lợi và trọn vẹn nhất.
+                    </p>
+                    <button type="button" @click="rsvpDialog?.open()">
+                      ♧ Gửi xác nhận
+                    </button>
+                  </div>
+                  <button
+                    v-else-if="node.type === 'PluginQrBox'"
+                    class="clone-gifts-button"
                     type="button"
-                    class="clone-photo-button"
-                    aria-label="Xem ảnh cưới lớn"
-                    @click="showPhoto(node.props.imgKey!)"
+                    aria-label="Gửi quà mừng"
+                    @click="giftsDialog?.open()"
                   >
                     <img
                       :src="asset(node.props.imgKey)"
-                      alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
-                      :loading="node.props.top > 900 ? 'lazy' : 'eager'"
-                      :style="{
-                        transform: `scale(${node.props.flipX ? -1 : 1},${node.props.flipY ? -1 : 1})`,
-                      }"
+                      alt="Hộp quà mừng cưới"
+                      loading="lazy"
                     />
                   </button>
-                  <img
-                    v-else
-                    :src="asset(node.props.imgKey)"
-                    alt=""
-                    aria-hidden="true"
-                    :loading="node.props.top > 900 ? 'lazy' : 'eager'"
-                  />
-                </template>
-                <div
-                  v-else-if="node.type === 'PluginCalendar'"
-                  class="clone-calendar"
-                  aria-label="Lịch tháng 11 năm 2026, ngày cưới 14 tháng 11"
-                >
-                  <span
-                    v-for="(day, index) in calendarDays"
-                    :key="index"
-                    :class="{ 'wedding-day': day === '14' }"
-                    >{{ day }}</span
-                  >
                 </div>
-                <WeddingCountdown
-                  v-else-if="node.type === 'PluginCountDown'"
-                  :date-time="ceremony.dateTime"
-                  compact
-                />
-                <div v-else-if="node.type === 'PluginRsvp'" class="clone-rsvp">
-                  <div class="rsvp-head">
-                    <span class="rsvp-eng">R.S.V.P.</span>
-                    <h2>Xác nhận tham dự</h2>
-                  </div>
-                  <p>
-                    Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới
-                    được thuận lợi và trọn vẹn nhất.
-                  </p>
-                  <button type="button" @click="rsvpDialog?.open()">
-                    ♧ Gửi xác nhận
-                  </button>
-                </div>
-                <button
-                  v-else-if="node.type === 'PluginQrBox'"
-                  class="clone-gifts-button"
-                  type="button"
-                  aria-label="Gửi quà mừng"
-                  @click="giftsDialog?.open()"
-                >
-                  <img
-                    :src="asset(node.props.imgKey)"
-                    alt="Hộp quà mừng cưới"
-                    loading="lazy"
-                  />
-                </button>
               </div>
             </div>
-          </main>
-        </div>
-        <WeddingTimeline v-if="opened" :events="wedding.events" />
-        <footer v-if="opened" class="clone-end">
-          <a href="/">Xem thiệp 1</a
-          ><button type="button" @click="replay">Xem lại mở thiệp</button>
-        </footer>
+          </div>
+
+          <footer class="clone-end">
+            <a href="/">Xem thiệp 1</a
+            ><button type="button" @click="replay">Xem lại mở thiệp</button>
+          </footer>
+        </main>
       </div>
       <RsvpDialog ref="rsvpDialog" />
       <GiftDialog ref="giftsDialog" :gifts="event.gifts" />
