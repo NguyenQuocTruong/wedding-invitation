@@ -30,8 +30,6 @@ async function verifyDock(page, width) {
   const box = await dock.boundingBox()
   assert.ok(box.x >= 0 && box.x + box.width <= width)
   assert.ok(box.y >= 0 && box.y + box.height <= 900)
-  assert.ok(width - box.x - box.width <= 17)
-  assert.ok(900 - box.y - box.height <= 19)
   const [musicBox, giftBox, mapBox] = await dock
     .locator('.floating-action')
     .evaluateAll((buttons) =>
@@ -40,14 +38,31 @@ async function verifyDock(page, width) {
         return { x, y, width, height }
       }),
     )
-  assert.equal(musicBox.y, giftBox.y)
-  assert.equal(giftBox.y, mapBox.y)
-  assert.equal(musicBox.width, mapBox.width)
-  assert.ok(musicBox.x + musicBox.width < giftBox.x)
+  assert.ok(musicBox.y < 28, 'music at the top right as in the reference')
+  assert.ok(box.x + box.width - musicBox.x - musicBox.width <= 21)
+  assert.ok(
+    giftBox.y > 810 && mapBox.y > 810,
+    'gift and directions at the bottom right',
+  )
   assert.ok(giftBox.x + giftBox.width < mapBox.x)
-  const viewport = await page.locator('.invitation-viewport').boundingBox()
-  assert.ok(viewport.y + viewport.height <= box.y + 1)
-  assert.ok(musicBox.height >= 44)
+  assert.ok(Math.abs(giftBox.y - mapBox.y) <= 10, 'gentle staggered bounce')
+  assert.ok(musicBox.height >= 44 && mapBox.height >= 44)
+  assert.equal(await dock.locator('.action-label').first().isVisible(), false)
+  assert.equal(
+    await dock
+      .locator('.floating-action')
+      .first()
+      .evaluate((button) =>
+        button
+          .getAnimations()
+          .some(
+            (animation) =>
+              animation.effect.getComputedTiming().duration === 3400,
+          ),
+      ),
+    true,
+    'attention bounce is active',
+  )
   const styles = await dock
     .locator('button')
     .first()
@@ -185,7 +200,7 @@ try {
       }
       await page.close()
       console.log(
-        `PASS ${route} ${width}: reserved compact dock, shared glass styles, paused audio, directions, no effects button, no overflow`,
+        `PASS ${route} ${width}: reference-position floating controls, shared glass styles, paused audio, directions, no effects button, no overflow`,
       )
     }
     const page = await browser.newPage({

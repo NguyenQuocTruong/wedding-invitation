@@ -29,19 +29,28 @@ async function open(page) {
   await page.getByRole('button', { name: 'Mở thiệp', exact: true }).click()
   await page.locator('.preview-hero, .clone-stage').waitFor()
 }
-async function verifyNoOverlap(page, height) {
+async function verifyFloatingPositions(page, height) {
   const viewport = await page.locator('.invitation-viewport').boundingBox()
-  const dock = await page.locator('.floating-actions').boundingBox()
-  assert.ok(
-    viewport.y + viewport.height <= dock.y + 1,
-    'dock must be outside readable content',
-  )
-  assert.ok(dock.y + dock.height <= height + 1, 'dock inside viewport')
-  assert.ok(dock.height <= 90, 'compact controls')
+  assert.equal(viewport.height, height, 'no footer band reduces the invitation')
   assert.equal(await page.locator('.floating-action').count(), 3)
-  for (const control of await page.locator('.floating-action').all()) {
+  const controls = await page.locator('.floating-action').all()
+  const music = await controls[0].boundingBox()
+  const gift = await controls[1].boundingBox()
+  const map = await controls[2].boundingBox()
+  assert.ok(music.y >= 0 && music.y < 28)
+  assert.ok(gift.y > height - 90 && gift.y + gift.height <= height)
+  assert.ok(map.y > height - 90 && map.y + map.height <= height)
+  assert.ok(gift.x + gift.width < map.x)
+  for (const control of controls) {
     const box = await control.boundingBox()
     assert.ok(box.width >= 44 && box.height >= 44, 'touch target')
+    assert.equal(
+      await control.evaluate(
+        (el) => globalThis.getComputedStyle(el).animationName,
+      ),
+      'none',
+      'device motion preference disables bouncing',
+    )
   }
   assert.equal(
     await page.evaluate(
@@ -52,6 +61,7 @@ async function verifyNoOverlap(page, height) {
     true,
   )
 }
+
 try {
   if (process.env.DOCK_ONLY !== '1')
     for (const route of ['/', '/thiep-2']) {
@@ -121,7 +131,7 @@ try {
         await page
           .getByRole('button', { name: 'Bật nhạc', exact: true })
           .waitFor()
-        await verifyNoOverlap(page, height)
+        await verifyFloatingPositions(page, height)
         if (route === '/thiep-2' && height === 390) {
           await page.screenshot({
             path: `${output}/template-02-landscape-opening.png`,
@@ -152,7 +162,7 @@ try {
         }
         await open(page)
         await page.locator('.wedding-timeline').scrollIntoViewIfNeeded()
-        await verifyNoOverlap(page, height)
+        await verifyFloatingPositions(page, height)
         if (width === 390) {
           await page
             .getByRole('button', { name: 'Gửi quà', exact: true })
@@ -201,10 +211,10 @@ try {
             .evaluate((el) => el.scrollTop),
           0,
         )
-        await verifyNoOverlap(page, height)
+        await verifyFloatingPositions(page, height)
         await page.close()
         console.log(
-          `PASS ${route} ${width}x${height}: controls never overlap content, gifts, scrolling/replay, touch targets`,
+          `PASS ${route} ${width}x${height}: reference control positions, gifts, scrolling/replay, touch targets`,
         )
       }
     }

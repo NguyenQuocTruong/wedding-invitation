@@ -521,6 +521,7 @@ onUnmounted(() => {
     </div>
     <template #actions>
       <FloatingActions
+        style="--floating-actions-width: 430px"
         :music-src="weddingMusic"
         :map-url="ceremony.mapUrl"
         @gifts="giftsDialog?.open()"

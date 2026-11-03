@@ -17,9 +17,10 @@ defineExpose({ scrollToTop })
 </template>
 <style>
 .invitation-frame {
-  --actions-height: calc(72px + env(safe-area-inset-bottom, 0px));
+  --actions-height: 0px;
+  position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   width: 100%;
   height: 100vh;
   height: 100dvh;
@@ -31,13 +32,28 @@ defineExpose({ scrollToTop })
   min-height: 0;
   overflow: auto;
   overscroll-behavior-y: contain;
+  scroll-padding-block: 64px calc(84px + env(safe-area-inset-bottom));
   -webkit-overflow-scrolling: touch;
 }
+.invitation-viewport .opened-invitation {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
 .invitation-viewport > .clone-page {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
   min-height: calc(100dvh - var(--actions-height));
 }
 .invitation-viewport .envelope-intro {
   min-height: calc(100dvh - var(--actions-height));
+}
+.invitation-viewport .intro-top {
+  padding-right: 58px;
+}
+.invitation-viewport .preview-nav {
+  padding-right: calc(72px + env(safe-area-inset-right));
+}
+.invitation-viewport .preview-nav > div {
+  min-width: 0;
+  flex-wrap: wrap;
 }
 @media (max-height: 640px) {
   .invitation-frame {
