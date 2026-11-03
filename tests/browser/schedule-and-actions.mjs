@@ -32,7 +32,10 @@ async function open(page) {
 async function verifyFloatingPositions(page, height) {
   const viewport = await page.locator('.invitation-viewport').boundingBox()
   assert.equal(viewport.height, height, 'no footer band reduces the invitation')
-  assert.equal(await page.locator('.floating-action').count(), 3)
+  assert.equal(
+    await page.locator('.floating-action').count(),
+    page.url().includes('/thiep-2') ? 4 : 3,
+  )
   const controls = await page.locator('.floating-action').all()
   const music = await controls[0].boundingBox()
   const gift = await controls[1].boundingBox()
@@ -70,7 +73,7 @@ try {
         reducedMotion: 'reduce',
       })
       observe(page)
-      const frozen = new Date('2026-11-13T06:30:00Z')
+      const frozen = new Date('2026-11-13T06:00:00Z')
       await page.clock.install({ time: frozen })
       await page.clock.pauseAt(frozen)
       await page.goto(baseUrl + route)
@@ -82,12 +85,16 @@ try {
         1,
       )
       const events = page.locator('.timeline-event')
-      assert.equal(await events.count(), 2)
-      assert.match(await events.nth(0).innerText(), /10:00.*Bữa cơm thân mật/s)
-      assert.match(await events.nth(1).innerText(), /13:30.*Lễ thành hôn/s)
+      assert.equal(await events.count(), 3)
+      assert.match(
+        await events.nth(0).innerText(),
+        /09:00–10:00.*Đón khách.*chụp ảnh/s,
+      )
+      assert.match(await events.nth(1).innerText(), /10:30–12:00.*Dự tiệc/s)
+      assert.match(await events.nth(2).innerText(), /13:00.*Lễ thành hôn/s)
       assert.equal(
         await events.nth(0).locator('time').getAttribute('datetime'),
-        '2026-11-14T10:00:00+07:00',
+        '2026-11-14T09:00:00+07:00',
       )
       const countdown = page.locator('.wedding-countdown')
       assert.equal(await countdown.count(), 1, 'one countdown per invitation')

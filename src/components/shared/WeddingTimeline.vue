@@ -19,7 +19,22 @@ defineProps<{ events: WeddingActivity[] }>()
         <span class="timeline-dot" aria-hidden="true"></span>
         <div class="timeline-card">
           <svg
-            v-if="activity.id === 'meal'"
+            v-if="activity.id === 'welcome'"
+            class="timeline-icon"
+            viewBox="0 0 48 48"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 14h10l4-6h10l4 6h8v27H6zM10 18h5M17 8h14" />
+            <circle cx="26" cy="27" r="9" />
+            <circle cx="26" cy="27" r="5.5" />
+          </svg>
+          <svg
+            v-else-if="activity.id === 'meal'"
             class="timeline-icon"
             viewBox="0 0 48 48"
             fill="none"

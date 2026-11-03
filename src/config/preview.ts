@@ -10,6 +10,7 @@ export interface WeddingActivity {
   title: string
   time: string
   dateTime: string
+  endDateTime?: string
   dateLabel: string
   lunarDate: string
   venue: string

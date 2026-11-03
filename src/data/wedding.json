@@ -20,21 +20,34 @@
   },
   "events": [
     {
-      "id": "meal",
-      "title": "Bữa cơm thân mật",
-      "time": "10:00",
-      "dateTime": "2026-11-14T10:00:00+07:00",
+      "id": "welcome",
+      "title": "Đón khách / chụp ảnh",
+      "time": "09:00–10:00",
+      "dateTime": "2026-11-14T09:00:00+07:00",
       "dateLabel": "Thứ Bảy, 14 tháng 11, 2026",
       "lunarDate": "06 tháng 10 năm Bính Ngọ",
       "venue": "Tư gia nhà gái",
       "address": "Xóm 4, Trung Lập, Phượng Dực, Hà Nội",
-      "mapUrl": "https://www.google.com/maps/search/?api=1&query=X%C3%B3m%204%2C%20Trung%20L%E1%BA%ADp%2C%20Ph%C6%B0%E1%BB%A3ng%20D%E1%BB%B1c%2C%20H%C3%A0%20N%E1%BB%99i"
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=X%C3%B3m%204%2C%20Trung%20L%E1%BA%ADp%2C%20Ph%C6%B0%E1%BB%A3ng%20D%E1%BB%B1c%2C%20H%C3%A0%20N%E1%BB%99i",
+      "endDateTime": "2026-11-14T10:00:00+07:00"
+    },
+    {
+      "id": "meal",
+      "title": "Dự tiệc",
+      "time": "10:30–12:00",
+      "dateTime": "2026-11-14T10:30:00+07:00",
+      "dateLabel": "Thứ Bảy, 14 tháng 11, 2026",
+      "lunarDate": "06 tháng 10 năm Bính Ngọ",
+      "venue": "Tư gia nhà gái",
+      "address": "Xóm 4, Trung Lập, Phượng Dực, Hà Nội",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=X%C3%B3m%204%2C%20Trung%20L%E1%BA%ADp%2C%20Ph%C6%B0%E1%BB%A3ng%20D%E1%BB%B1c%2C%20H%C3%A0%20N%E1%BB%99i",
+      "endDateTime": "2026-11-14T12:00:00+07:00"
     },
     {
       "id": "ceremony",
       "title": "Lễ thành hôn",
-      "time": "13:30",
-      "dateTime": "2026-11-14T13:30:00+07:00",
+      "time": "13:00",
+      "dateTime": "2026-11-14T13:00:00+07:00",
       "dateLabel": "Thứ Bảy, 14 tháng 11, 2026",
       "lunarDate": "06 tháng 10 năm Bính Ngọ",
       "venue": "Tư gia nhà gái",

@@ -23,10 +23,13 @@ const commonStyles = new Map()
 
 async function verifyDock(page, width) {
   const dock = page.getByRole('complementary', {
-    name: 'Nhạc, gửi quà và chỉ đường',
+    name: 'Tiện ích thiệp cưới',
   })
   assert.equal(await dock.count(), 1)
-  assert.equal(await dock.locator('.floating-action').count(), 3)
+  assert.equal(
+    await dock.locator('.floating-action').count(),
+    page.url().includes('/thiep-2') ? 4 : 3,
+  )
   const box = await dock.boundingBox()
   assert.ok(box.x >= 0 && box.x + box.width <= width)
   assert.ok(box.y >= 0 && box.y + box.height <= 900)

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue'
-const props = defineProps<{ musicSrc: string | null; mapUrl: string }>()
-const emit = defineEmits<{ gifts: [] }>()
+const props = defineProps<{
+  musicSrc: string | null
+  mapUrl: string
+  rsvp?: boolean
+}>()
+const emit = defineEmits<{ gifts: []; rsvp: [] }>()
 const audio = ref<HTMLAudioElement | null>(null)
 const playing = ref(false)
 const loading = ref(false)
@@ -37,7 +41,7 @@ function musicError() {
 onUnmounted(() => audio.value?.pause())
 </script>
 <template>
-  <aside class="floating-actions" aria-label="Nhạc, gửi quà và chỉ đường">
+  <aside class="floating-actions" aria-label="Tiện ích thiệp cưới">
     <p v-if="status" class="floating-actions-status" role="status">
       {{ status }}
     </p>
@@ -110,6 +114,28 @@ onUnmounted(() => audio.value?.pause())
         </svg>
         <span class="action-label">Chỉ đường</span>
       </a>
+      <button
+        v-if="rsvp"
+        class="floating-action floating-action--rsvp"
+        type="button"
+        title="Xác nhận tham dự"
+        aria-label="Xác nhận tham dự"
+        @click="emit('rsvp')"
+      >
+        <svg
+          class="direction-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M7 11V4h10v7M5 11h14v5H5zM7 16l-2 5m12-5 2 5M7 8h10" />
+        </svg>
+        <span class="action-label">Xác nhận tham dự</span>
+      </button>
     </div>
     <audio
       v-if="musicSrc"
@@ -200,6 +226,9 @@ onUnmounted(() => audio.value?.pause())
 }
 .floating-actions .floating-action--directions {
   animation-delay: -0.7s;
+}
+.floating-actions .floating-action--rsvp {
+  animation-delay: -1.05s;
 }
 .floating-actions .floating-action:focus-visible {
   outline: 2px solid #fff;

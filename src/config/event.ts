@@ -2,7 +2,7 @@ import type { PreviewEvent } from './preview'
 import { weddingHero, weddingPhotos, weddingMusic } from './weddingMedia'
 import wedding from '../data/wedding.json'
 
-const ceremony = wedding.events[1]!
+const ceremony = wedding.events.find((activity) => activity.id === 'ceremony')!
 
 // Confirmed public invitation content; RSVP remains unavailable pending backend setup.
 export const event: PreviewEvent & { rsvpEnabled: false } = {
@@ -15,7 +15,7 @@ export const event: PreviewEvent & { rsvpEnabled: false } = {
   monthLabel: 'THÁNG MƯỜI MỘT',
   year: '2026',
   dateLabel: '14 tháng 11, 2026',
-  timeLabel: '13:30 · Thứ Bảy',
+  timeLabel: `${ceremony.time} · Thứ Bảy`,
   venue: ceremony.venue,
   address: ceremony.address,
   mapUrl: ceremony.mapUrl,

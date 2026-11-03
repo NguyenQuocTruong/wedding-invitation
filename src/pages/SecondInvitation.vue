@@ -4,6 +4,7 @@ import sourceLayout from '../data/template-02-layout.json'
 import FloatingActions from '../components/shared/FloatingActions.vue'
 import InvitationFrame from '../components/shared/InvitationFrame.vue'
 import GiftDialog from '../components/shared/GiftDialog.vue'
+import RsvpDialog from '../components/shared/RsvpDialog.vue'
 import { event } from '../config/event'
 import WeddingTimeline from '../components/shared/WeddingTimeline.vue'
 import WeddingCountdown from '../components/shared/WeddingCountdown.vue'
@@ -29,10 +30,11 @@ let openingTimer: ReturnType<typeof setTimeout> | undefined
 const scale = ref(1)
 const photoDialog = ref<HTMLDialogElement | null>(null)
 const selectedPhoto = ref('')
-const rsvpDialog = ref<HTMLDialogElement | null>(null)
+const rsvpDialog = ref<InstanceType<typeof RsvpDialog> | null>(null)
 const giftsDialog = ref<InstanceType<typeof GiftDialog> | null>(null)
 const frame = ref<InstanceType<typeof InvitationFrame> | null>(null)
 const ceremony = wedding.events.find((item) => item.id === 'ceremony')!
+const meal = wedding.events.find((item) => item.id === 'meal')!
 const calendarDays = Array.from({ length: 42 }, (_, i) =>
   i < 6 || i > 35 ? '' : String(i - 5),
 )
@@ -40,6 +42,9 @@ let observer: ResizeObserver | undefined
 useReveal(content)
 function displayedText(node: LayoutNode): string {
   const confirmed: Record<string, string> = {
+    TcEqC8UiF3: meal.title,
+    rOjINyBAK1: `${meal.time} · Thứ Bảy`,
+    m_XVKgwfEn: `${ceremony.time} · Thứ Bảy`,
     yVBwEU9zaz: `${wedding.couple.groomName} & ${wedding.couple.brideName}`,
     aTCEF52ZsB: wedding.couple.groomName,
     XJnZfJxoBp: wedding.couple.brideName,
@@ -457,7 +462,7 @@ onUnmounted(() => {
                     Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới
                     được thuận lợi và trọn vẹn nhất.
                   </p>
-                  <button type="button" @click="rsvpDialog?.showModal()">
+                  <button type="button" @click="rsvpDialog?.open()">
                     ♧ Gửi xác nhận
                   </button>
                 </div>
@@ -484,20 +489,7 @@ onUnmounted(() => {
           ><button type="button" @click="replay">Xem lại mở thiệp</button>
         </footer>
       </div>
-      <dialog
-        ref="rsvpDialog"
-        class="clone-form-dialog"
-        aria-label="Xác nhận tham dự"
-      >
-        <h2>Xác nhận tham dự</h2>
-        <p>
-          Xác nhận trực tuyến chưa mở. Bạn vui lòng liên hệ trực tiếp cô dâu
-          hoặc chú rể.
-        </p>
-        <label
-          >Họ và tên<input disabled placeholder="Họ và tên của bạn" /></label
-        ><button type="button" @click="rsvpDialog?.close()">Đóng</button>
-      </dialog>
+      <RsvpDialog ref="rsvpDialog" />
       <GiftDialog ref="giftsDialog" :gifts="event.gifts" />
       <dialog
         ref="photoDialog"
@@ -524,6 +516,8 @@ onUnmounted(() => {
         style="--floating-actions-width: 430px"
         :music-src="weddingMusic"
         :map-url="ceremony.mapUrl"
+        rsvp
+        @rsvp="rsvpDialog?.open()"
         @gifts="giftsDialog?.open()"
       />
     </template>
