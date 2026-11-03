@@ -42,41 +42,61 @@ async function close() {
     <p v-if="!event.photos.length" class="section-heading subtle" role="status">
       Album ảnh cưới đang được chuẩn bị. Hẹn bạn những khoảnh khắc thật đẹp.
     </p>
-    <div v-else class="gallery-grid">
-      <figure
-        v-for="(photo, index) in event.photos"
-        :key="photo.src"
-        :class="[
-          'gallery-item',
-          photo.group === 'red' ? 'gallery-red' : '',
-          'gallery-item-' + index,
-        ]"
-        data-reveal
-      >
-        <div v-if="photo.group === 'red'" class="red-heading">
+    <div
+      v-else
+      class="gallery-grid"
+      :class="{ 'gallery-grid--photos': !preview }"
+    >
+      <template v-for="(photo, index) in event.photos" :key="photo.src">
+        <div
+          v-if="
+            !preview &&
+            photo.group === 'red' &&
+            (index === 0 || event.photos[index - 1]?.group !== 'red')
+          "
+          class="album-group-heading"
+          data-reveal
+        >
           <p class="eyebrow">MỘT NÉT VIỆT</p>
           <h3>Sắc son, lời hẹn.</h3>
           <p>Giữ nét truyền thống trong câu chuyện của chúng mình.</p>
         </div>
-        <button
-          type="button"
-          :aria-label="'Xem ảnh: ' + photo.label"
-          @click="open(index)"
+        <figure
+          :class="[
+            'gallery-item',
+            preview && photo.group === 'red' ? 'gallery-red' : '',
+            !preview && index === event.photos.length - 1
+              ? 'gallery-item--wide'
+              : '',
+            'gallery-item-' + index,
+          ]"
+          data-reveal
         >
-          <img
-            :src="photo.src"
-            :alt="photo.alt"
-            width="800"
-            height="1000"
-            loading="lazy"
-            decoding="async"
-          /><span class="image-expand" aria-hidden="true">↗</span>
-        </button>
-        <figcaption>
-          <span>0{{ index + 1 }}</span
-          >{{ photo.label }}
-        </figcaption>
-      </figure>
+          <div v-if="preview && photo.group === 'red'" class="red-heading">
+            <p class="eyebrow">MỘT NÉT VIỆT</p>
+            <h3>Sắc son, lời hẹn.</h3>
+            <p>Giữ nét truyền thống trong câu chuyện của chúng mình.</p>
+          </div>
+          <button
+            type="button"
+            :aria-label="'Xem ảnh: ' + photo.label"
+            @click="open(index)"
+          >
+            <img
+              :src="photo.src"
+              :alt="photo.alt"
+              width="800"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            /><span class="image-expand" aria-hidden="true">↗</span>
+          </button>
+          <figcaption>
+            <span>0{{ index + 1 }}</span
+            >{{ photo.label }}
+          </figcaption>
+        </figure>
+      </template>
     </div>
     <dialog
       v-if="event.photos.length"

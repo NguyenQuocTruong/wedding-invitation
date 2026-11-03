@@ -1343,3 +1343,37 @@
     transform: none;
   }
 }
+
+/* Real photographs shared with Template 02, arranged for Template 01. */
+.gallery-grid--photos .gallery-item-0 {
+  grid-column: auto;
+}
+.gallery-grid--photos .gallery-item-0 button img {
+  aspect-ratio: 4/5;
+  object-position: center;
+}
+.gallery-grid--photos .gallery-item--wide {
+  grid-column: 1/-1;
+}
+.gallery-grid--photos .gallery-item--wide button img {
+  aspect-ratio: 16/9;
+}
+.album-group-heading {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 34px 0 8px;
+}
+.album-group-heading h3 {
+  font-size: clamp(30px, 4vw, 42px);
+  margin: 14px 0;
+}
+.album-group-heading > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 13px;
+}
+.gallery-grid--photos {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.gallery-grid--photos .gallery-item {
+  min-width: 0;
+}

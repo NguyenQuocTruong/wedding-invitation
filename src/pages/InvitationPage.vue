@@ -11,6 +11,7 @@ provide(invitationKey, {
   event,
   preview,
 })
+import PetalField from '../components/effects/PetalField.vue'
 import FamilyDetails from '../components/preview/FamilyDetails.vue'
 import EnvelopeIntro from '../components/preview/EnvelopeIntro.vue'
 import InvitationHero from '../components/preview/InvitationHero.vue'
@@ -62,7 +63,8 @@ async function open() {
       BẢN NỘI DUNG MẪU · Tên, gia đình, địa chỉ và ngày cưới đều là thông tin
       minh họa.
     </div>
-    <div class="ambient-leaves" aria-hidden="true">
+    <PetalField v-if="!preview" />
+    <div v-else class="ambient-leaves" aria-hidden="true">
       <span v-for="n in 8" :key="n" :style="{ '--leaf-index': n }"></span>
     </div>
     <button

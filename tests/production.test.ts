@@ -1,6 +1,10 @@
 import { expect, it } from 'vitest'
 import { event } from '../src/config/event'
 import { countdownParts } from '../src/utils/preview'
+import sourceLayout from '../src/data/template-02-layout.json'
+import sourceAssets from '../src/data/template-02-assets.json'
+import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 
 it('uses the confirmed couple, parents, and ceremony countdown', () => {
   expect(event.sampleContent).toBe(false)
@@ -43,5 +47,26 @@ it('never offers sample payment QR or an unconfigured RSVP submission', () => {
     expect(event.gifts[side].recipient).toBe('')
   }
   expect(event.musicSrc).toBeNull()
-  expect(event.photos.length).toBe(4)
+  expect(event.photos.length).toBe(9)
+})
+
+it('reuses real photo assets from the second invitation for the hero and complete album', () => {
+  const keys = sourceLayout
+    .filter(
+      (node) =>
+        node.type === 'PhotoBox' &&
+        node.props.semanticField === 'weddingPhoto' &&
+        node.props.imgKey?.startsWith('uploads/'),
+    )
+    .map((node) => node.props.imgKey!)
+  const assets = sourceAssets as Record<string, string>
+  const sources = new Set(keys.map((key) => assets[key]))
+  expect(sources.has(event.hero)).toBe(true)
+  expect(new Set(event.photos.map((photo) => photo.src)).size).toBe(9)
+  for (const photo of event.photos) {
+    expect(sources.has(photo.src)).toBe(true)
+    expect(existsSync(resolve('public', photo.src.slice(1)))).toBe(true)
+    expect(photo.alt).toContain('Quốc Trưởng')
+    expect(photo.alt).toContain('Lâm Oanh')
+  }
 })
