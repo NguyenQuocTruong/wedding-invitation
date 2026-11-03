@@ -13,6 +13,17 @@ export interface ThemeColors {
   badgeBorder: string
   badgeColor: string
   countdownBg: string
+  assetFilter: string
+  opening: {
+    backdropGradient: string
+    textColor: string
+    buttonBg: string
+    buttonShadowRgb: string
+    guestBadgeBg: string
+    cardGlowRgb: string
+    dividerColor: string
+    flowerFilter: string
+  }
   timeline: {
     bg: string
     color: string
@@ -40,6 +51,18 @@ export const TEMPLATE_02_THEMES: Record<ThemeId, ThemeColors> = {
     badgeBorder: '#ef9d9b',
     badgeColor: '#ffffff',
     countdownBg: '#424f33',
+    assetFilter: 'none',
+    opening: {
+      backdropGradient:
+        'linear-gradient(to bottom right, #364131, #2c3528, #22291f)',
+      textColor: '#5d6a57',
+      buttonBg: '#5d6a57',
+      buttonShadowRgb: '93, 106, 87',
+      guestBadgeBg: 'rgba(93, 106, 87, 0.1)',
+      cardGlowRgb: '105, 122, 98',
+      dividerColor: '#697a62',
+      flowerFilter: 'none',
+    },
     timeline: {
       bg: '#fafbf7',
       color: '#465640',
@@ -62,9 +85,21 @@ export const TEMPLATE_02_THEMES: Record<ThemeId, ThemeColors> = {
     cardBg: '#557352',
     canvasBg: '#fdfbf7',
     outerBg: '#edf2eb',
-    badgeBorder: '#c5a869',
-    badgeColor: '#c5a869',
+    badgeBorder: '#ffffff',
+    badgeColor: '#ffffff',
     countdownBg: '#557352',
+    assetFilter: 'hue-rotate(20deg) saturate(0.95) brightness(1.08)',
+    opening: {
+      backdropGradient:
+        'linear-gradient(to bottom right, #344832, #283726, #1d2a1c)',
+      textColor: '#557352',
+      buttonBg: '#557352',
+      buttonShadowRgb: '85, 115, 82',
+      guestBadgeBg: 'rgba(85, 115, 82, 0.12)',
+      cardGlowRgb: '85, 115, 82',
+      dividerColor: '#557352',
+      flowerFilter: 'hue-rotate(20deg) saturate(0.95) brightness(1.08)',
+    },
     timeline: {
       bg: '#fdfbf7',
       color: '#2b3828',
@@ -87,9 +122,21 @@ export const TEMPLATE_02_THEMES: Record<ThemeId, ThemeColors> = {
     cardBg: '#c46d75',
     canvasBg: '#fffdfc',
     outerBg: '#fbf0ed',
-    badgeBorder: '#e09389',
-    badgeColor: '#e09389',
+    badgeBorder: '#ffffff',
+    badgeColor: '#ffffff',
     countdownBg: '#c46d75',
+    assetFilter: 'hue-rotate(240deg) saturate(1.15) brightness(1.08)',
+    opening: {
+      backdropGradient:
+        'linear-gradient(to bottom right, #5c2f37, #452128, #2e141a)',
+      textColor: '#c46d75',
+      buttonBg: '#c46d75',
+      buttonShadowRgb: '196, 109, 117',
+      guestBadgeBg: 'rgba(196, 109, 117, 0.12)',
+      cardGlowRgb: '196, 109, 117',
+      dividerColor: '#c46d75',
+      flowerFilter: 'hue-rotate(240deg) saturate(1.15) brightness(1.08)',
+    },
     timeline: {
       bg: '#fffdfc',
       color: '#4a3537',

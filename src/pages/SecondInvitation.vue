@@ -49,21 +49,52 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
   // Map text colors
   if (node.props.color === '#1c491f') {
     styled.color = themeVars.accent
-  } else if (node.props.color === 'rgba(66, 79, 51, 0.9521047930931825)') {
+  } else if (
+    node.props.color?.includes('66, 79, 51') ||
+    node.props.color === '#424f33'
+  ) {
     styled.color = themeVars.primary
   }
 
   // Map background colors
-  if (node.props.backgroundColor === '#424f33') {
+  if (
+    node.props.backgroundColor === '#424f33' ||
+    node.props.backgroundColor?.includes('66, 79, 51')
+  ) {
     styled.backgroundColor = themeVars.cardBg
   } else if (node.props.backgroundColor === '#1c491f') {
     styled.backgroundColor = themeVars.primary
   }
 
-  // Map SVGs
-  if (node.props.materialType === 'svg') {
-    if (node.props.color === '#1c491f' || node.props.color === '#424f33') {
-      styled.backgroundColor = themeVars.primary
+  // Map SVGs & shape cards (including Calendar card yA5bCPORcy)
+  if (node.props.materialType === 'svg' || node.id === 'yA5bCPORcy') {
+    if (
+      node.props.color === '#1c491f' ||
+      node.props.color === '#424f33' ||
+      node.props.color?.includes('66, 79, 51') ||
+      node.id === 'yA5bCPORcy'
+    ) {
+      styled.backgroundColor = themeVars.cardBg
+      styled.color = themeVars.cardBg
+    }
+  }
+
+  // Map decorative botanical / artwork images (excluding actual couple photos)
+  const isCouplePhoto =
+    node.props.semanticField === 'weddingPhoto' ||
+    Boolean(node.props.imgKey?.startsWith('uploads/'))
+
+  if (!isCouplePhoto && node.props.imgKey && themeVars.assetFilter !== 'none') {
+    const isDecorativeGraphic =
+      node.id === 'l2mZjv5O_e' || // Arch frame at top
+      node.id === 'lx4IwuzDxw' || // Top decorative bracket
+      node.id === 'y83Rpc5YYy' || // M & L ribbon bow
+      node.props.imgKey.includes('bouquet') ||
+      node.props.imgKey.includes('templates/')
+
+    if (isDecorativeGraphic) {
+      styled.filter = themeVars.assetFilter
+      styled.transition = 'filter 0.3s ease'
     }
   }
 
@@ -180,23 +211,20 @@ onUnmounted(() => {
           v-if="!opened"
           class="slr-root"
           :class="{ 'is-opening': opening }"
-          style="
-            position: fixed;
-            inset: 0 0 var(--actions-height);
-            z-index: 999999;
-            display: flex;
-            align-items: var(--opening-alignment, center);
-            justify-content: center;
-            overflow-x: hidden;
-            overflow-y: auto;
-            padding: var(--opening-padding, 0);
-            background: linear-gradient(
-              to bottom right,
-              #364131,
-              #2c3528,
-              #22291f
-            );
-          "
+          :style="{
+            position: 'fixed',
+            inset: '0 0 var(--actions-height)',
+            zIndex: 999999,
+            display: 'flex',
+            alignItems: 'var(--opening-alignment, center)',
+            justifyContent: 'center',
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            padding: 'var(--opening-padding, 0)',
+            background:
+              TEMPLATE_02_THEMES[currentTheme].opening.backdropGradient,
+            transition: 'background 0.4s ease',
+          }"
         >
           <div class="slr-floating-layer" aria-hidden="true">
             <div
@@ -351,17 +379,23 @@ onUnmounted(() => {
             <div
               class="slr-ui-frame slr-ui-frame--responsive"
               data-slr-theme="vuonxuan-green"
-              style="
-                --slr-font-display:
-                  'UNI Chu truyen thong', 'Baskerville', 'Times New Roman',
-                  serif;
-                --slr-card-glow-rgb: 105, 122, 98;
-                --slr-open-button-shadow-rgb: 93, 106, 87;
-                --slr-guest-badge-bg: rgba(93, 106, 87, 0.1);
-                --slr-text-color: #5d6a57;
-                --slr-open-button-bg: #5d6a57;
-                --slr-open-button-text-color: #ffffff;
-              "
+              :style="{
+                '--slr-font-display':
+                  '\'UNI Chu truyen thong\', \'Baskerville\', \'Times New Roman\', serif',
+                '--slr-card-glow-rgb':
+                  TEMPLATE_02_THEMES[currentTheme].opening.cardGlowRgb,
+                '--slr-open-button-shadow-rgb':
+                  TEMPLATE_02_THEMES[currentTheme].opening.buttonShadowRgb,
+                '--slr-guest-badge-bg':
+                  TEMPLATE_02_THEMES[currentTheme].opening.guestBadgeBg,
+                '--slr-text-color':
+                  TEMPLATE_02_THEMES[currentTheme].opening.textColor,
+                '--slr-open-button-bg':
+                  TEMPLATE_02_THEMES[currentTheme].opening.buttonBg,
+                '--slr-open-button-text-color': '#ffffff',
+                '--slr-seal-base':
+                  TEMPLATE_02_THEMES[currentTheme].opening.buttonBg,
+              }"
             >
               <div class="slr-ui-seal">
                 <svg
@@ -381,11 +415,21 @@ onUnmounted(() => {
                     alt=""
                     aria-hidden="true"
                     class="slr-ui-art slr-ui-vxg-flower-top"
+                    :style="{
+                      filter:
+                        TEMPLATE_02_THEMES[currentTheme].opening.flowerFilter,
+                      transition: 'filter 0.3s ease',
+                    }"
                   /><img
                     src="/template-02/9ae458b6b007e3ae.webp"
                     alt=""
                     aria-hidden="true"
                     class="slr-ui-art slr-ui-vxg-flower-bottom"
+                    :style="{
+                      filter:
+                        TEMPLATE_02_THEMES[currentTheme].opening.flowerFilter,
+                      transition: 'filter 0.3s ease',
+                    }"
                   />
                   <div class="slr-ui-text-wrap">
                     <h1

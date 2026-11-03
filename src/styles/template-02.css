@@ -718,8 +718,8 @@
   --theme-primary-text: #ffffff;
   --theme-accent: #364e34;
   --theme-card-bg: #557352;
-  --theme-badge-border: #c5a869;
-  --theme-badge-color: #364e34;
+  --theme-badge-border: #ffffff;
+  --theme-badge-color: #ffffff;
   --countdown-cell-bg: #557352;
   --timeline-bg: #fdfbf7;
   --timeline-color: #2b3828;
@@ -743,8 +743,8 @@
   --theme-primary-text: #ffffff;
   --theme-accent: #73323a;
   --theme-card-bg: #c46d75;
-  --theme-badge-border: #e09389;
-  --theme-badge-color: #73323a;
+  --theme-badge-border: #ffffff;
+  --theme-badge-color: #ffffff;
   --countdown-cell-bg: #c46d75;
   --timeline-bg: #fffdfc;
   --timeline-color: #4a3537;
@@ -759,6 +759,25 @@
   --slr-open-button-text-color: #ffffff;
   --slr-text-color: #c46d75;
   --slr-seal-base: #c46d75;
+}
+
+/* Opening screen theme integration */
+.slr-ui-frame .slr-ui-divider span {
+  color: var(--slr-text-color, #697a62);
+}
+.slr-ui-frame .slr-ui-divider-line--left {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--slr-text-color, #697a62)
+  );
+}
+.slr-ui-frame .slr-ui-divider-line--right {
+  background: linear-gradient(
+    270deg,
+    transparent,
+    var(--slr-text-color, #697a62)
+  );
 }
 
 /* Theme Switcher Widget */

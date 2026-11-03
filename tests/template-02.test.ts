@@ -34,3 +34,42 @@ describe('source invitation geometry', () => {
     expect(elementStyle(node.props, 'PluginRsvp').boxShadow).toBe('none')
   })
 })
+
+describe('template-02 color themes', () => {
+  it('defines all required theme palettes with distinct styling', async () => {
+    const { TEMPLATE_02_THEMES } =
+      await import('../src/config/template-02-themes')
+    expect(TEMPLATE_02_THEMES.original).toBeDefined()
+    expect(TEMPLATE_02_THEMES.sage).toBeDefined()
+    expect(TEMPLATE_02_THEMES.peach).toBeDefined()
+
+    expect(TEMPLATE_02_THEMES.sage.primary).toBe('#557352')
+    expect(TEMPLATE_02_THEMES.peach.primary).toBe('#c46d75')
+  })
+
+  it('configures distinct opening page colors and flower filters per theme', async () => {
+    const { TEMPLATE_02_THEMES } =
+      await import('../src/config/template-02-themes')
+    const { original, sage, peach } = TEMPLATE_02_THEMES
+
+    expect(original.opening.buttonBg).toBe('#5d6a57')
+    expect(sage.opening.buttonBg).toBe('#557352')
+    expect(peach.opening.buttonBg).toBe('#c46d75')
+
+    expect(original.opening.flowerFilter).toBe('none')
+    expect(sage.opening.flowerFilter).toContain('hue-rotate')
+    expect(peach.opening.flowerFilter).toContain('hue-rotate')
+
+    expect(original.opening.backdropGradient).not.toBe(
+      peach.opening.backdropGradient,
+    )
+  })
+
+  it('configures asset filters for top card illustrations in non-original themes', async () => {
+    const { TEMPLATE_02_THEMES } =
+      await import('../src/config/template-02-themes')
+    expect(TEMPLATE_02_THEMES.original.assetFilter).toBe('none')
+    expect(TEMPLATE_02_THEMES.sage.assetFilter).toContain('hue-rotate')
+    expect(TEMPLATE_02_THEMES.peach.assetFilter).toContain('hue-rotate')
+  })
+})
