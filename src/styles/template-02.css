@@ -443,7 +443,10 @@
 
 /* Fidelity fixes: source canvas is 430px; opening has its own responsive frame. */
 .clone-page {
-  background: #eeeeee;
+  background: var(--theme-outer-bg, #303b2b);
+}
+.invitation-viewport > .clone-page {
+  padding-bottom: 0;
 }
 .clone-shell {
   max-width: 430px;
@@ -452,7 +455,7 @@
   display: none;
 }
 .clone-stage {
-  background: #f7f7f7;
+  background: var(--theme-canvas-bg, #f7f7f7);
 }
 .clone-motion-toggle {
   position: fixed;
@@ -716,26 +719,26 @@
 .clone-page.theme-sage {
   --theme-outer-bg: #edf2eb;
   --theme-canvas-bg: #fdfbf7;
-  --theme-primary: #557352;
+  --theme-primary: #4a7c59;
   --theme-primary-text: #ffffff;
-  --theme-accent: #364e34;
-  --theme-card-bg: #557352;
+  --theme-accent: #2f5d3e;
+  --theme-card-bg: #4a7c59;
   --theme-badge-border: #ffffff;
   --theme-badge-color: #ffffff;
-  --countdown-cell-bg: #557352;
+  --countdown-cell-bg: #4a7c59;
   --timeline-bg: #fdfbf7;
   --timeline-color: #2b3828;
-  --timeline-accent: #557352;
-  --timeline-line: #d1dccd;
-  --timeline-dot-bg: #c5a869;
+  --timeline-accent: #4a7c59;
+  --timeline-line: #c8dccd;
+  --timeline-dot-bg: #ffffff;
   --timeline-card-bg: #ffffff;
-  --timeline-card-border: #e2ebe0;
-  --timeline-time-color: #557352;
-  --timeline-icon-color: #557352;
-  --slr-open-button-bg: #557352;
+  --timeline-card-border: #dcebe0;
+  --timeline-time-color: #3d6b4b;
+  --timeline-icon-color: #4a7c59;
+  --slr-open-button-bg: #4a7c59;
   --slr-open-button-text-color: #ffffff;
-  --slr-text-color: #557352;
-  --slr-seal-base: #557352;
+  --slr-text-color: #3d6b4b;
+  --slr-seal-base: #4a7c59;
 }
 
 .clone-page.theme-peach {
@@ -752,7 +755,7 @@
   --timeline-color: #4a3537;
   --timeline-accent: #ad5560;
   --timeline-line: #f2d9d6;
-  --timeline-dot-bg: #e09389;
+  --timeline-dot-bg: #ffffff;
   --timeline-card-bg: #ffffff;
   --timeline-card-border: #f8e5e3;
   --timeline-time-color: #ad5560;

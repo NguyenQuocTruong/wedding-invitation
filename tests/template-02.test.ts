@@ -43,8 +43,10 @@ describe('template-02 color themes', () => {
     expect(TEMPLATE_02_THEMES.sage).toBeDefined()
     expect(TEMPLATE_02_THEMES.peach).toBeDefined()
 
-    expect(TEMPLATE_02_THEMES.sage.primary).toBe('#557352')
+    expect(TEMPLATE_02_THEMES.sage.primary).toBe('#4a7c59')
     expect(TEMPLATE_02_THEMES.peach.primary).toBe('#ad5560')
+    expect(TEMPLATE_02_THEMES.sage.archBg).toBe('#eaf2e8')
+    expect(TEMPLATE_02_THEMES.peach.archBg).toBe('#fdf0f0')
   })
 
   it('configures distinct opening page colors and flower filters per theme', async () => {
@@ -53,13 +55,16 @@ describe('template-02 color themes', () => {
     const { original, sage, peach } = TEMPLATE_02_THEMES
 
     expect(original.opening.buttonBg).toBe('#5d6a57')
-    expect(sage.opening.buttonBg).toBe('#557352')
+    expect(sage.opening.buttonBg).toBe('#4a7c59')
     expect(peach.opening.buttonBg).toBe('#ad5560')
 
     expect(original.opening.flowerFilter).toBe('none')
     expect(sage.opening.flowerFilter).toContain('hue-rotate')
     expect(peach.opening.flowerFilter).toContain('hue-rotate')
 
+    expect(original.opening.backdropGradient).not.toBe(
+      sage.opening.backdropGradient,
+    )
     expect(original.opening.backdropGradient).not.toBe(
       peach.opening.backdropGradient,
     )

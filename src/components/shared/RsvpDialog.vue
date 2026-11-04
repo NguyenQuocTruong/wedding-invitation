@@ -375,8 +375,8 @@ defineExpose({ open })
   padding: 0;
   border: 1px solid #ffffffb8;
   border-radius: 24px;
-  background: #fbfcf8;
-  color: #465640;
+  background: var(--theme-canvas-bg, #fbfcf8);
+  color: var(--theme-accent, #465640);
   box-shadow: 0 24px 100px #16231340;
   font:
     13px/1.6 system-ui,
@@ -391,7 +391,7 @@ defineExpose({ open })
   top: 0;
   z-index: 1;
   padding: 28px 44px 20px;
-  background: #fbfcf8f5;
+  background: var(--theme-canvas-bg, #fbfcf8f5);
   text-align: center;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -408,7 +408,7 @@ defineExpose({ open })
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #465640;
+  color: var(--theme-primary, #465640);
   font:
     26px/1 system-ui,
     sans-serif;
@@ -416,7 +416,7 @@ defineExpose({ open })
 }
 .rsvp-dialog-eyebrow {
   margin: 0 0 10px;
-  color: #627058;
+  color: var(--theme-primary, #627058);
   font-size: 11px;
   letter-spacing: 0.14em;
 }
@@ -428,7 +428,7 @@ defineExpose({ open })
 }
 .rsvp-dialog-header > p:last-child {
   margin: 10px 0 0;
-  color: #627058;
+  color: var(--theme-primary, #627058);
   font-size: 14px;
 }
 .rsvp-dialog-form {
@@ -502,23 +502,23 @@ defineExpose({ open })
   cursor: pointer;
 }
 .rsvp-options label.selected {
-  border-color: #7c916c;
-  background: #edf3e7;
-  color: #405737;
+  border-color: var(--theme-primary, #7c916c);
+  background: var(--theme-outer-bg, #edf3e7);
+  color: var(--theme-accent, #405737);
 }
 .rsvp-options input {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: #667f54;
+  accent-color: var(--theme-primary, #667f54);
 }
 .rsvp-availability {
   margin: 0;
   padding: 12px 14px;
   border-radius: 12px;
-  background: #eef1e9;
-  color: #627058;
+  background: var(--theme-outer-bg, #eef1e9);
+  color: var(--theme-accent, #627058);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -536,10 +536,10 @@ defineExpose({ open })
   justify-self: center;
   min-height: 44px;
   padding: 8px 14px;
-  border: 1px solid #aebba3;
+  border: 1px solid var(--theme-primary, #aebba3);
   border-radius: 999px;
   background: transparent;
-  color: #405737;
+  color: var(--theme-accent, #405737);
   font: inherit;
   cursor: pointer;
 }
@@ -555,7 +555,7 @@ defineExpose({ open })
   padding: 12px 18px;
   border: 0;
   border-radius: 999px;
-  background: #66735b;
+  background: var(--theme-primary, #66735b);
   color: #fff;
   font:
     13px/1.4 system-ui,
@@ -566,7 +566,7 @@ defineExpose({ open })
   cursor: not-allowed;
 }
 .rsvp-dialog :focus-visible {
-  outline: 2px solid #627c50;
+  outline: 2px solid var(--theme-primary, #627c50);
   outline-offset: 3px;
 }
 @media (max-width: 359px) {

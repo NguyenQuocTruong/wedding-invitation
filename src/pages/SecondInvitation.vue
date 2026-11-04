@@ -96,34 +96,42 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
     styled.backgroundColor = themeVars.primary
   }
 
-  // Map SVGs & shape cards (including Calendar card yA5bCPORcy)
-  if (node.props.materialType === 'svg' || node.id === 'yA5bCPORcy') {
+  // Map SVGs & shape cards (including Calendar card yA5bCPORcy, Couplet card PbWk0wRGqb, RSVP arch H3xwC69tfn)
+  if (
+    node.props.materialType === 'svg' ||
+    node.id === 'yA5bCPORcy' ||
+    node.id === 'PbWk0wRGqb' ||
+    node.id === 'H3xwC69tfn'
+  ) {
     if (
       node.props.color === '#1c491f' ||
       node.props.color === '#424f33' ||
+      node.props.color === '#4f3333' ||
       node.props.color?.includes('66, 79, 51') ||
-      node.id === 'yA5bCPORcy'
+      node.id === 'yA5bCPORcy' ||
+      node.id === 'PbWk0wRGqb'
     ) {
       styled.backgroundColor = themeVars.cardBg
       styled.color = themeVars.cardBg
+    } else if (node.props.color === '#f8efef' || node.id === 'H3xwC69tfn') {
+      styled.backgroundColor = themeVars.archBg
+      styled.color = themeVars.archBg
     }
   }
 
-  // Map decorative botanical / artwork images (excluding actual couple photos)
-  const isCouplePhoto =
-    node.props.semanticField === 'weddingPhoto' ||
-    Boolean(node.props.imgKey?.startsWith('uploads/'))
-
-  if (!isCouplePhoto && node.props.imgKey && themeVars.assetFilter !== 'none') {
-    const isDecorativeGraphic =
+  // Map green envelope/arch decorative PNGs only (never couple .jpg photos or multi-color floral bouquets)
+  if (node.props.imgKey && themeVars.assetFilter !== 'none') {
+    const isGreenEnvelopeGraphic =
       node.id === 'l2mZjv5O_e' || // Arch frame at top
       node.id === 'lx4IwuzDxw' || // Top decorative bracket
-      node.id === 'y83Rpc5YYy' || // M & L ribbon bow
-      node.props.imgKey.includes('bouquet') ||
-      node.props.imgKey.includes('templates/')
+      node.id === 'y83Rpc5YYy' // M & L ribbon bow
 
-    if (isDecorativeGraphic) {
+    if (isGreenEnvelopeGraphic) {
       styled.filter = themeVars.assetFilter
+      styled.transition = 'filter 0.3s ease'
+    } else if (node.id === 'AfAx01WBob' && currentTheme.value === 'sage') {
+      // Soften pink hearts on green couplet card into warm cream/white in Sage theme
+      styled.filter = 'brightness(1.85) saturate(0.25)'
       styled.transition = 'filter 0.3s ease'
     }
   }

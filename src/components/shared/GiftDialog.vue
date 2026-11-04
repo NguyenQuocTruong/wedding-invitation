@@ -61,8 +61,8 @@ defineExpose({ open })
   padding: 48px 24px 28px;
   border: 1px solid #fff9;
   border-radius: 24px;
-  background: #fbfcf8;
-  color: #465640;
+  background: var(--theme-canvas-bg, #fbfcf8);
+  color: var(--theme-accent, #465640);
   text-align: center;
   box-shadow: 0 24px 100px #16231340;
   font:
@@ -84,8 +84,8 @@ defineExpose({ open })
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #e9eee5;
-  color: #465640;
+  background: var(--theme-outer-bg, #e9eee5);
+  color: var(--theme-primary, #465640);
   font:
     26px/1 system-ui,
     sans-serif;
@@ -93,8 +93,8 @@ defineExpose({ open })
 }
 .wedding-gift-dialog .gift-dialog-eyebrow {
   margin: 0 0 12px;
-  color: #7a8b70;
-  font-size: 9px;
+  color: var(--theme-primary, #7a8b70);
+  font-size: 11px;
   letter-spacing: 0.18em;
 }
 .wedding-gift-dialog h2 {
@@ -105,7 +105,7 @@ defineExpose({ open })
 }
 .wedding-gift-dialog .gift-dialog-intro {
   margin: 18px 0 24px;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 .gift-dialog-grid {
   display: grid;
@@ -114,7 +114,8 @@ defineExpose({ open })
 }
 .gift-dialog-grid article {
   padding: 20px 12px;
-  border: 1px solid #dce4d7;
+  border: 1px solid var(--timeline-card-border, #dce4d7);
+  background: #fff;
   border-radius: 16px;
 }
 .gift-dialog-grid h3 {
@@ -125,8 +126,8 @@ defineExpose({ open })
 }
 .gift-dialog-grid p {
   margin: 0;
-  font-size: 12px;
-  color: #707a69;
+  font-size: 13px;
+  color: var(--theme-accent, #707a69);
 }
 .gift-dialog-grid img {
   display: block;
@@ -137,11 +138,12 @@ defineExpose({ open })
 .gift-dialog-grid a {
   display: inline-block;
   padding: 12px 0;
-  color: #465640;
-  font-size: 12px;
+  color: var(--theme-primary, #465640);
+  font-size: 13px;
+  font-weight: 500;
 }
 .wedding-gift-dialog :focus-visible {
-  outline: 2px solid #607653;
+  outline: 2px solid var(--theme-primary, #607653);
   outline-offset: 3px;
 }
 @media (max-width: 359px) {
