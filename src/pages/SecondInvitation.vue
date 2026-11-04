@@ -114,27 +114,32 @@ function adjustedNodeProps(node: LayoutNode): NodeProps {
     }
   }
   if (node.id === 'KZX422DR9H') {
-    // Center the RSVP button container horizontally on the 430px canvas (was left: 101.175, width: 258 -> center 230.2)
+    // Center the RSVP button container horizontally on the 430px canvas
     return {
       ...node.props,
+      top: 3550,
       left: 0,
       width: 430,
+      height: 220,
     }
   }
   if (node.id === 'dQOJShtA-K') {
-    // Center the Gift Box image horizontally on the 430px canvas (was left: 23.832, width: 390.315 -> center 219)
+    // Center the interactive Hoa Moc Xanh Gift Box widget horizontally on the 430px canvas without rotation
     return {
       ...node.props,
-      left: 20,
-      width: 390,
+      top: 3824,
+      left: 0,
+      width: 430,
+      height: 274,
+      rotation: 0,
+      continuousAnimation: { type: 'none', duration: 2, delay: 0 },
     }
   }
   if (node.id === 'T4OVXAoo80') {
-    // Center "Gửi Quà Mừng" label horizontally on the 430px canvas (was left: 101.152, width: 242.434 -> center 222.4)
+    // Hide old static "Gửi Quà Mừng" text below gift box since the new widget has "HỘP QUÀ MỪNG" header and "Nhấn để mở" hint
     return {
       ...node.props,
-      left: 93.8,
-      width: 242.4,
+      opacity: 0,
     }
   }
   return node.props
@@ -607,13 +612,18 @@ onUnmounted(() => {
                 <div
                   class="clone-element"
                   :class="{
-                    'clone-reveal': node.props.transition?.effectEnabled,
+                    'clone-reveal':
+                      adjustedNodeProps(node).transition?.effectEnabled,
                   }"
                   :data-reveal="
-                    node.props.transition?.effectEnabled ? '' : undefined
+                    adjustedNodeProps(node).transition?.effectEnabled
+                      ? ''
+                      : undefined
                   "
-                  :data-effect="node.props.transition?.effectType"
-                  :data-continuous="node.props.continuousAnimation?.type"
+                  :data-effect="adjustedNodeProps(node).transition?.effectType"
+                  :data-continuous="
+                    adjustedNodeProps(node).continuousAnimation?.type
+                  "
                   :style="themedNodeStyle(node)"
                 >
                   <template v-if="node.type === 'TextBox'">
@@ -708,13 +718,18 @@ onUnmounted(() => {
                 <div
                   class="clone-element"
                   :class="{
-                    'clone-reveal': node.props.transition?.effectEnabled,
+                    'clone-reveal':
+                      adjustedNodeProps(node).transition?.effectEnabled,
                   }"
                   :data-reveal="
-                    node.props.transition?.effectEnabled ? '' : undefined
+                    adjustedNodeProps(node).transition?.effectEnabled
+                      ? ''
+                      : undefined
                   "
-                  :data-effect="node.props.transition?.effectType"
-                  :data-continuous="node.props.continuousAnimation?.type"
+                  :data-effect="adjustedNodeProps(node).transition?.effectType"
+                  :data-continuous="
+                    adjustedNodeProps(node).continuousAnimation?.type
+                  "
                   :style="themedNodeStyle(node)"
                 >
                   <template v-if="node.type === 'TextBox'">
@@ -771,19 +786,108 @@ onUnmounted(() => {
                       <span class="clone-rsvp-cta-shine" aria-hidden="true" />
                     </button>
                   </div>
-                  <button
-                    v-else-if="node.type === 'PluginQrBox'"
-                    class="clone-gifts-button"
-                    type="button"
-                    aria-label="Gửi quà mừng"
-                    @click="giftsDialog?.open()"
-                  >
-                    <img
-                      :src="asset(node.props.imgKey)"
-                      alt="Hộp quà mừng cưới"
-                      loading="lazy"
-                    />
-                  </button>
+                  <div v-else-if="node.type === 'PluginQrBox'" class="igb-root">
+                    <h2 class="igb-heading">Hộp Quà Mừng</h2>
+                    <button
+                      class="clone-gifts-button igb-trigger"
+                      type="button"
+                      aria-label="Mở hộp mừng cưới"
+                      @click="giftsDialog?.open()"
+                    >
+                      <div class="igb-stage">
+                        <span
+                          class="igb-sparkle igb-sparkle-1"
+                          aria-hidden="true"
+                          >✦</span
+                        >
+                        <span
+                          class="igb-sparkle igb-sparkle-2"
+                          aria-hidden="true"
+                          >✦</span
+                        >
+                        <span
+                          class="igb-sparkle igb-sparkle-3"
+                          aria-hidden="true"
+                          >✦</span
+                        >
+                        <span
+                          class="igb-sparkle igb-sparkle-4"
+                          aria-hidden="true"
+                          >✦</span
+                        >
+                        <div class="igb-confetti-wrap" aria-hidden="true">
+                          <div class="igb-confetti igb-c1" />
+                          <div class="igb-confetti igb-c2" />
+                          <div class="igb-confetti igb-c3" />
+                          <div class="igb-confetti igb-c4" />
+                          <div class="igb-confetti igb-c5" />
+                          <div class="igb-confetti igb-c6" />
+                          <div class="igb-confetti igb-c7" />
+                          <div class="igb-confetti igb-c8" />
+                        </div>
+                        <div class="igb-bob">
+                          <div class="igb-shadow" aria-hidden="true" />
+                          <img
+                            src="/images/giftbox/mini/qasr_gold.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-1"
+                          />
+                          <img
+                            src="/images/giftbox/mini/double_phoenix_green.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-2"
+                          />
+                          <img
+                            src="/images/giftbox/mini/boho_floral_brown.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-3"
+                          />
+                          <img
+                            src="/images/giftbox/mini/song_hy_red.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-4"
+                          />
+                          <img
+                            src="/images/giftbox/boho_floral_green.webp"
+                            alt="Hộp quà mừng cưới"
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-box"
+                          />
+                          <img
+                            src="/images/giftbox/mini/riviera_blue.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-5"
+                          />
+                          <img
+                            src="/images/giftbox/mini/porcelain_v2_green.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-6"
+                          />
+                          <img
+                            src="/images/giftbox/mini/porcelain_brown.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="igb-decor igb-decor-7"
+                          />
+                        </div>
+                      </div>
+                      <p class="igb-hint">Nhấn để mở</p>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
