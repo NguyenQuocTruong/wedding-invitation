@@ -36,45 +36,28 @@ describe('source invitation geometry', () => {
 })
 
 describe('template-02 color themes', () => {
-  it('defines all required theme palettes with distinct styling', async () => {
+  it('retains only the Sage theme palette and removes Original and Peach', async () => {
     const { TEMPLATE_02_THEMES } =
       await import('../src/config/template-02-themes')
-    expect(TEMPLATE_02_THEMES.original).toBeDefined()
+    expect(Object.keys(TEMPLATE_02_THEMES)).toEqual(['sage'])
     expect(TEMPLATE_02_THEMES.sage).toBeDefined()
-    expect(TEMPLATE_02_THEMES.peach).toBeDefined()
-
     expect(TEMPLATE_02_THEMES.sage.primary).toBe('#4a7c59')
-    expect(TEMPLATE_02_THEMES.peach.primary).toBe('#ad5560')
     expect(TEMPLATE_02_THEMES.sage.archBg).toBe('#eaf2e8')
-    expect(TEMPLATE_02_THEMES.peach.archBg).toBe('#fdf0f0')
   })
 
-  it('configures distinct opening page colors and flower filters per theme', async () => {
+  it('configures Sage opening page colors and flower filter', async () => {
     const { TEMPLATE_02_THEMES } =
       await import('../src/config/template-02-themes')
-    const { original, sage, peach } = TEMPLATE_02_THEMES
+    const { sage } = TEMPLATE_02_THEMES
 
-    expect(original.opening.buttonBg).toBe('#5d6a57')
     expect(sage.opening.buttonBg).toBe('#4a7c59')
-    expect(peach.opening.buttonBg).toBe('#ad5560')
-
-    expect(original.opening.flowerFilter).toBe('none')
     expect(sage.opening.flowerFilter).toContain('hue-rotate')
-    expect(peach.opening.flowerFilter).toContain('hue-rotate')
-
-    expect(original.opening.backdropGradient).not.toBe(
-      sage.opening.backdropGradient,
-    )
-    expect(original.opening.backdropGradient).not.toBe(
-      peach.opening.backdropGradient,
-    )
+    expect(sage.opening.backdropGradient).toContain('#5b8a68')
   })
 
-  it('configures asset filters for top card illustrations in non-original themes', async () => {
+  it('configures asset filter for top card illustrations in Sage theme', async () => {
     const { TEMPLATE_02_THEMES } =
       await import('../src/config/template-02-themes')
-    expect(TEMPLATE_02_THEMES.original.assetFilter).toBe('none')
     expect(TEMPLATE_02_THEMES.sage.assetFilter).toContain('hue-rotate')
-    expect(TEMPLATE_02_THEMES.peach.assetFilter).toContain('hue-rotate')
   })
 })

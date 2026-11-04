@@ -23,21 +23,14 @@ import {
 import { TEMPLATE_02_THEMES, type ThemeId } from '../config/template-02-themes'
 import '../styles/template-02-fonts.css'
 import '../styles/template-02-opening.css'
-const nodes = sourceLayout as LayoutNode[]
+const nodes = (sourceLayout as LayoutNode[]).filter(
+  (n) => n.id !== 'QckHkpXeK6' && n.id !== 'HTOuYYjmCZ',
+)
 const TOP_STAGE_HEIGHT = 3470
 const BOTTOM_OFFSET = 3410
 const BOTTOM_STAGE_HEIGHT = 4567 - BOTTOM_OFFSET
 
-const currentTheme = ref<ThemeId>('original')
-
-function setTheme(id: ThemeId) {
-  currentTheme.value = id
-  try {
-    localStorage.setItem('wedding_invitation_theme', id)
-  } catch {
-    // ignore
-  }
-}
+const currentTheme = ref<ThemeId>('sage')
 
 // Readability overrides (canvas px, before mobile scale-down). The source layout
 // used 12.9–13.8px for several lines, which renders below 10px on 320px phones.
@@ -51,13 +44,11 @@ const READABLE_FONT_SIZES: Record<string, number> = {
   'sNW5-RzUm4': 14.5,
   ZADmDXCmdX: 14.5,
   // Couplet
-  wHG0JRLvlM: 14.5,
-  '6VDnXLZvKc': 14.5,
-  // Parents and hometowns
+  wHG0JRLvlM: 12.9,
+  '6VDnXLZvKc': 12.9,
+  // Parents
   Ed3xk9f3C6: 16,
   '78T5hdX33j': 16,
-  QckHkpXeK6: 15.5,
-  HTOuYYjmCZ: 15.5,
   // "Vào hồi" labels
   YWfFy7Hwzq: 16,
   'paUgPUc-Ix': 16,
@@ -66,61 +57,104 @@ const READABLE_FONT_SIZES: Record<string, number> = {
   bAEsnUsTek: 17,
 }
 
+function adjustedNodeProps(node: LayoutNode): NodeProps {
+  if (node.id === 'PbWk0wRGqb') {
+    // Fit couplet background card neatly between the two red photos with rounded bottom corners
+    return {
+      ...node.props,
+      top: 1416.67,
+      left: 158,
+      width: 106,
+      height: 204.1,
+      borderRadius: [14, 14, 14, 14],
+    }
+  }
+  if (node.id === 'wHG0JRLvlM') {
+    // Left vertical couplet line centered in the left half of the green card
+    return {
+      ...node.props,
+      left: 88,
+      top: 1504,
+      width: 178.88,
+      height: 24,
+    }
+  }
+  if (node.id === '6VDnXLZvKc') {
+    // Right vertical couplet line single-line centered in the right half of the green card
+    return {
+      ...node.props,
+      left: 118,
+      top: 1504,
+      width: 229.62,
+      height: 24,
+    }
+  }
+  if (node.id === 'AfAx01WBob') {
+    // Center the heart icon between the two vertical couplet lines
+    return {
+      ...node.props,
+      left: 193.5,
+      top: 1503,
+    }
+  }
+  if (node.id === 'H3xwC69tfn') {
+    // Hide the solid arch shape behind RSVP since the RSVP section now uses a clean floating button
+    return {
+      ...node.props,
+      opacity: 0,
+    }
+  }
+  return node.props
+}
+
 function themedNodeStyle(node: LayoutNode): CSSProperties {
+  const props = adjustedNodeProps(node)
   const readable = READABLE_FONT_SIZES[node.id]
   const base: CSSProperties = readable
-    ? { ...elementStyle(node.props, node.type), fontSize: readable + 'px' }
-    : elementStyle(node.props, node.type)
-  if (currentTheme.value === 'original') return base
+    ? { ...elementStyle(props, node.type), fontSize: readable + 'px' }
+    : elementStyle(props, node.type)
 
   const themeVars = TEMPLATE_02_THEMES[currentTheme.value]
   const styled: CSSProperties = { ...base }
 
   // Map text colors
-  if (node.props.color === '#1c491f') {
+  if (props.color === '#1c491f') {
     styled.color = themeVars.accent
-  } else if (
-    node.props.color?.includes('66, 79, 51') ||
-    node.props.color === '#424f33'
-  ) {
+  } else if (props.color?.includes('66, 79, 51') || props.color === '#424f33') {
     styled.color = themeVars.primary
   }
 
   // Map background colors
   if (
-    node.props.backgroundColor === '#424f33' ||
-    node.props.backgroundColor?.includes('66, 79, 51')
+    props.backgroundColor === '#424f33' ||
+    props.backgroundColor?.includes('66, 79, 51')
   ) {
     styled.backgroundColor = themeVars.cardBg
-  } else if (node.props.backgroundColor === '#1c491f') {
+  } else if (props.backgroundColor === '#1c491f') {
     styled.backgroundColor = themeVars.primary
   }
 
-  // Map SVGs & shape cards (including Calendar card yA5bCPORcy, Couplet card PbWk0wRGqb, RSVP arch H3xwC69tfn)
+  // Map SVGs & shape cards (including Calendar card yA5bCPORcy, Couplet card PbWk0wRGqb)
   if (
-    node.props.materialType === 'svg' ||
+    props.materialType === 'svg' ||
     node.id === 'yA5bCPORcy' ||
-    node.id === 'PbWk0wRGqb' ||
-    node.id === 'H3xwC69tfn'
+    node.id === 'PbWk0wRGqb'
   ) {
     if (
-      node.props.color === '#1c491f' ||
-      node.props.color === '#424f33' ||
-      node.props.color === '#4f3333' ||
-      node.props.color?.includes('66, 79, 51') ||
+      props.color === '#1c491f' ||
+      props.color === '#424f33' ||
+      props.color === '#4f3333' ||
+      props.color?.includes('66, 79, 51') ||
       node.id === 'yA5bCPORcy' ||
       node.id === 'PbWk0wRGqb'
     ) {
       styled.backgroundColor = themeVars.cardBg
       styled.color = themeVars.cardBg
-    } else if (node.props.color === '#f8efef' || node.id === 'H3xwC69tfn') {
-      styled.backgroundColor = themeVars.archBg
-      styled.color = themeVars.archBg
     }
   }
 
   // Map green envelope/arch decorative PNGs only (never couple .jpg photos or multi-color floral bouquets)
-  if (node.props.imgKey && themeVars.assetFilter !== 'none') {
+  if (props.imgKey && themeVars.assetFilter !== 'none') {
     const isGreenEnvelopeGraphic =
       node.id === 'l2mZjv5O_e' || // Arch frame at top
       node.id === 'lx4IwuzDxw' || // Top decorative bracket
@@ -129,11 +163,15 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
     if (isGreenEnvelopeGraphic) {
       styled.filter = themeVars.assetFilter
       styled.transition = 'filter 0.3s ease'
-    } else if (node.id === 'AfAx01WBob' && currentTheme.value === 'sage') {
+    } else if (node.id === 'AfAx01WBob') {
       // Soften pink hearts on green couplet card into warm cream/white in Sage theme
       styled.filter = 'brightness(1.85) saturate(0.25)'
       styled.transition = 'filter 0.3s ease'
     }
+  }
+
+  if (node.id === 'wHG0JRLvlM' || node.id === '6VDnXLZvKc') {
+    styled.whiteSpace = 'nowrap'
   }
 
   return styled
@@ -149,7 +187,12 @@ const bottomNodes = nodes.filter(
   (n) => n.id !== countdownNode.id && n.props.top >= countdownNode.props.top,
 )
 
-function bottomNodeStyle(p: NodeProps) {
+function topNodeStyle(node: LayoutNode) {
+  return nodeStyle(adjustedNodeProps(node))
+}
+
+function bottomNodeStyle(node: LayoutNode) {
+  const p = adjustedNodeProps(node)
   return nodeStyle({ ...p, top: p.top - BOTTOM_OFFSET })
 }
 const shell = ref<HTMLElement | null>(null)
@@ -209,16 +252,6 @@ function showPhoto(key: string) {
   photoDialog.value?.showModal()
 }
 onMounted(() => {
-  try {
-    const saved = localStorage.getItem(
-      'wedding_invitation_theme',
-    ) as ThemeId | null
-    if (saved && saved in TEMPLATE_02_THEMES) {
-      currentTheme.value = saved
-    }
-  } catch {
-    // ignore
-  }
   observer = new ResizeObserver((entries) => {
     scale.value = getCanvasScale(entries[0]!.contentRect.width)
   })
@@ -232,19 +265,6 @@ onUnmounted(() => {
 <template>
   <InvitationFrame ref="frame">
     <div class="clone-page" :class="'theme-' + currentTheme">
-      <!-- Theme Switcher Widget -->
-      <aside class="clone-theme-switcher" aria-label="Bộ màu thiệp">
-        <span class="switcher-tag">Màu:</span>
-        <button
-          v-for="item in TEMPLATE_02_THEMES"
-          :key="item.id"
-          type="button"
-          :class="{ 'is-active': currentTheme === item.id }"
-          @click="setTheme(item.id)"
-        >
-          {{ item.icon }} {{ item.name }}
-        </button>
-      </aside>
       <div ref="shell" class="clone-shell">
         <div
           v-if="!opened"
@@ -549,7 +569,7 @@ onUnmounted(() => {
                 v-for="node in topNodes"
                 :key="node.id"
                 class="clone-node"
-                :style="nodeStyle(node.props)"
+                :style="topNodeStyle(node)"
               >
                 <div
                   class="clone-element"
@@ -650,7 +670,7 @@ onUnmounted(() => {
                 v-for="node in bottomNodes"
                 :key="node.id"
                 class="clone-node"
-                :style="bottomNodeStyle(node.props)"
+                :style="bottomNodeStyle(node)"
               >
                 <div
                   class="clone-element"
@@ -705,16 +725,17 @@ onUnmounted(() => {
                     v-else-if="node.type === 'PluginRsvp'"
                     class="clone-rsvp"
                   >
-                    <div class="rsvp-head">
-                      <span class="rsvp-eng">R.S.V.P.</span>
-                      <h2>Xác nhận tham dự</h2>
-                    </div>
-                    <p>
-                      Vui lòng xác nhận tham dự để chúng mình chuẩn bị lễ cưới
-                      được thuận lợi và trọn vẹn nhất.
-                    </p>
-                    <button type="button" @click="rsvpDialog?.open()">
-                      ♧ Gửi xác nhận
+                    <button
+                      type="button"
+                      class="clone-rsvp-cta"
+                      @click="rsvpDialog?.open()"
+                    >
+                      <span class="clone-rsvp-cta-pulse" aria-hidden="true" />
+                      <span class="clone-rsvp-cta-icon" aria-hidden="true"
+                        >💌</span
+                      >
+                      <span class="clone-rsvp-cta-label">Xác nhận tham dự</span>
+                      <span class="clone-rsvp-cta-shine" aria-hidden="true" />
                     </button>
                   </div>
                   <button

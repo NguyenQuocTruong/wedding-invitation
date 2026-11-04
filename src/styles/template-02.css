@@ -683,39 +683,93 @@
 }
 .clone-rsvp {
   height: 100%;
-  gap: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   font:
-    calc(16px / var(--canvas-scale, 1)) Arial,
-    Helvetica,
+    calc(16px / var(--canvas-scale, 1)) system-ui,
+    -apple-system,
     sans-serif;
 }
-.clone-rsvp .rsvp-head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.clone-rsvp .rsvp-eng {
-  font-size: 0.75em;
-  letter-spacing: 0.12em;
-}
-.clone-rsvp h2 {
-  margin: 0;
-  font-size: 1.15em;
-}
-.clone-rsvp p {
-  margin: 0;
-  font-size: 0.85em;
-  line-height: 1.5;
-}
-.clone-rsvp button {
+.clone-rsvp .clone-rsvp-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   margin: 0 auto;
-  padding: 10px 18px;
-  min-height: 44px;
-  font-size: 0.95em;
+  padding: 15px 30px;
+  min-height: 54px;
+  border: 1.5px solid rgba(255, 255, 255, 0.92);
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary, #4a7c59) 0%,
+    var(--theme-accent, #2f5d3e) 100%
+  );
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 1.05em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  box-shadow:
+    0 10px 26px rgba(47, 93, 62, 0.38),
+    0 0 0 6px rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+  isolation: isolate;
+  animation: clone-rsvp-float 2.8s ease-in-out infinite;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.clone-rsvp .clone-rsvp-cta:hover,
+.clone-rsvp .clone-rsvp-cta:focus-visible {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow:
+    0 14px 32px rgba(47, 93, 62, 0.48),
+    0 0 0 8px rgba(255, 255, 255, 0.65);
+}
+.clone-rsvp .clone-rsvp-cta-icon {
+  font-size: 1.15em;
+  line-height: 1;
+}
+.clone-rsvp .clone-rsvp-cta-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.38) 48%,
+    transparent 75%
+  );
+  transform: translateX(-120%);
+  animation: clone-rsvp-shine 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes clone-rsvp-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.025);
+  }
+}
+@keyframes clone-rsvp-shine {
+  0%,
+  35% {
+    transform: translateX(-120%);
+  }
+  75%,
+  100% {
+    transform: translateX(120%);
+  }
 }
 
-/* Theme presets for Template 2 */
+/* Theme preset for Template 2 (Xanh Sage) */
+.clone-page,
 .clone-page.theme-sage {
   --theme-outer-bg: #edf2eb;
   --theme-canvas-bg: #fdfbf7;
@@ -741,96 +795,21 @@
   --slr-seal-base: #4a7c59;
 }
 
-.clone-page.theme-peach {
-  --theme-outer-bg: #fbf0ed;
-  --theme-canvas-bg: #fffdfc;
-  --theme-primary: #ad5560;
-  --theme-primary-text: #ffffff;
-  --theme-accent: #73323a;
-  --theme-card-bg: #ad5560;
-  --theme-badge-border: #ffffff;
-  --theme-badge-color: #ffffff;
-  --countdown-cell-bg: #ad5560;
-  --timeline-bg: #fffdfc;
-  --timeline-color: #4a3537;
-  --timeline-accent: #ad5560;
-  --timeline-line: #f2d9d6;
-  --timeline-dot-bg: #ffffff;
-  --timeline-card-bg: #ffffff;
-  --timeline-card-border: #f8e5e3;
-  --timeline-time-color: #ad5560;
-  --timeline-icon-color: #ad5560;
-  --slr-open-button-bg: #ad5560;
-  --slr-open-button-text-color: #ffffff;
-  --slr-text-color: #ad5560;
-  --slr-seal-base: #ad5560;
-}
-
 /* Opening screen theme integration */
 .slr-ui-frame .slr-ui-divider span {
-  color: var(--slr-text-color, #697a62);
+  color: var(--slr-text-color, #3d6b4b);
 }
 .slr-ui-frame .slr-ui-divider-line--left {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--slr-text-color, #697a62)
+    var(--slr-text-color, #3d6b4b)
   );
 }
 .slr-ui-frame .slr-ui-divider-line--right {
   background: linear-gradient(
     270deg,
     transparent,
-    var(--slr-text-color, #697a62)
+    var(--slr-text-color, #3d6b4b)
   );
-}
-
-/* Theme Switcher Widget */
-.clone-theme-switcher {
-  position: fixed;
-  z-index: 1000001;
-  top: 12px;
-  left: 12px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 20px;
-  padding: 3px 5px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  font-size: 11px;
-}
-.clone-theme-switcher .switcher-tag {
-  font-size: 10px;
-  color: #777;
-  padding: 0 4px;
-  font-weight: 500;
-  user-select: none;
-}
-.clone-theme-switcher button {
-  border: 0;
-  background: transparent;
-  padding: 4px 7px;
-  border-radius: 12px;
-  font-size: 11px;
-  color: #444;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-.clone-theme-switcher button:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-.clone-theme-switcher button.is-active {
-  background: var(--theme-primary, #424f33);
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
