@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Analytics } from '@vercel/analytics/vue'
 import { nextTick, onMounted, onUnmounted, ref, type CSSProperties } from 'vue'
 import sourceLayout from '../data/template-02-layout.json'
 import FloatingActions from '../components/shared/FloatingActions.vue'
@@ -102,6 +103,38 @@ function adjustedNodeProps(node: LayoutNode): NodeProps {
     return {
       ...node.props,
       opacity: 0,
+    }
+  }
+  if (node.id === 'TglqGUmVPi') {
+    // Center the RSVP invitation note horizontally on the 430px canvas (was left: 37.8, width: 376.25 -> center 225.9)
+    return {
+      ...node.props,
+      left: 27,
+      width: 376,
+    }
+  }
+  if (node.id === 'KZX422DR9H') {
+    // Center the RSVP button container horizontally on the 430px canvas (was left: 101.175, width: 258 -> center 230.2)
+    return {
+      ...node.props,
+      left: 0,
+      width: 430,
+    }
+  }
+  if (node.id === 'dQOJShtA-K') {
+    // Center the Gift Box image horizontally on the 430px canvas (was left: 23.832, width: 390.315 -> center 219)
+    return {
+      ...node.props,
+      left: 20,
+      width: 390,
+    }
+  }
+  if (node.id === 'T4OVXAoo80') {
+    // Center "Gửi Quà Mừng" label horizontally on the 430px canvas (was left: 101.152, width: 242.434 -> center 222.4)
+    return {
+      ...node.props,
+      left: 93.8,
+      width: 242.4,
     }
   }
   return node.props
@@ -795,4 +828,5 @@ onUnmounted(() => {
       />
     </template>
   </InvitationFrame>
+  <Analytics />
 </template>

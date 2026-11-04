@@ -18,6 +18,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "vue": "^3.5.44",
     "zod": "^4.6.7"
   },
