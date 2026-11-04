@@ -9,7 +9,7 @@ import RsvpDialog from '../components/shared/RsvpDialog.vue'
 import { event } from '../config/event'
 import WeddingTimeline from '../components/shared/WeddingTimeline.vue'
 import WeddingCountdown from '../components/shared/WeddingCountdown.vue'
-import { weddingMusic } from '../config/weddingMedia'
+import { weddingMusic, weddingPhotos } from '../config/weddingMedia'
 import wedding from '../data/wedding.json'
 import { useReveal } from '../composables/useReveal'
 import '../styles/template-02.css'
@@ -31,11 +31,19 @@ const REMOVED_NODE_IDS = new Set([
   'tY18iTAVbf', // "TRÂN TRỌNG KÍNH MỜI"
   '87RNR5GKM4', // "Quý Khách"
   'PQfSCjcV6p', // "ĐẾN DỰ BỮA TIỆC MỪNG CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI"
+  // Replaced with 3D Coverflow Album from template-03
+  'RT108AH5CE',
+  'pvmeq6OFX5',
+  'odFP3i7HRs',
+  '_Ty1C_5Ghb',
+  '5pck3yqslq',
+  'mKzuYNCjeI',
+  'RQ3mzMLUIJ',
 ])
 const nodes = (sourceLayout as LayoutNode[]).filter(
   (n) => !REMOVED_NODE_IDS.has(n.id),
 )
-const TOP_STAGE_HEIGHT = 3163
+const TOP_STAGE_HEIGHT = 2950
 const BOTTOM_OFFSET = 3410
 const BOTTOM_STAGE_HEIGHT = 4348 - BOTTOM_OFFSET
 
@@ -121,15 +129,8 @@ const SPACING_OVERRIDES: Record<string, Partial<NodeProps>> = {
   ew3QuUAQZc: { top: 2335, height: 51 },
   SfYn6TpLmf: { top: 2324.4, height: 70.6 },
 
-  // Zone 5: Photo grid (12px row gaps) & centered Countdown
-  RT108AH5CE: { top: 2427, height: 190 },
-  pvmeq6OFX5: { top: 2427, height: 190 },
-  odFP3i7HRs: { top: 2427, height: 190 },
-  _Ty1C_5Ghb: { top: 2629, height: 197.4 },
-  '5pck3yqslq': { top: 2838.4, height: 214.2 },
-  mKzuYNCjeI: { top: 2838.4, height: 214.2 },
-  RQ3mzMLUIJ: { top: 2838.4, height: 214.2 },
-  CKnqYl_n8r: { top: 3085, left: 33.5, width: 363, height: 66.6 },
+  // Zone 5: Centered Countdown below 3D Album
+  CKnqYl_n8r: { top: 2840, left: 33.5, width: 363, height: 66.6 },
 
   // Zone 6: Bottom stage — RSVP, Hoa Moc Xanh Gift Box, Forest Photo & Thank-You note
   Am7NeCnjKk: { top: 3410, height: 310, opacity: 0 },
@@ -323,6 +324,115 @@ let openingTimer: ReturnType<typeof setTimeout> | undefined
 const scale = ref(1)
 const photoDialog = ref<HTMLDialogElement | null>(null)
 const selectedPhoto = ref('')
+const lightboxIndex = ref(0)
+const floatingActions = ref<InstanceType<typeof FloatingActions> | null>(null)
+const activeSlide = ref(0)
+const totalSlides = weddingPhotos.length
+let touchStartX = 0
+let touchEndX = 0
+
+function prevSlide() {
+  activeSlide.value = (activeSlide.value - 1 + totalSlides) % totalSlides
+}
+
+function nextSlide() {
+  activeSlide.value = (activeSlide.value + 1) % totalSlides
+}
+
+function goToSlide(index: number) {
+  activeSlide.value = index
+}
+
+function getSlideOffset(index: number): number {
+  let diff = index - activeSlide.value
+  const half = Math.floor(totalSlides / 2)
+  if (diff > half) diff -= totalSlides
+  if (diff < -half) diff += totalSlides
+  return diff
+}
+
+function slideStyle(index: number): CSSProperties {
+  const offset = getSlideOffset(index)
+  const photo = weddingPhotos[index]
+  const aspectRatio = photo?.group === 'red' ? '0.67 / 1' : '1.2 / 1'
+  if (offset === 0) {
+    return {
+      aspectRatio,
+      transitionDuration: '1100ms',
+      transform: 'translateX(0%) translateZ(0px) rotateY(0deg) scale(1)',
+      opacity: 1,
+      zIndex: 100,
+    }
+  }
+  if (offset === 1) {
+    return {
+      aspectRatio,
+      transitionDuration: '1100ms',
+      transform:
+        'translateX(60%) translateZ(-150px) rotateY(45deg) scale(0.85)',
+      opacity: 0.75,
+      zIndex: 99,
+    }
+  }
+  if (offset === -1) {
+    return {
+      aspectRatio,
+      transitionDuration: '1100ms',
+      transform:
+        'translateX(-60%) translateZ(-150px) rotateY(-45deg) scale(0.85)',
+      opacity: 0.75,
+      zIndex: 99,
+    }
+  }
+  return {
+    aspectRatio,
+    transitionDuration: '1100ms',
+    transform: 'translateX(0%) translateZ(-300px) rotateY(0deg) scale(0.7)',
+    opacity: 0,
+    zIndex: 90,
+    pointerEvents: 'none',
+  }
+}
+
+function handleSlideClick(index: number) {
+  const offset = getSlideOffset(index)
+  if (offset === 0) {
+    openLightbox(index)
+  } else {
+    goToSlide(index)
+  }
+}
+
+function onTouchStart(e: TouchEvent) {
+  touchStartX = e.changedTouches[0]?.screenX ?? 0
+}
+
+function onTouchEnd(e: TouchEvent) {
+  touchEndX = e.changedTouches[0]?.screenX ?? 0
+  const delta = touchEndX - touchStartX
+  if (Math.abs(delta) > 40) {
+    if (delta < 0) nextSlide()
+    else prevSlide()
+  }
+}
+
+function openLightbox(index: number) {
+  lightboxIndex.value = index
+  photoDialog.value?.showModal()
+}
+
+function closeLightbox() {
+  photoDialog.value?.close()
+}
+
+function prevLightbox() {
+  lightboxIndex.value = (lightboxIndex.value - 1 + totalSlides) % totalSlides
+}
+
+function nextLightbox() {
+  lightboxIndex.value = (lightboxIndex.value + 1) % totalSlides
+}
+
 const rsvpDialog = ref<InstanceType<typeof RsvpDialog> | null>(null)
 const giftsDialog = ref<InstanceType<typeof GiftDialog> | null>(null)
 const frame = ref<InstanceType<typeof InvitationFrame> | null>(null)
@@ -838,6 +948,8 @@ const HY_BURST_PARTICLES: HyBurstParticle[] = [
 
 async function open() {
   if (opening.value) return
+  // Try gentle music autoplay on envelope open with safe default volume
+  void floatingActions.value?.play()
   opening.value = true
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (!reduced)
@@ -849,6 +961,8 @@ async function open() {
   await nextTick()
   content.value?.focus({ preventScroll: true })
   frame.value?.scrollToTop()
+  // Ensure audio starts if user interaction wasn't caught before
+  void floatingActions.value?.play()
 }
 async function replay() {
   opened.value = false
@@ -857,8 +971,14 @@ async function replay() {
   frame.value?.scrollToTop()
 }
 function showPhoto(key: string) {
-  selectedPhoto.value = asset(key)
-  photoDialog.value?.showModal()
+  const fullUrl = asset(key)
+  const idx = weddingPhotos.findIndex((p) => p.src === fullUrl)
+  if (idx !== -1) {
+    openLightbox(idx)
+  } else {
+    selectedPhoto.value = fullUrl
+    photoDialog.value?.showModal()
+  }
 }
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
@@ -1342,6 +1462,125 @@ onUnmounted(() => {
                   />
                 </div>
               </div>
+
+              <!-- 3D Coverflow Album Carousel (ported from Template 03) -->
+              <div
+                class="clone-node clone-album-section"
+                :style="{
+                  top: '2370px',
+                  left: '0px',
+                  width: '430px',
+                  zIndex: 2,
+                }"
+              >
+                <div class="flex flex-col items-center px-4 pt-4 pb-2 w-full">
+                  <h2
+                    class="uppercase font-bold tracking-wider text-center"
+                    style="
+                      color: var(--theme-accent, #2f5d3e);
+                      font-family:
+                        'Playfair Display', Georgia, 'Times New Roman', serif;
+                      font-size: 21px;
+                      letter-spacing: 1.5px;
+                    "
+                  >
+                    Album Ảnh
+                  </h2>
+                  <div class="mt-4 w-full max-w-[390px] relative z-10">
+                    <div
+                      class="relative h-[340px] touch-pan-y"
+                      @touchstart.passive="onTouchStart"
+                      @touchend.passive="onTouchEnd"
+                    >
+                      <button
+                        type="button"
+                        aria-label="Ảnh trước"
+                        class="flex absolute left-1 top-1/2 -translate-y-1/2 z-[200] w-8 h-8 items-center justify-center rounded-full bg-white/80 hover:bg-white transition-colors border-0 cursor-pointer shadow-md"
+                        style="color: var(--theme-accent, #2f5d3e)"
+                        @click="prevSlide"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15.75 19.5L8.25 12l7.5-7.5"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Ảnh tiếp theo"
+                        class="flex absolute right-1 top-1/2 -translate-y-1/2 z-[200] w-8 h-8 items-center justify-center rounded-full bg-white/80 hover:bg-white transition-colors border-0 cursor-pointer shadow-md"
+                        style="color: var(--theme-accent, #2f5d3e)"
+                        @click="nextSlide"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+
+                      <div
+                        class="relative w-full h-full flex items-center justify-center"
+                        style="perspective: 1000px"
+                      >
+                        <div
+                          v-for="(photo, index) in weddingPhotos"
+                          :key="photo.src"
+                          class="absolute h-[92%] rounded-2xl overflow-hidden shadow-xl cursor-pointer transition-all ease-in-out"
+                          :class="{
+                            'ring-2 ring-white/50': getSlideOffset(index) === 0,
+                          }"
+                          :style="slideStyle(index)"
+                          @click="handleSlideClick(index)"
+                        >
+                          <img
+                            :alt="photo.alt"
+                            class="h-full w-full object-cover"
+                            :src="photo.src"
+                            loading="lazy"
+                            style="object-position: 50% 20%"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex justify-center gap-1.5 mt-3">
+                      <button
+                        v-for="(photo, index) in weddingPhotos"
+                        :key="photo.src"
+                        type="button"
+                        :aria-label="`Xem ảnh ${index + 1}`"
+                        class="rounded-full transition-all duration-300 h-2 border-0 p-0 cursor-pointer"
+                        :class="
+                          activeSlide === index
+                            ? 'w-6 opacity-80'
+                            : 'w-2 opacity-30 hover:opacity-50'
+                        "
+                        :style="{
+                          backgroundColor: 'var(--theme-accent, #2f5d3e)',
+                        }"
+                        @click="goToSlide(index)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1576,29 +1815,96 @@ onUnmounted(() => {
       <GiftDialog ref="giftsDialog" :gifts="event.gifts" />
       <dialog
         ref="photoDialog"
-        class="clone-photo-dialog"
+        class="clone-photo-lightbox"
         aria-label="Ảnh cưới lớn"
-        @click="$event.target === photoDialog && photoDialog?.close()"
+        @click="$event.target === photoDialog && closeLightbox()"
       >
-        <button
-          type="button"
-          autofocus
-          aria-label="Đóng ảnh"
-          @click="photoDialog?.close()"
+        <div
+          class="flex flex-col items-center h-[100dvh] w-screen px-2 sm:px-4 pt-10 sm:pt-12 pb-4 sm:pb-6 relative"
+          @click="$event.target === $event.currentTarget && closeLightbox()"
         >
-          ×</button
-        ><img
-          v-if="selectedPhoto"
-          :src="selectedPhoto"
-          alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
-        />
+          <button
+            type="button"
+            class="absolute right-3 sm:right-5 top-3 sm:top-4 z-10 w-10 h-10 rounded-full bg-black/40 text-white text-xl flex items-center justify-center border-0 cursor-pointer hover:bg-white/20 transition-colors"
+            aria-label="Đóng ảnh"
+            @click="closeLightbox"
+          >
+            ✕
+          </button>
+          <div
+            class="absolute top-3 sm:top-4 left-3 sm:left-5 text-white text-sm sm:text-base bg-black/40 px-3 py-1 rounded-full shadow-md z-10"
+          >
+            {{ lightboxIndex + 1 }} / {{ totalSlides }}
+          </div>
+          <div
+            class="relative flex flex-1 w-full max-w-5xl items-center justify-center px-10 sm:px-14 min-h-0"
+          >
+            <button
+              type="button"
+              class="w-10 h-10 rounded-full bg-black/40 text-white text-2xl absolute left-1 sm:left-2 z-10 flex items-center justify-center border-0 cursor-pointer hover:bg-white/20 transition-colors"
+              aria-label="Ảnh trước"
+              @click="prevLightbox"
+            >
+              ‹
+            </button>
+            <img
+              v-if="weddingPhotos[lightboxIndex]"
+              :alt="weddingPhotos[lightboxIndex]!.alt"
+              class="max-h-full max-w-full rounded-xl sm:rounded-2xl object-contain shadow-2xl select-none"
+              draggable="false"
+              :src="weddingPhotos[lightboxIndex]!.src"
+            />
+            <button
+              type="button"
+              class="w-10 h-10 rounded-full bg-black/40 text-white text-2xl absolute right-1 sm:right-2 z-10 flex items-center justify-center border-0 cursor-pointer hover:bg-white/20 transition-colors"
+              aria-label="Ảnh tiếp theo"
+              @click="nextLightbox"
+            >
+              ›
+            </button>
+          </div>
+          <div
+            class="flex-shrink-0 flex gap-2 sm:gap-3 overflow-x-auto px-3 py-2 mt-3 bg-black/30 rounded-lg backdrop-blur-sm max-w-[90vw] sm:max-w-[80vw]"
+          >
+            <button
+              v-for="(photo, idx) in weddingPhotos"
+              :key="photo.src"
+              type="button"
+              class="flex-shrink-0 h-12 w-12 sm:h-16 sm:w-16 rounded-md overflow-hidden transition-all duration-200 p-0 border-0 cursor-pointer bg-transparent"
+              :class="
+                lightboxIndex === idx
+                  ? 'scale-105 shadow-lg opacity-100'
+                  : 'opacity-60 hover:opacity-100'
+              "
+              :style="
+                lightboxIndex === idx
+                  ? {
+                      outline: '2px solid var(--theme-accent, #2f5d3e)',
+                      outlineOffset: '2px',
+                    }
+                  : undefined
+              "
+              :aria-label="`Xem ảnh ${idx + 1}`"
+              @click="lightboxIndex = idx"
+            >
+              <img
+                class="h-full w-full object-cover"
+                :alt="photo.label"
+                draggable="false"
+                :src="photo.src"
+              />
+            </button>
+          </div>
+        </div>
       </dialog>
     </div>
     <template #actions>
       <FloatingActions
+        ref="floatingActions"
         style="--floating-actions-width: 430px"
         :music-src="weddingMusic"
         :map-url="ceremony.mapUrl"
+        :volume="0.4"
         rsvp
         @rsvp="rsvpDialog?.open()"
         @gifts="giftsDialog?.open()"

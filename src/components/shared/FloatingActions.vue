@@ -4,6 +4,8 @@ const props = defineProps<{
   musicSrc: string | null
   mapUrl: string
   rsvp?: boolean
+  autoplay?: boolean
+  volume?: number
 }>()
 const emit = defineEmits<{ gifts: []; rsvp: [] }>()
 const audio = ref<HTMLAudioElement | null>(null)
@@ -13,6 +15,27 @@ const status = ref('')
 const musicLabel = computed(() =>
   playing.value ? 'Tắt nhạc' : loading.value ? 'Đang tải nhạc' : 'Bật nhạc',
 )
+
+function setVolume() {
+  if (audio.value) {
+    audio.value.volume =
+      typeof props.volume === 'number'
+        ? Math.max(0, Math.min(1, props.volume))
+        : 0.4
+  }
+}
+
+async function play() {
+  if (!props.musicSrc || !audio.value) return
+  setVolume()
+  try {
+    await audio.value.play()
+    playing.value = true
+  } catch {
+    // Autoplay policy or browser block
+  }
+}
+
 async function toggleMusic() {
   status.value = ''
   if (!props.musicSrc || !audio.value) {
@@ -23,6 +46,7 @@ async function toggleMusic() {
     audio.value.pause()
     return
   }
+  setVolume()
   loading.value = true
   try {
     await audio.value.play()
@@ -33,6 +57,13 @@ async function toggleMusic() {
     loading.value = false
   }
 }
+
+defineExpose({
+  play,
+  toggleMusic,
+  audio,
+  playing,
+})
 function musicError() {
   playing.value = false
   loading.value = false

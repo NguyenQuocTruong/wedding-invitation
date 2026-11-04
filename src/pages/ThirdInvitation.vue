@@ -714,7 +714,7 @@ onUnmounted(() => {
                       font-family: Baskerville, 'Times New Roman', serif;
                     "
                   >
-                    <span dir="auto">Út Nữ</span>
+                    <span dir="auto">Ái Nữ</span>
                   </div>
                   <div
                     class="text-[29px] md:text-[36px] whitespace-nowrap leading-tight"
@@ -846,12 +846,6 @@ onUnmounted(() => {
                   >
                     <span dir="auto">{{ parent }}</span>
                   </span>
-                  <div
-                    class="whitespace-pre-line [overflow-wrap:anywhere] mt-1 text-[11px] md:text-[18px] tracking-normal w-[90%] md:w-[80%] mx-auto flex flex-col"
-                    style="color: rgb(157, 109, 99)"
-                  >
-                    <span dir="auto">{{ wedding.families.GROOM.address }}</span>
-                  </div>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
@@ -866,12 +860,6 @@ onUnmounted(() => {
                   >
                     <span dir="auto">{{ parent }}</span>
                   </span>
-                  <div
-                    class="whitespace-pre-line [overflow-wrap:anywhere] mt-1 text-[11px] md:text-[18px] tracking-normal w-[90%] md:w-[80%] mx-auto flex flex-col"
-                    style="color: rgb(157, 109, 99)"
-                  >
-                    <span dir="auto">{{ wedding.families.BRIDE.address }}</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -940,7 +928,7 @@ onUnmounted(() => {
                   letter-spacing: 0.1em;
                 "
               >
-                <span dir="auto">Út Nữ</span>
+                <span dir="auto">Ái Nữ</span>
               </div>
             </div>
 

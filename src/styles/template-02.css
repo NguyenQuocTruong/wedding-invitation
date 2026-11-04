@@ -367,6 +367,23 @@
   border-radius: 50%;
   font-size: 30px;
 }
+/* Fullscreen photo lightbox for Template 02 3D Album */
+.clone-photo-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 99999;
+}
+.clone-photo-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.88);
+}
 .clone-page .sr-only {
   position: absolute;
   width: 1px;
