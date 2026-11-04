@@ -48,7 +48,7 @@ export const TEMPLATE_02_THEMES: Record<ThemeId, ThemeColors> = {
     accent: '#2f5d3e',
     cardBg: '#4a7c59',
     archBg: '#eaf2e8',
-    canvasBg: '#fdfbf7',
+    canvasBg: '#fffaf7',
     outerBg: '#edf2eb',
     badgeBorder: '#ffffff',
     badgeColor: '#ffffff',
@@ -66,7 +66,7 @@ export const TEMPLATE_02_THEMES: Record<ThemeId, ThemeColors> = {
       flowerFilter: 'hue-rotate(28deg) saturate(1.15) brightness(1.18)',
     },
     timeline: {
-      bg: '#fdfbf7',
+      bg: '#fffaf7',
       color: '#2b3828',
       accent: '#4a7c59',
       line: '#c8dccd',

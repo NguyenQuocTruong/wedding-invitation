@@ -129,7 +129,7 @@ const SPACING_OVERRIDES: Record<string, Partial<NodeProps>> = {
   CKnqYl_n8r: { top: 3085, left: 33.5, width: 363, height: 66.6 },
 
   // Zone 6: Bottom stage — RSVP, Hoa Moc Xanh Gift Box, Forest Photo & Thank-You note
-  Am7NeCnjKk: { top: 3410, height: 310 },
+  Am7NeCnjKk: { top: 3410, height: 310, opacity: 0 },
   H3xwC69tfn: { opacity: 0 },
   TglqGUmVPi: { top: 3432, left: 27, width: 376, height: 74 },
   KZX422DR9H: { top: 3558, left: 0, width: 430, height: 72 },
@@ -495,7 +495,7 @@ onUnmounted(() => {
           >
             <div
               class="slr-ui-frame slr-ui-frame--responsive"
-              data-slr-theme="vuonxuan-green"
+              data-slr-theme="boho-floral-green"
               :style="{
                 '--slr-font-display':
                   '\'UNI Chu truyen thong\', \'Baskerville\', \'Times New Roman\', serif',
@@ -528,25 +528,15 @@ onUnmounted(() => {
               <div class="slr-ui-card-shadow">
                 <div class="slr-ui-card">
                   <img
-                    src="/template-02/2be37cb2e976db19.webp"
+                    src="/images/themes/boho-floral-green/flower.webp"
                     alt=""
                     aria-hidden="true"
-                    class="slr-ui-art slr-ui-vxg-flower-top"
-                    :style="{
-                      filter:
-                        TEMPLATE_02_THEMES[currentTheme].opening.flowerFilter,
-                      transition: 'filter 0.3s ease',
-                    }"
+                    class="slr-ui-art slr-ui-bfg-flower-left"
                   /><img
-                    src="/template-02/9ae458b6b007e3ae.webp"
+                    src="/images/themes/boho-floral-green/flower.webp"
                     alt=""
                     aria-hidden="true"
-                    class="slr-ui-art slr-ui-vxg-flower-bottom"
-                    :style="{
-                      filter:
-                        TEMPLATE_02_THEMES[currentTheme].opening.flowerFilter,
-                      transition: 'filter 0.3s ease',
-                    }"
+                    class="slr-ui-art slr-ui-bfg-flower-right"
                   />
                   <div class="slr-ui-text-wrap">
                     <h1
@@ -623,6 +613,69 @@ onUnmounted(() => {
                 '--canvas-scale': scale,
               }"
             >
+              <div class="boho-bg-layer" aria-hidden="true">
+                <img
+                  src="/images/themes/boho-floral-green/decoration_bar.webp"
+                  alt=""
+                  class="boho-bg-bar boho-bg-bar-top"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  class="boho-bg-flower boho-bg-top-1"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  class="boho-bg-flower boho-bg-top-2"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  class="boho-bg-flower boho-bg-top-3"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  class="boho-bg-flower boho-bg-top-4"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-5"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-6"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-7"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-8"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-9"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-top-10"
+                />
+              </div>
               <div
                 v-for="node in topNodes"
                 :key="node.id"
@@ -729,6 +782,32 @@ onUnmounted(() => {
                 '--canvas-scale': scale,
               }"
             >
+              <div class="boho-bg-layer" aria-hidden="true">
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-bottom-1"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-bottom-2"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-bottom-3"
+                />
+                <img
+                  src="/images/themes/boho-floral-green/flower.webp"
+                  alt=""
+                  loading="lazy"
+                  class="boho-bg-flower boho-bg-bottom-4"
+                />
+              </div>
               <div
                 v-for="node in bottomNodes"
                 :key="node.id"

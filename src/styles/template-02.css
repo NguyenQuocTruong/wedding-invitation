@@ -493,10 +493,12 @@
     opacity 700ms ease-in;
   opacity: 0;
 }
-.clone-page .slr-root.is-opening .slr-ui-vxg-flower-top {
+.clone-page .slr-root.is-opening .slr-ui-vxg-flower-top,
+.clone-page .slr-root.is-opening .slr-ui-bfg-flower-left {
   translate: -100px -80px;
 }
-.clone-page .slr-root.is-opening .slr-ui-vxg-flower-bottom {
+.clone-page .slr-root.is-opening .slr-ui-vxg-flower-bottom,
+.clone-page .slr-root.is-opening .slr-ui-bfg-flower-right {
   translate: 100px 80px;
 }
 @keyframes clone-envelope-away {
@@ -772,7 +774,7 @@
 .clone-page,
 .clone-page.theme-sage {
   --theme-outer-bg: #edf2eb;
-  --theme-canvas-bg: #fdfbf7;
+  --theme-canvas-bg: #fffaf7;
   --theme-primary: #4a7c59;
   --theme-primary-text: #ffffff;
   --theme-accent: #2f5d3e;
@@ -780,7 +782,7 @@
   --theme-badge-border: #ffffff;
   --theme-badge-color: #ffffff;
   --countdown-cell-bg: #4a7c59;
-  --timeline-bg: #fdfbf7;
+  --timeline-bg: #fffaf7;
   --timeline-color: #2b3828;
   --timeline-accent: #4a7c59;
   --timeline-line: #c8dccd;
@@ -1451,7 +1453,35 @@
 
 /* Vertical rhythm & spacing calibration for Template 2 */
 .clone-page .wedding-timeline {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   padding: 28px 20px 24px;
+}
+.clone-page .wedding-timeline::before,
+.clone-page .wedding-timeline::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  background: url('/images/themes/boho-floral-green/flower.webp') no-repeat
+    center / contain;
+}
+.clone-page .wedding-timeline::before {
+  top: -40px;
+  right: -130px;
+  width: 340px;
+  height: 340px;
+  opacity: 0.22;
+  transform: rotate(148deg);
+}
+.clone-page .wedding-timeline::after {
+  bottom: -50px;
+  left: -130px;
+  width: 320px;
+  height: 320px;
+  opacity: 0.35;
+  transform: rotate(-38deg);
 }
 .clone-page .wedding-timeline header {
   margin-bottom: 20px;
@@ -1476,4 +1506,129 @@
 }
 .clone-page .clone-end {
   padding: 12px 15px 84px;
+}
+
+/* Hoa Moc Xanh (boho-floral-green) watercolor background layers */
+.clone-canvas > .clone-node {
+  z-index: 1;
+}
+.boho-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.boho-bg-flower,
+.boho-bg-bar {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  height: auto;
+  display: block;
+}
+.boho-bg-bar-top {
+  top: 155px;
+  left: 0;
+  width: 430px;
+  height: 118px;
+  object-fit: cover;
+  opacity: 0.16;
+}
+.boho-bg-top-1 {
+  top: -210px;
+  left: 115px;
+  width: 520px;
+  opacity: 0.72;
+  transform: rotate(-0.76deg);
+}
+.boho-bg-top-2 {
+  top: 8px;
+  left: -85px;
+  width: 410px;
+  opacity: 0.2;
+  transform: scaleX(-1) rotate(142deg);
+}
+.boho-bg-top-3 {
+  top: 295px;
+  right: -200px;
+  width: 540px;
+  opacity: 0.15;
+  transform: rotate(152deg);
+}
+.boho-bg-top-4 {
+  top: 470px;
+  left: -175px;
+  width: 385px;
+  opacity: 0.65;
+  transform: rotate(-60.58deg);
+}
+.boho-bg-top-5 {
+  top: 940px;
+  left: -110px;
+  width: 640px;
+  opacity: 0.16;
+  transform: rotate(132deg);
+}
+.boho-bg-top-6 {
+  top: 1055px;
+  right: -135px;
+  width: 285px;
+  opacity: 0.58;
+  transform: scaleX(-1) rotate(-36deg);
+}
+.boho-bg-top-7 {
+  top: 1545px;
+  right: -280px;
+  width: 640px;
+  opacity: 0.16;
+  transform: rotate(122deg);
+}
+.boho-bg-top-8 {
+  top: 2210px;
+  left: -330px;
+  width: 510px;
+  opacity: 0.62;
+}
+.boho-bg-top-9 {
+  top: 2460px;
+  left: -250px;
+  width: 820px;
+  opacity: 0.15;
+  transform: rotate(128deg);
+}
+.boho-bg-top-10 {
+  top: 2820px;
+  right: -135px;
+  width: 285px;
+  opacity: 0.58;
+  transform: scaleX(-1) rotate(-36deg);
+}
+.boho-bg-bottom-1 {
+  top: -35px;
+  left: -145px;
+  width: 360px;
+  opacity: 0.52;
+  transform: rotate(-22deg);
+}
+.boho-bg-bottom-2 {
+  top: 90px;
+  right: -240px;
+  width: 580px;
+  opacity: 0.18;
+  transform: rotate(139deg);
+}
+.boho-bg-bottom-3 {
+  top: 390px;
+  left: -140px;
+  width: 300px;
+  opacity: 0.58;
+  transform: rotate(176deg);
+}
+.boho-bg-bottom-4 {
+  bottom: 20px;
+  right: -145px;
+  width: 340px;
+  opacity: 0.42;
+  transform: scaleX(-1) rotate(-36deg);
 }
