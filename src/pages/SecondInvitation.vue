@@ -69,6 +69,9 @@ const READABLE_FONT_SIZES: Record<string, number> = {
 // Calibrated vertical rhythm overrides (canvas px) so sections have balanced
 // breathing room (no 7px collisions and no 110px+ dead zones).
 const SPACING_OVERRIDES: Record<string, Partial<NodeProps>> = {
+  // Calendar card narrowed slightly from 430px (full-bleed) to 394px centered (left: 18)
+  yA5bCPORcy: { left: 18, width: 394 },
+
   // Zone 2: Family headers, parents & couple names (closed gap after removing 9lgMutRMS8)
   oYl3EmtdXv: { top: 938, left: 6, width: 204, height: 28 },
   DTbp1fpdwl: { top: 938, left: 220, width: 204, height: 28 },
@@ -173,6 +176,43 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
     styled.color = themeVars.accent
   } else if (props.color?.includes('66, 79, 51') || props.color === '#424f33') {
     styled.color = themeVars.primary
+  }
+
+  // Remove green card background behind event details ("Dự tiệc"), render text directly on page background
+  const EVENT_DETAIL_NODE_IDS = new Set([
+    'WgfDuhmlui', // The green event card background SVG
+    'TcEqC8UiF3', // "Dự bữa cơm thân mật"
+    'YWfFy7Hwzq', // "Vào hồi"
+    'rOjINyBAK1', // "10 : 00 , thứ bảy"
+    'mUOyxsOBvB', // "14 . 11 . 2026"
+    'zWYFkJ4mQw', // "Tức Ngày 06 Tháng 10 Năm Bính Ngọ"
+    'DQxlx7_0o5', // "tại tư gia nhà gái"
+    'IwcKKmD_Dy', // "Xóm 4, Trung Lập, Phượng Dực, Hà Nội"
+    'SyRwr0Bizr', // Map button pill shape border
+    'oxea_sD-us', // "Xem chỉ đường"
+    '0ip-kFTx4n', // Divider line
+    'VYXl18XbmR', // "Tham Dự hôn lễ"
+    'paUgPUc-Ix', // "Vào hồi"
+    'm_XVKgwfEn', // "13 : 30 , thứ bảy"
+    '9lTrOJEJY3', // "14.11.2026"
+    'e3NpxGM2hl', // "Tức Ngày 06 Tháng 10 Năm Bính Ngọ"
+    '-sdqcZXJOt', // "tại tư gia nhà Gái"
+    'ZYCcF9gjAt', // "Xóm 4, Trung Lập, Phượng Dực, Hà Nội"
+    'hksbFKxd8p', // Map button pill shape border
+    'bAEsnUsTek', // "Xem chỉ đường"
+    'ew3QuUAQZc', // "Sự hiện diện của Quý Khách..."
+    'RfnyYk7CoP', // Divider line
+  ])
+
+  if (node.id === 'WgfDuhmlui') {
+    styled.display = 'none'
+  } else if (EVENT_DETAIL_NODE_IDS.has(node.id)) {
+    if (props.color === '#ffffff') {
+      styled.color = themeVars.accent
+    }
+    if (props.borderColor === '#ffffff') {
+      styled.borderColor = themeVars.primary
+    }
   }
 
   // Map background colors

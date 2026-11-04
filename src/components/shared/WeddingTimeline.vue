@@ -10,7 +10,6 @@ defineProps<{ events: WeddingActivity[] }>()
     data-reveal
   >
     <header>
-      <p class="timeline-eyebrow">WEDDING TIMELINE</p>
       <h2 id="timeline-title">Lịch trình ngày cưới</h2>
       <p class="timeline-date">{{ events[0]?.dateLabel }}</p>
     </header>
