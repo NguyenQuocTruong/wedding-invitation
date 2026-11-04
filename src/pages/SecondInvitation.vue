@@ -27,9 +27,9 @@ import '../styles/template-02-opening.css'
 const nodes = (sourceLayout as LayoutNode[]).filter(
   (n) => n.id !== 'QckHkpXeK6' && n.id !== 'HTOuYYjmCZ',
 )
-const TOP_STAGE_HEIGHT = 3470
+const TOP_STAGE_HEIGHT = 3406
 const BOTTOM_OFFSET = 3410
-const BOTTOM_STAGE_HEIGHT = 4567 - BOTTOM_OFFSET
+const BOTTOM_STAGE_HEIGHT = 4348 - BOTTOM_OFFSET
 
 const currentTheme = ref<ThemeId>('sage')
 
@@ -58,88 +58,99 @@ const READABLE_FONT_SIZES: Record<string, number> = {
   bAEsnUsTek: 17,
 }
 
+// Calibrated vertical rhythm overrides (canvas px) so sections have balanced
+// breathing room (no 7px collisions and no 110px+ dead zones).
+const SPACING_OVERRIDES: Record<string, Partial<NodeProps>> = {
+  // Zone 2: Family headers & parents (symmetric left/right columns, 32px below Calendar card)
+  oYl3EmtdXv: { top: 938, left: 6, width: 204, height: 28 },
+  DTbp1fpdwl: { top: 938, left: 220, width: 204, height: 28 },
+  '78T5hdX33j': { top: 978, left: 6, width: 204, height: 52 },
+  Ed3xk9f3C6: { top: 978, left: 220, width: 204, height: 52 },
+  '9lgMutRMS8': { top: 1062, height: 34 },
+  IxamiwXUJF: { top: 1106, height: 175 },
+  aTCEF52ZsB: { top: 1118, height: 45.6 },
+  h5kiW7I5RO: { top: 1166, height: 43.5 },
+  XJnZfJxoBp: { top: 1216, height: 46 },
+
+  // Zone 3: Red engagement photos & couplet card (close the top-mask dead zone below couple names)
+  jIOYhoanmR: { top: 1245.6, height: 329.2 },
+  'NUvo3-ss6F': { top: 1246.9, height: 327.9 },
+  PbWk0wRGqb: {
+    top: 1352,
+    left: 158,
+    width: 106,
+    height: 222.8,
+    borderRadius: [14, 14, 14, 14],
+  },
+  wHG0JRLvlM: { left: 88, top: 1451, width: 178.88, height: 24 },
+  '6VDnXLZvKc': { left: 118, top: 1451, width: 229.62, height: 24 },
+  AfAx01WBob: { left: 193.5, top: 1450 },
+
+  // Zone 4: Invitation heading & guest greeting (was 14.9px above green event card)
+  tY18iTAVbf: { top: 1606, height: 22 },
+  '87RNR5GKM4': { top: 1638, height: 56 },
+  PQfSCjcV6p: { top: 1706, height: 59 },
+
+  // Zone 5: Green Event Card & internal blocks (unified 10px/9px rhythm & symmetric dividers)
+  WgfDuhmlui: { top: 1798, height: 840 },
+  TcEqC8UiF3: { top: 1828, height: 31 },
+  YWfFy7Hwzq: { top: 1869, height: 22 },
+  rOjINyBAK1: { top: 1900, height: 30 },
+  mUOyxsOBvB: { top: 1934, height: 52 },
+  zWYFkJ4mQw: { top: 1988, height: 26 },
+  DQxlx7_0o5: { top: 2024, height: 51 },
+  IwcKKmD_Dy: { top: 2077, height: 26 },
+  SyRwr0Bizr: { top: 2117, height: 36.7 },
+  'oxea_sD-us': { top: 2125, height: 20 },
+  '0ip-kFTx4n': { top: 2182, height: 22.5 },
+  VYXl18XbmR: { top: 2210, height: 31 },
+  'paUgPUc-Ix': { top: 2251, height: 22 },
+  m_XVKgwfEn: { top: 2282, height: 30 },
+  '9lTrOJEJY3': { top: 2316, height: 52 },
+  e3NpxGM2hl: { top: 2370, height: 26 },
+  '-sdqcZXJOt': { top: 2406, height: 51 },
+  ZYCcF9gjAt: { top: 2459, height: 26 },
+  hksbFKxd8p: { top: 2499, height: 36.7 },
+  bAEsnUsTek: { top: 2507, height: 20 },
+  RfnyYk7CoP: { top: 2560, height: 27.7 },
+  ew3QuUAQZc: { top: 2578, height: 51 },
+  SfYn6TpLmf: { top: 2567.4, height: 70.6 },
+
+  // Zone 6: Photo grid (12px row gaps so shadows don't bleed) & centered Countdown
+  RT108AH5CE: { top: 2670, height: 190 },
+  pvmeq6OFX5: { top: 2670, height: 190 },
+  odFP3i7HRs: { top: 2670, height: 190 },
+  _Ty1C_5Ghb: { top: 2872, height: 197.4 },
+  '5pck3yqslq': { top: 3081.4, height: 214.2 },
+  mKzuYNCjeI: { top: 3081.4, height: 214.2 },
+  RQ3mzMLUIJ: { top: 3081.4, height: 214.2 },
+  CKnqYl_n8r: { top: 3328, left: 33.5, width: 363, height: 66.6 },
+
+  // Zone 7: Bottom stage — RSVP, Hoa Moc Xanh Gift Box, Forest Photo & Thank-You note
+  Am7NeCnjKk: { top: 3410, height: 310 },
+  H3xwC69tfn: { opacity: 0 },
+  TglqGUmVPi: { top: 3432, left: 27, width: 376, height: 74 },
+  KZX422DR9H: { top: 3558, left: 0, width: 430, height: 72 },
+  'dQOJShtA-K': {
+    top: 3682,
+    left: 0,
+    width: 430,
+    height: 274,
+    rotation: 0,
+    continuousAnimation: { type: 'none', duration: 2, delay: 0 },
+  },
+  T4OVXAoo80: { opacity: 0 },
+  gurF8jcjvk: { top: 3968, left: 0.9, width: 429, height: 229.2 },
+  QH4uLzyPJ_: { top: 4192, left: 8.4, width: 412.8, height: 44 },
+  '8BXH9srgD3': { top: 4246, left: 23, width: 391.1, height: 82 },
+}
+
 function adjustedNodeProps(node: LayoutNode): NodeProps {
-  if (node.id === 'PbWk0wRGqb') {
-    // Fit couplet background card neatly between the two red photos with rounded bottom corners
+  const override = SPACING_OVERRIDES[node.id]
+  if (override) {
     return {
       ...node.props,
-      top: 1416.67,
-      left: 158,
-      width: 106,
-      height: 204.1,
-      borderRadius: [14, 14, 14, 14],
-    }
-  }
-  if (node.id === 'wHG0JRLvlM') {
-    // Left vertical couplet line centered in the left half of the green card
-    return {
-      ...node.props,
-      left: 88,
-      top: 1504,
-      width: 178.88,
-      height: 24,
-    }
-  }
-  if (node.id === '6VDnXLZvKc') {
-    // Right vertical couplet line single-line centered in the right half of the green card
-    return {
-      ...node.props,
-      left: 118,
-      top: 1504,
-      width: 229.62,
-      height: 24,
-    }
-  }
-  if (node.id === 'AfAx01WBob') {
-    // Center the heart icon between the two vertical couplet lines
-    return {
-      ...node.props,
-      left: 193.5,
-      top: 1503,
-    }
-  }
-  if (node.id === 'H3xwC69tfn') {
-    // Hide the solid arch shape behind RSVP since the RSVP section now uses a clean floating button
-    return {
-      ...node.props,
-      opacity: 0,
-    }
-  }
-  if (node.id === 'TglqGUmVPi') {
-    // Center the RSVP invitation note horizontally on the 430px canvas (was left: 37.8, width: 376.25 -> center 225.9)
-    return {
-      ...node.props,
-      left: 27,
-      width: 376,
-    }
-  }
-  if (node.id === 'KZX422DR9H') {
-    // Center the RSVP button container horizontally on the 430px canvas
-    return {
-      ...node.props,
-      top: 3550,
-      left: 0,
-      width: 430,
-      height: 220,
-    }
-  }
-  if (node.id === 'dQOJShtA-K') {
-    // Center the interactive Hoa Moc Xanh Gift Box widget horizontally on the 430px canvas without rotation
-    return {
-      ...node.props,
-      top: 3824,
-      left: 0,
-      width: 430,
-      height: 274,
-      rotation: 0,
-      continuousAnimation: { type: 'none', duration: 2, delay: 0 },
-    }
-  }
-  if (node.id === 'T4OVXAoo80') {
-    // Hide old static "Gửi Quà Mừng" text below gift box since the new widget has "HỘP QUÀ MỪNG" header and "Nhấn để mở" hint
-    return {
-      ...node.props,
-      opacity: 0,
+      ...override,
     }
   }
   return node.props
@@ -210,6 +221,13 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
 
   if (node.id === 'wHG0JRLvlM' || node.id === '6VDnXLZvKc') {
     styled.whiteSpace = 'nowrap'
+  }
+
+  if (node.id === 'Am7NeCnjKk') {
+    const fadeMask =
+      'linear-gradient(to bottom, transparent 0%, #000 16%, #000 74%, transparent 100%)'
+    styled.maskImage = fadeMask
+    styled.WebkitMaskImage = fadeMask
   }
 
   return styled

@@ -1448,3 +1448,32 @@
     opacity: 1;
   }
 }
+
+/* Vertical rhythm & spacing calibration for Template 2 */
+.clone-page .wedding-timeline {
+  padding: 28px 20px 24px;
+}
+.clone-page .wedding-timeline header {
+  margin-bottom: 20px;
+}
+.clone-page .wedding-timeline .timeline-eyebrow {
+  margin: 0 0 6px;
+}
+.clone-page .wedding-timeline .timeline-date {
+  margin: 6px 0 0;
+}
+.clone-page .wedding-timeline .timeline-event {
+  min-height: 108px;
+}
+.clone-page .wedding-timeline .timeline-card {
+  gap: 6px;
+}
+.clone-page .wedding-timeline .timeline-card h3 {
+  margin: 3px 0 0;
+}
+.clone-page .wedding-timeline .timeline-venue {
+  margin: 18px 0 0;
+}
+.clone-page .clone-end {
+  padding: 12px 15px 84px;
+}
