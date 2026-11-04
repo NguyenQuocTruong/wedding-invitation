@@ -761,7 +761,9 @@
 .clone-photo-button,
 .clone-node a,
 .clone-rsvp button,
-.clone-gifts-button {
+.clone-gifts-button,
+.clone-album-section,
+.clone-album-section * {
   pointer-events: auto;
 }
 .clone-countdown > div {
