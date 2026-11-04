@@ -285,13 +285,365 @@ function displayedText(node: LayoutNode): string {
   }
   return confirmed[node.id] || node.props.text || ''
 }
+interface HyBurstParticle {
+  mode: 'fall' | 'rise'
+  bx: string
+  by: string
+  dx: string
+  fy: string
+  rot: string
+  size: string
+  dur: string
+  delay: string
+  color: string
+}
+
+const HY_BURST_PARTICLES: HyBurstParticle[] = [
+  {
+    mode: 'rise',
+    bx: '-18px',
+    by: '-96px',
+    dx: '-14px',
+    fy: '-92px',
+    rot: '-28deg',
+    size: '16px',
+    dur: '1080ms',
+    delay: '0ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'rise',
+    bx: '22px',
+    by: '-104px',
+    dx: '18px',
+    fy: '-105px',
+    rot: '32deg',
+    size: '15px',
+    dur: '1120ms',
+    delay: '15ms',
+    color: '#ff4d6d',
+  },
+  {
+    mode: 'rise',
+    bx: '-58px',
+    by: '-88px',
+    dx: '-26px',
+    fy: '-84px',
+    rot: '-42deg',
+    size: '14px',
+    dur: '1050ms',
+    delay: '10ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'rise',
+    bx: '62px',
+    by: '-86px',
+    dx: '28px',
+    fy: '-88px',
+    rot: '40deg',
+    size: '17px',
+    dur: '1140ms',
+    delay: '20ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'rise',
+    bx: '-96px',
+    by: '-68px',
+    dx: '-34px',
+    fy: '-74px',
+    rot: '-55deg',
+    size: '13px',
+    dur: '1060ms',
+    delay: '25ms',
+    color: '#ffe8a3',
+  },
+  {
+    mode: 'rise',
+    bx: '98px',
+    by: '-64px',
+    dx: '36px',
+    fy: '-76px',
+    rot: '52deg',
+    size: '14px',
+    dur: '1100ms',
+    delay: '15ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'rise',
+    bx: '-38px',
+    by: '-116px',
+    dx: '-16px',
+    fy: '-118px',
+    rot: '-22deg',
+    size: '18px',
+    dur: '1180ms',
+    delay: '5ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'rise',
+    bx: '42px',
+    by: '-114px',
+    dx: '20px',
+    fy: '-112px',
+    rot: '26deg',
+    size: '13px',
+    dur: '1150ms',
+    delay: '30ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'rise',
+    bx: '-124px',
+    by: '-42px',
+    dx: '-40px',
+    fy: '-68px',
+    rot: '-64deg',
+    size: '12px',
+    dur: '1040ms',
+    delay: '35ms',
+    color: '#ff4d6d',
+  },
+  {
+    mode: 'rise',
+    bx: '126px',
+    by: '-38px',
+    dx: '42px',
+    fy: '-70px',
+    rot: '60deg',
+    size: '15px',
+    dur: '1090ms',
+    delay: '25ms',
+    color: '#ffe8a3',
+  },
+  {
+    mode: 'rise',
+    bx: '-4px',
+    by: '-126px',
+    dx: '6px',
+    fy: '-128px',
+    rot: '14deg',
+    size: '16px',
+    dur: '1200ms',
+    delay: '0ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'rise',
+    bx: '-76px',
+    by: '-102px',
+    dx: '-28px',
+    fy: '-96px',
+    rot: '-36deg',
+    size: '12px',
+    dur: '1110ms',
+    delay: '40ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'rise',
+    bx: '78px',
+    by: '-98px',
+    dx: '30px',
+    fy: '-94px',
+    rot: '38deg',
+    size: '13px',
+    dur: '1130ms',
+    delay: '45ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'rise',
+    bx: '0px',
+    by: '-78px',
+    dx: '-8px',
+    fy: '-98px',
+    rot: '-18deg',
+    size: '14px',
+    dur: '1060ms',
+    delay: '55ms',
+    color: '#ff4d6d',
+  },
+  {
+    mode: 'fall',
+    bx: '-82px',
+    by: '-54px',
+    dx: '-28px',
+    fy: '96px',
+    rot: '-68deg',
+    size: '16px',
+    dur: '1140ms',
+    delay: '0ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'fall',
+    bx: '84px',
+    by: '-52px',
+    dx: '30px',
+    fy: '98px',
+    rot: '72deg',
+    size: '15px',
+    dur: '1160ms',
+    delay: '10ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'fall',
+    bx: '-114px',
+    by: '-26px',
+    dx: '-36px',
+    fy: '104px',
+    rot: '-84deg',
+    size: '14px',
+    dur: '1120ms',
+    delay: '15ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'fall',
+    bx: '116px',
+    by: '-24px',
+    dx: '38px',
+    fy: '108px',
+    rot: '86deg',
+    size: '16px',
+    dur: '1150ms',
+    delay: '20ms',
+    color: '#ff4d6d',
+  },
+  {
+    mode: 'fall',
+    bx: '-48px',
+    by: '-64px',
+    dx: '-20px',
+    fy: '88px',
+    rot: '-48deg',
+    size: '15px',
+    dur: '1100ms',
+    delay: '5ms',
+    color: '#ffe8a3',
+  },
+  {
+    mode: 'fall',
+    bx: '52px',
+    by: '-62px',
+    dx: '22px',
+    fy: '92px',
+    rot: '54deg',
+    size: '17px',
+    dur: '1130ms',
+    delay: '12ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'fall',
+    bx: '-134px',
+    by: '4px',
+    dx: '-42px',
+    fy: '112px',
+    rot: '-96deg',
+    size: '13px',
+    dur: '1080ms',
+    delay: '25ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'fall',
+    bx: '136px',
+    by: '6px',
+    dx: '44px',
+    fy: '114px',
+    rot: '94deg',
+    size: '13px',
+    dur: '1090ms',
+    delay: '30ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'fall',
+    bx: '-66px',
+    by: '-18px',
+    dx: '-24px',
+    fy: '118px',
+    rot: '-62deg',
+    size: '12px',
+    dur: '1160ms',
+    delay: '35ms',
+    color: '#ff4d6d',
+  },
+  {
+    mode: 'fall',
+    bx: '68px',
+    by: '-16px',
+    dx: '26px',
+    fy: '120px',
+    rot: '64deg',
+    size: '14px',
+    dur: '1170ms',
+    delay: '40ms',
+    color: '#ffe8a3',
+  },
+  {
+    mode: 'fall',
+    bx: '-28px',
+    by: '-34px',
+    dx: '-14px',
+    fy: '106px',
+    rot: '-38deg',
+    size: '15px',
+    dur: '1120ms',
+    delay: '18ms',
+    color: '#e63946',
+  },
+  {
+    mode: 'fall',
+    bx: '30px',
+    by: '-32px',
+    dx: '16px',
+    fy: '108px',
+    rot: '42deg',
+    size: '14px',
+    dur: '1140ms',
+    delay: '22ms',
+    color: '#ffd166',
+  },
+  {
+    mode: 'fall',
+    bx: '-98px',
+    by: '18px',
+    dx: '-32px',
+    fy: '124px',
+    rot: '-78deg',
+    size: '12px',
+    dur: '1100ms',
+    delay: '45ms',
+    color: '#ffb703',
+  },
+  {
+    mode: 'fall',
+    bx: '102px',
+    by: '20px',
+    dx: '34px',
+    fy: '126px',
+    rot: '80deg',
+    size: '13px',
+    dur: '1110ms',
+    delay: '50ms',
+    color: '#ff4d6d',
+  },
+]
+
 async function open() {
   if (opening.value) return
   opening.value = true
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (!reduced)
     await new Promise<void>((resolve) => {
-      openingTimer = setTimeout(resolve, 900)
+      openingTimer = setTimeout(resolve, 1250)
     })
   opened.value = true
   opening.value = false
@@ -340,7 +692,6 @@ onUnmounted(() => {
             padding: 'var(--opening-padding, 0)',
             background:
               TEMPLATE_02_THEMES[currentTheme].opening.backdropGradient,
-            transition: 'background 0.4s ease',
           }"
         >
           <div class="slr-floating-layer" aria-hidden="true">
@@ -514,6 +865,11 @@ onUnmounted(() => {
                   TEMPLATE_02_THEMES[currentTheme].opening.buttonBg,
               }"
             >
+              <div
+                v-if="opening"
+                class="slr-ui-seal-ring"
+                aria-hidden="true"
+              ></div>
               <div class="slr-ui-seal">
                 <svg
                   class="slr-ui-seal-heart"
@@ -587,6 +943,27 @@ onUnmounted(() => {
                     </button>
                   </div>
                 </div>
+              </div>
+              <div v-if="opening" class="slr-hy-burst" aria-hidden="true">
+                <span class="slr-hy-shockwave"></span>
+                <span
+                  v-for="(p, idx) in HY_BURST_PARTICLES"
+                  :key="idx"
+                  class="slr-hy-particle"
+                  :class="'slr-hy-particle--' + p.mode"
+                  :style="{
+                    '--bx': p.bx,
+                    '--by': p.by,
+                    '--dx': p.dx,
+                    '--fy': p.fy,
+                    '--rot': p.rot,
+                    '--size': p.size,
+                    '--dur': p.dur,
+                    '--delay': p.delay,
+                    '--hy-color': p.color,
+                  }"
+                  >囍</span
+                >
               </div>
             </div>
           </div>

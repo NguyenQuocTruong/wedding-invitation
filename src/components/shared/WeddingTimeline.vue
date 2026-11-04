@@ -70,9 +70,6 @@ defineProps<{ events: WeddingActivity[] }>()
         </div>
       </li>
     </ol>
-    <p v-if="events[0]" class="timeline-venue">
-      {{ events[0].venue }}<br /><span>{{ events[0].address }}</span>
-    </p>
   </section>
 </template>
 <style scoped>
