@@ -178,6 +178,28 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
     styled.color = themeVars.primary
   }
 
+  // Calendar section: remove green card background (yA5bCPORcy) and render calendar text directly on page background
+  const CALENDAR_SECTION_NODE_IDS = new Set([
+    'yA5bCPORcy', // Calendar card background SVG
+    'U5U7gu1zsm', // PluginCalendar
+    'zm4MN49OJ4', // "Tháng 11.2026"
+    'tCMzAdDXCw', // "Mon"
+    'ZivaOByuCH', // "Tue"
+    'pwYWzzxcwB', // "Wed"
+    'rCUQNnGdaW', // "Thu"
+    'ucS-7K2sSF', // "Fri"
+    'sNW5-RzUm4', // "Sat"
+    'ZADmDXCmdX', // "Sun"
+  ])
+
+  if (node.id === 'yA5bCPORcy') {
+    styled.display = 'none'
+  } else if (CALENDAR_SECTION_NODE_IDS.has(node.id)) {
+    if (props.color === '#ffffff') {
+      styled.color = themeVars.accent
+    }
+  }
+
   // Remove green card background behind event details ("Dự tiệc"), render text directly on page background
   const EVENT_DETAIL_NODE_IDS = new Set([
     'WgfDuhmlui', // The green event card background SVG

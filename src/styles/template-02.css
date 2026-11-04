@@ -939,8 +939,8 @@
   --theme-primary-text: #ffffff;
   --theme-accent: #2f5d3e;
   --theme-card-bg: #4a7c59;
-  --theme-badge-border: #ffffff;
-  --theme-badge-color: #ffffff;
+  --theme-badge-border: #4a7c59;
+  --theme-badge-color: #2f5d3e;
   --countdown-cell-bg: #4a7c59;
   --timeline-bg: #fffaf7;
   --timeline-color: #2b3828;
