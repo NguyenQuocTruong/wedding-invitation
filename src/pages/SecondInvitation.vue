@@ -1393,9 +1393,6 @@ onUnmounted(() => {
                       @click="rsvpDialog?.open()"
                     >
                       <span class="clone-rsvp-cta-pulse" aria-hidden="true" />
-                      <span class="clone-rsvp-cta-icon" aria-hidden="true"
-                        >💌</span
-                      >
                       <span class="clone-rsvp-cta-label">Xác nhận tham dự</span>
                       <span class="clone-rsvp-cta-shine" aria-hidden="true" />
                     </button>
