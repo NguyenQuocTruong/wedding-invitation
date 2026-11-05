@@ -45,6 +45,7 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
     expect(source).toContain('LỊCH TRÌNH NGÀY')
     expect(source).toContain('Hộp Quà')
     expect(source).toContain('RsvpDialog')
+    expect(source).toContain('<RsvpDialog ref="rsvpDialog" side="GROOM" />')
     expect(source).toContain('GiftDialog')
 
     // Explicitly omitted per user request: Sổ lưu bút (guestbook) & Bản đồ (map)

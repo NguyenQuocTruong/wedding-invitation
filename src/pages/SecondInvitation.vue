@@ -1846,7 +1846,7 @@ onUnmounted(() => {
           </footer>
         </main>
       </div>
-      <RsvpDialog ref="rsvpDialog" />
+      <RsvpDialog ref="rsvpDialog" side="BRIDE" />
       <GiftDialog ref="giftsDialog" :gifts="event.gifts" />
       <dialog
         ref="photoDialog"

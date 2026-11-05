@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import layout from '../src/data/template-02-layout.json'
 import { elementStyle, getCanvasScale } from '../src/utils/template-02'
@@ -59,5 +61,13 @@ describe('template-02 color themes', () => {
     const { TEMPLATE_02_THEMES } =
       await import('../src/config/template-02-themes')
     expect(TEMPLATE_02_THEMES.sage.assetFilter).toContain('hue-rotate')
+  })
+
+  it('binds RsvpDialog exclusively to BRIDE side for green template', () => {
+    const source = readFileSync(
+      resolve('src/pages/SecondInvitation.vue'),
+      'utf8',
+    )
+    expect(source).toContain('<RsvpDialog ref="rsvpDialog" side="BRIDE" />')
   })
 })

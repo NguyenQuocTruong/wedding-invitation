@@ -7,13 +7,22 @@ import {
 } from '../../services/rsvpApi'
 import type { Attendance, GuestSide } from '../../types/rsvp'
 
+const props = withDefaults(
+  defineProps<{
+    side?: GuestSide
+  }>(),
+  {
+    side: undefined,
+  },
+)
+
 const dialog = ref<HTMLDialogElement | null>(null)
 const formElement = ref<HTMLFormElement | null>(null)
 const nameInput = ref<HTMLInputElement | null>(null)
 const successNotice = ref<HTMLParagraphElement | null>(null)
 const form = reactive({
   guestName: '',
-  guestSide: '' as GuestSide | '',
+  guestSide: (props.side || '') as GuestSide | '',
   attendance: '' as Attendance | '',
   message: '',
   website: '',
@@ -91,8 +100,21 @@ async function checkAvailability() {
   }
 }
 
+watch(
+  () => props.side,
+  (newSide) => {
+    if (newSide) {
+      form.guestSide = newSide
+    }
+  },
+  { immediate: true },
+)
+
 function open() {
   if (!dialog.value || dialog.value.open) return
+  if (props.side) {
+    form.guestSide = props.side
+  }
   dialog.value.showModal()
   void checkAvailability()
 }
@@ -146,7 +168,7 @@ async function newResponse() {
   errorMessage.value = ''
   Object.assign(form, {
     guestName: '',
-    guestSide: '',
+    guestSide: props.side || '',
     attendance: '',
     message: '',
     website: '',
@@ -203,7 +225,7 @@ defineExpose({ open })
           placeholder="Tên thân thương của bạn"
         />
       </div>
-      <fieldset class="rsvp-options" :disabled="locked">
+      <fieldset v-if="!props.side" class="rsvp-options" :disabled="locked">
         <legend>Bạn là khách của <span aria-hidden="true">*</span></legend>
         <div>
           <label :class="{ selected: form.guestSide === 'BRIDE' }"
@@ -226,6 +248,11 @@ defineExpose({ open })
           >
         </div>
       </fieldset>
+      <div v-else class="rsvp-side-indicator">
+        <span class="rsvp-side-badge">
+          Khách mời: <strong>{{ props.side === 'BRIDE' ? 'Nhà gái (Cô dâu)' : 'Nhà trai (Chú rể)' }}</strong>
+        </span>
+      </div>
       <fieldset class="rsvp-options" :disabled="locked">
         <legend>
           Bạn sẽ đến chung vui chứ? <span aria-hidden="true">*</span>
@@ -512,6 +539,26 @@ defineExpose({ open })
   height: 16px;
   margin: 0;
   accent-color: var(--theme-primary, #667f54);
+}
+.rsvp-side-indicator {
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+.rsvp-side-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--theme-outer-bg, #edf3e7);
+  color: var(--theme-accent, #405737);
+  border: 1px solid var(--theme-primary, #7c916c);
+}
+.rsvp-side-badge strong {
+  font-weight: 600;
+  color: var(--theme-accent, #2f5d3e);
 }
 .rsvp-availability {
   margin: 0;
