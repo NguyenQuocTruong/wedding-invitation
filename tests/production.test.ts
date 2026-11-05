@@ -51,7 +51,7 @@ it('provides all three confirmed activities at the bride family home', () => {
 })
 it('configures confirmed bride gift QR and leaves unconfigured groom gift empty', () => {
   expect(event.rsvpEnabled).toBe(false)
-  expect(event.gifts.BRIDE.image).toBe('/images/wedding-photos/IMG_5718.jpeg')
+  expect(event.gifts.BRIDE.image).toBe('/images/wedding-photos/IMG_5721.jpeg')
   expect(event.gifts.BRIDE.recipient).toBe('NGHIEM THI LAM OANH')
   expect(event.gifts.BRIDE.bank).toContain('TECHCOMBANK')
   expect(event.gifts.BRIDE.bank).toContain('1903')

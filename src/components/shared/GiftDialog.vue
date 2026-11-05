@@ -1,10 +1,31 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { PreviewEvent } from '../../config/preview'
+import type { GuestSide } from '../../types/rsvp'
 
-defineProps<{ gifts: PreviewEvent['gifts'] }>()
+const props = withDefaults(
+  defineProps<{
+    gifts: PreviewEvent['gifts']
+    side?: GuestSide
+  }>(),
+  {
+    side: undefined,
+  },
+)
+
 const dialog = ref<HTMLDialogElement | null>(null)
 const copiedSide = ref<string | null>(null)
+
+const displayedGifts = computed(() => {
+  if (props.side && props.gifts[props.side]) {
+    return { [props.side]: props.gifts[props.side] }
+  }
+  return props.gifts
+})
+
+const isSingle = computed(
+  () => Object.keys(displayedGifts.value).length === 1,
+)
 
 function open() {
   if (!dialog.value?.open) dialog.value?.showModal()
@@ -47,8 +68,8 @@ defineExpose({ open })
     <p class="gift-dialog-intro">
       Sự hiện diện của bạn là món quà quý giá với chúng mình.
     </p>
-    <div class="gift-dialog-grid">
-      <article v-for="(gift, side) in gifts" :key="side">
+    <div class="gift-dialog-grid" :class="{ 'is-single': isSingle }">
+      <article v-for="(gift, giftSide) in displayedGifts" :key="giftSide">
         <h3>{{ gift.label }}</h3>
         <template v-if="gift.image">
           <img
@@ -64,10 +85,10 @@ defineExpose({ open })
               v-if="gift.bank"
               type="button"
               class="gift-copy-btn"
-              @click="copyAccount(gift.bank, String(side))"
+              @click="copyAccount(gift.bank, String(giftSide))"
             >
               {{
-                copiedSide === side
+                copiedSide === giftSide
                   ? '✓ Đã sao chép STK'
                   : 'Sao chép STK'
               }}
@@ -143,6 +164,13 @@ defineExpose({ open })
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+.gift-dialog-grid.is-single {
+  grid-template-columns: minmax(0, 290px);
+  justify-content: center;
+}
+.wedding-gift-dialog:has(.is-single) {
+  width: min(390px, calc(100vw - 32px));
 }
 .gift-dialog-grid article {
   padding: 20px 12px;

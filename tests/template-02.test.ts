@@ -70,4 +70,14 @@ describe('template-02 color themes', () => {
     )
     expect(source).toContain('<RsvpDialog ref="rsvpDialog" side="BRIDE" />')
   })
+
+  it('binds GiftDialog exclusively to BRIDE side on green invitation', () => {
+    const source = readFileSync(
+      resolve('src/pages/SecondInvitation.vue'),
+      'utf8',
+    )
+    expect(source).toContain(
+      '<GiftDialog ref="giftsDialog" :gifts="event.gifts" side="BRIDE" />',
+    )
+  })
 })

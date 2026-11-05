@@ -28,7 +28,7 @@ export const event: PreviewEvent & { rsvpEnabled: false } = {
   gifts: {
     BRIDE: {
       label: 'Cô dâu',
-      image: '/images/wedding-photos/IMG_5718.jpeg',
+      image: '/images/wedding-photos/IMG_5721.jpeg',
       recipient: 'NGHIEM THI LAM OANH',
       bank: 'TECHCOMBANK · 1903 6537 9350 11',
     },
