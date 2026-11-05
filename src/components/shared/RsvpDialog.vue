@@ -203,6 +203,11 @@ defineExpose({ open })
       :aria-busy="submission === 'sending'"
       @submit.prevent="submit"
     >
+      <div v-if="props.side" class="rsvp-side-indicator">
+        <span class="rsvp-side-tag">
+          {{ props.side === 'BRIDE' ? 'Nhà gái' : 'Nhà trai' }}
+        </span>
+      </div>
       <div class="rsvp-input-group">
         <label for="rsvp-popup-name"
           >Họ và tên <span aria-hidden="true">*</span></label
@@ -245,11 +250,6 @@ defineExpose({ open })
           >
         </div>
       </fieldset>
-      <div v-else class="rsvp-side-indicator">
-        <span class="rsvp-side-badge">
-          Khách mời: <strong>{{ props.side === 'BRIDE' ? 'Nhà gái' : 'Nhà trai' }}</strong>
-        </span>
-      </div>
       <fieldset class="rsvp-options" :disabled="locked">
         <legend>
           Tham dự <span aria-hidden="true">*</span>
@@ -338,27 +338,31 @@ defineExpose({ open })
           availability !== 'ready' || locked ? 'rsvp-availability' : undefined
         "
       >
-        {{
-          submission === 'sending'
-            ? 'Đang gửi…'
-            : submission === 'success'
-              ? 'Đã gửi xác nhận'
-              : submission === 'error'
-                ? 'Thử gửi lại'
-                : 'Gửi xác nhận'
-        }}
+        <span>
+          {{
+            submission === 'sending'
+              ? 'Đang gửi…'
+              : submission === 'success'
+                ? 'Đã gửi xác nhận'
+                : submission === 'error'
+                  ? 'Thử gửi lại'
+                  : 'Gửi xác nhận'
+          }}
+        </span>
         <svg
-          width="16"
-          height="16"
+          class="rsvp-submit-icon"
+          width="15"
+          height="15"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="M7 17 17 7M7 7h10v10" />
+          <path d="m22 2-7 20-4-9-9-4Z" />
+          <path d="M22 2 11 13" />
         </svg>
       </button>
       <button
@@ -377,11 +381,15 @@ defineExpose({ open })
 .rsvp-dialog {
   position: fixed;
   box-sizing: border-box;
-  width: min(440px, calc(100vw - 24px));
-  max-height: min(480px, calc(100dvh - 20px));
+  top: max(20px, env(safe-area-inset-top, 20px));
+  bottom: auto;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: min(340px, calc(100vw - 48px));
+  max-height: calc(100dvh - 36px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  margin: auto;
   padding: 0;
   border: 1px solid #ffffffb8;
   border-radius: 20px;
@@ -505,22 +513,19 @@ defineExpose({ open })
 .rsvp-side-indicator {
   display: flex;
   align-items: center;
-  margin: 0;
+  margin: 2px 0 0;
 }
-.rsvp-side-badge {
+.rsvp-side-tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: var(--theme-outer-bg, #edf3e7);
-  color: var(--theme-accent, #405737);
-  border: 1px solid var(--theme-primary, #7c916c);
-}
-.rsvp-side-badge strong {
+  font-size: 11.5px;
   font-weight: 600;
-  color: var(--theme-accent, #2f5d3e);
+  letter-spacing: 0.02em;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--theme-outer-bg, #edf3e7);
+  color: var(--theme-accent, #334d2c);
+  border: 1px solid var(--theme-primary, #7c916c);
 }
 .rsvp-availability {
   margin: 0;
@@ -553,7 +558,8 @@ defineExpose({ open })
 .rsvp-dialog .rsvp-submit {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
   min-height: 42px;
   padding: 10px 16px;
   border: 0;
@@ -564,6 +570,13 @@ defineExpose({ open })
     500 13px/1.4 system-ui,
     sans-serif;
   cursor: pointer;
+}
+.rsvp-submit-icon {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.rsvp-dialog .rsvp-submit:hover:not(:disabled) .rsvp-submit-icon {
+  transform: translate(2px, -2px);
 }
 .rsvp-dialog .rsvp-submit:disabled {
   opacity: 0.55;
