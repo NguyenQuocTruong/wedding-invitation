@@ -18,7 +18,7 @@ export const RSVP_COLUMNS = Object.freeze([
   'source',
 ])
 
-const TABS = Object.freeze(['BRIDE_RSVP', 'GROOM_RSVP'])
+const TABS = Object.freeze(['KHACH_CO_DAU', 'KHACH_CHU_RE'])
 const TOKEN_URL = 'https://oauth2.googleapis.com/token'
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -75,8 +75,8 @@ function readProbes(flag) {
         throw new Error()
     }
     if (
-      probes.BRIDE_RSVP.submissionId.toLowerCase() ===
-      probes.GROOM_RSVP.submissionId.toLowerCase()
+      probes.KHACH_CO_DAU.submissionId.toLowerCase() ===
+      probes.KHACH_CHU_RE.submissionId.toLowerCase()
     )
       throw new Error()
     return probes

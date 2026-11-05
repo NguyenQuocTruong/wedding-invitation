@@ -7,7 +7,10 @@ export interface RSVPSaveResult {
 export interface RSVPRepository {
   save(record: RSVPRecord): Promise<RSVPSaveResult>
 }
-export const RSVP_TABS = { BRIDE: 'BRIDE_RSVP', GROOM: 'GROOM_RSVP' } as const
+export const RSVP_TABS = {
+  BRIDE: 'KHACH_CO_DAU',
+  GROOM: 'KHACH_CHU_RE',
+} as const
 export const RSVP_COLUMNS = [
   'submission_id',
   'client_id',

@@ -5,7 +5,10 @@ import {
   readGoogleSheetsConfig,
   type GoogleSheetsConfig,
 } from '../server/infrastructure/googleSheetsRepository'
-import type { RSVPRecord } from '../server/domain/rsvpRepository'
+import {
+  RSVP_TABS,
+  type RSVPRecord,
+} from '../server/domain/rsvpRepository'
 
 const { privateKey, publicKey } = generateKeyPairSync('rsa', {
   modulusLength: 2048,
@@ -48,8 +51,8 @@ function json(body: unknown, status = 200) {
 // Simulates only Google's external HTTP boundary; the repository and crypto stay real.
 function google(
   initial: Record<string, string[][]> = {
-    BRIDE_RSVP: [columns.slice()],
-    GROOM_RSVP: [columns.slice()],
+    KHACH_CO_DAU: [columns.slice()],
+    KHACH_CHU_RE: [columns.slice()],
   },
   hook?: Hook,
 ) {
@@ -233,7 +236,7 @@ describe('Google Sheets RSVP repository', () => {
         url.pathname.endsWith(':append'),
       )!
       expect(decodeURIComponent(append.url.pathname)).toContain(
-        `/values/'${guestSide}_RSVP'!A:G:append`,
+        `/values/'${RSVP_TABS[guestSide]}'!A:G:append`,
       )
       expect(append.url.searchParams.get('valueInputOption')).toBe('RAW')
       expect(append.body).toEqual({
@@ -250,9 +253,11 @@ describe('Google Sheets RSVP repository', () => {
           ],
         ],
       })
-      expect(api.tabs.get(`${guestSide}_RSVP`)).toHaveLength(2)
+      expect(api.tabs.get(RSVP_TABS[guestSide])).toHaveLength(2)
       expect(
-        api.tabs.get(guestSide === 'BRIDE' ? 'GROOM_RSVP' : 'BRIDE_RSVP'),
+        api.tabs.get(
+          guestSide === 'BRIDE' ? RSVP_TABS.GROOM : RSVP_TABS.BRIDE,
+        ),
       ).toHaveLength(1)
     },
   )
@@ -277,14 +282,14 @@ describe('Google Sheets RSVP repository', () => {
         guestName: text,
         message: text,
       })
-      expect(api.tabs.get('BRIDE_RSVP')![1]![2]).toBe(`'${text}`)
-      expect(api.tabs.get('BRIDE_RSVP')![1]![4]).toBe(`'${text}`)
+      expect(api.tabs.get('KHACH_CO_DAU')![1]![2]).toBe(`'${text}`)
+      expect(api.tabs.get('KHACH_CO_DAU')![1]![4]).toBe(`'${text}`)
     },
   )
 
   it('creates only missing named tabs and initializes only verified empty tabs', async () => {
     const api = google({
-      BRIDE_RSVP: [columns.slice()],
+      KHACH_CO_DAU: [columns.slice()],
       SUMMARY: [['Private summary']],
     })
     await createGoogleSheetsRepository(config, api.fetchImpl).save(record)
@@ -292,12 +297,12 @@ describe('Google Sheets RSVP repository', () => {
       url.pathname.endsWith(':batchUpdate'),
     )!
     expect(batch.body).toEqual({
-      requests: [{ addSheet: { properties: { title: 'GROOM_RSVP' } } }],
+      requests: [{ addSheet: { properties: { title: 'KHACH_CHU_RE' } } }],
     })
     const header = writes(api.calls).filter(({ init }) => init.method === 'PUT')
     expect(header).toHaveLength(1)
     expect(decodeURIComponent(header[0]!.url.pathname)).toContain(
-      "'GROOM_RSVP'!A1:G1",
+      "'KHACH_CHU_RE'!A1:G1",
     )
     expect(header[0]!.url.searchParams.get('valueInputOption')).toBe('RAW')
     expect(header[0]!.body).toEqual({
@@ -306,7 +311,7 @@ describe('Google Sheets RSVP repository', () => {
     })
     const verification = api.calls.findIndex(
       ({ url, init }) =>
-        decodeURIComponent(url.pathname).endsWith("/values/'GROOM_RSVP'") &&
+        decodeURIComponent(url.pathname).endsWith("/values/'KHACH_CHU_RE'") &&
         init.method !== 'PUT',
     )
     expect(verification).toBeGreaterThan(-1)
@@ -322,20 +327,20 @@ describe('Google Sheets RSVP repository', () => {
   ])(
     'rejects existing incompatible data without overwriting it: %j',
     async (...rows) => {
-      const api = google({ BRIDE_RSVP: rows, GROOM_RSVP: [columns.slice()] })
+      const api = google({ KHACH_CO_DAU: rows, KHACH_CHU_RE: [columns.slice()] })
       const before = structuredClone(rows)
       await expect(
         createGoogleSheetsRepository(config, api.fetchImpl).save(record),
       ).rejects.toThrow('RSVP storage unavailable')
       expect(writes(api.calls)).toHaveLength(0)
-      expect(api.tabs.get('BRIDE_RSVP')).toEqual(before)
+      expect(api.tabs.get('KHACH_CO_DAU')).toEqual(before)
     },
   )
 
   it('recovers a create-tab conflict by rereading metadata', async () => {
-    const api = google({ BRIDE_RSVP: [columns.slice()] }, ({ url }) => {
+    const api = google({ KHACH_CO_DAU: [columns.slice()] }, ({ url }) => {
       if (!url.pathname.endsWith(':batchUpdate')) return
-      api.tabs.set('GROOM_RSVP', [columns.slice()])
+      api.tabs.set('KHACH_CHU_RE', [columns.slice()])
       return json({ error: 'concurrent tab creation' }, 400)
     })
     await expect(
@@ -353,8 +358,8 @@ describe('Google Sheets RSVP repository', () => {
 
   it('recognizes an existing submission ID only in its destination without appending', async () => {
     const api = google({
-      BRIDE_RSVP: [columns.slice(), [record.submissionId]],
-      GROOM_RSVP: [columns.slice()],
+      KHACH_CO_DAU: [columns.slice(), [record.submissionId]],
+      KHACH_CHU_RE: [columns.slice()],
     })
     expect(
       await createGoogleSheetsRepository(config, api.fetchImpl).save(record),
@@ -382,20 +387,20 @@ describe('Google Sheets RSVP repository', () => {
       await expect(
         createGoogleSheetsRepository(config, api.fetchImpl).save(record),
       ).rejects.toThrow('RSVP storage unavailable')
-      expect(api.tabs.get('BRIDE_RSVP')).toHaveLength(1)
+      expect(api.tabs.get('KHACH_CO_DAU')).toHaveLength(1)
     },
   )
 
   it('rechecks submission IDs after a lost append acknowledgment and avoids another append', async () => {
     const api = google(undefined, ({ url, body }) => {
       if (!url.pathname.endsWith(':append')) return
-      api.tabs.get('BRIDE_RSVP')!.push(...(body.values as string[][]))
+      api.tabs.get('KHACH_CO_DAU')!.push(...(body.values as string[][]))
       return Promise.reject(new Error('sensitive guest/network detail'))
     })
     expect(
       await createGoogleSheetsRepository(config, api.fetchImpl).save(record),
     ).toEqual({ duplicate: true })
-    expect(api.tabs.get('BRIDE_RSVP')).toHaveLength(2)
+    expect(api.tabs.get('KHACH_CO_DAU')).toHaveLength(2)
     expect(
       api.calls.filter(({ url }) => url.pathname.endsWith(':append')),
     ).toHaveLength(1)
@@ -416,7 +421,7 @@ describe('Google Sheets RSVP repository', () => {
       await createGoogleSheetsRepository(config, api.fetchImpl).save(record),
     ).toEqual({ duplicate: false })
     expect(attempts).toBe(2)
-    expect(api.tabs.get('BRIDE_RSVP')).toHaveLength(2)
+    expect(api.tabs.get('KHACH_CO_DAU')).toHaveLength(2)
     const ranges = api.calls
       .map(({ url }) => decodeURIComponent(url.pathname))
       .filter((path) => path.endsWith(':append') || path.endsWith('!A2:A'))
@@ -450,7 +455,7 @@ describe('Google Sheets RSVP repository', () => {
       await createGoogleSheetsRepository(config, api.fetchImpl).save(record),
     ).toEqual({ duplicate: false })
     expect(tokens).toBe(2)
-    expect(api.tabs.get('BRIDE_RSVP')).toHaveLength(2)
+    expect(api.tabs.get('KHACH_CO_DAU')).toHaveLength(2)
   })
 
   it('does not append when its duplicate-check read fails', async () => {
@@ -470,11 +475,11 @@ describe('Google Sheets RSVP repository', () => {
   it('does not overwrite a competing header after an ambiguous header update failure', async () => {
     let headerUpdates = 0
     const api = google(
-      { BRIDE_RSVP: [], GROOM_RSVP: [columns.slice()] },
+      { KHACH_CO_DAU: [], KHACH_CHU_RE: [columns.slice()] },
       ({ init }) => {
         if (init.method !== 'PUT') return
         headerUpdates++
-        api.tabs.set('BRIDE_RSVP', [['Competing data']])
+        api.tabs.set('KHACH_CO_DAU', [['Competing data']])
         return Promise.reject(new Error('lost response'))
       },
     )
@@ -482,7 +487,7 @@ describe('Google Sheets RSVP repository', () => {
       createGoogleSheetsRepository(config, api.fetchImpl).save(record),
     ).rejects.toThrow(/^RSVP storage unavailable$/)
     expect(headerUpdates).toBe(1)
-    expect(api.tabs.get('BRIDE_RSVP')).toEqual([['Competing data']])
+    expect(api.tabs.get('KHACH_CO_DAU')).toEqual([['Competing data']])
   })
 
   it.each([' \tplain text', ' \rplain text'])(
@@ -493,7 +498,7 @@ describe('Google Sheets RSVP repository', () => {
         ...record,
         message,
       })
-      expect(api.tabs.get('BRIDE_RSVP')![1]![4]).toBe(`'${message}`)
+      expect(api.tabs.get('KHACH_CO_DAU')![1]![4]).toBe(`'${message}`)
     },
   )
 
@@ -522,7 +527,7 @@ describe('Google Sheets RSVP repository', () => {
     await expect(
       createGoogleSheetsRepository(config, api.fetchImpl).save(record),
     ).rejects.toThrow(/^RSVP storage unavailable$/)
-    expect(api.tabs.get('BRIDE_RSVP')).toHaveLength(1)
+    expect(api.tabs.get('KHACH_CO_DAU')).toHaveLength(1)
     expect(
       api.calls.filter(({ url }) => url.pathname.endsWith(':append')),
     ).toHaveLength(0)

@@ -18,11 +18,11 @@ const columns = [
   'source',
 ]
 const probes = {
-  BRIDE_RSVP: {
+  KHACH_CO_DAU: {
     submissionId: 'de638d50-940e-42dd-bdb4-c20b702de413',
     clientId: 'a537ec26-60df-4bde-875e-71ba634c990b',
   },
-  GROOM_RSVP: {
+  KHACH_CHU_RE: {
     submissionId: '427ba21b-83ea-41bc-a2c6-5267f466d5bf',
     clientId: '47a9120c-70ae-4a96-9c56-8754975cb9a4',
   },
@@ -129,7 +129,7 @@ function google(initial, hook = () => undefined) {
       for (const range of body.ranges) {
         assert.match(
           range,
-          /^'(BRIDE_RSVP|GROOM_RSVP)'!A[2-9][0-9]*:G[2-9][0-9]*$/,
+          /^'(KHACH_CO_DAU|KHACH_CHU_RE)'!A[2-9][0-9]*:G[2-9][0-9]*$/,
         )
         const [, tab, first, last] = /^'([^']+)'!A(\d+):G(\d+)$/.exec(range)
         assert.equal(first, last)
@@ -154,7 +154,7 @@ function google(initial, hook = () => undefined) {
       })
     }
     const range = decodeURIComponent(url.pathname.split('/values/')[1])
-    assert.match(range, /^'(BRIDE_RSVP|GROOM_RSVP)'!A:G$/)
+    assert.match(range, /^'(KHACH_CO_DAU|KHACH_CHU_RE)'!A:G$/)
     assert.equal(url.searchParams.get('valueRenderOption'), 'FORMULA')
     const [, tab] = /^'([^']+)'/.exec(range)
     readCount++
@@ -178,21 +178,21 @@ test('invalid flags and arbitrary tabs/ranges fail before HTTP', async () => {
     'null',
     '[]',
     '{}',
-    JSON.stringify({ ...probes, SUMMARY: probes.BRIDE_RSVP }),
-    JSON.stringify({ BRIDE_RSVP: probes.BRIDE_RSVP }),
+    JSON.stringify({ ...probes, SUMMARY: probes.KHACH_CO_DAU }),
+    JSON.stringify({ KHACH_CO_DAU: probes.KHACH_CO_DAU }),
     JSON.stringify({
       ...probes,
-      BRIDE_RSVP: { ...probes.BRIDE_RSVP, range: 'A:G' },
+      KHACH_CO_DAU: { ...probes.KHACH_CO_DAU, range: 'A:G' },
     }),
     JSON.stringify({
       ...probes,
-      GROOM_RSVP: { ...probes.GROOM_RSVP, submissionId: 'not-a-uuid' },
+      KHACH_CHU_RE: { ...probes.KHACH_CHU_RE, submissionId: 'not-a-uuid' },
     }),
     JSON.stringify({
       ...probes,
-      GROOM_RSVP: {
-        ...probes.GROOM_RSVP,
-        submissionId: probes.BRIDE_RSVP.submissionId,
+      KHACH_CHU_RE: {
+        ...probes.KHACH_CHU_RE,
+        submissionId: probes.KHACH_CO_DAU.submissionId,
       },
     }),
   ]
@@ -208,14 +208,14 @@ test('invalid flags and arbitrary tabs/ranges fail before HTTP', async () => {
 
 test('exact marked probes are verified without changing probe, guest, or unrelated rows', async () => {
   const fake = google({
-    BRIDE_RSVP: [
+    KHACH_CO_DAU: [
       columns,
       guest,
-      probeRow('BRIDE_RSVP'),
+      probeRow('KHACH_CO_DAU'),
       [],
       ['other', '', '', '', '', '', 'WEB'],
     ],
-    GROOM_RSVP: [columns, probeRow('GROOM_RSVP'), guest],
+    KHACH_CHU_RE: [columns, probeRow('KHACH_CHU_RE'), guest],
     SUMMARY: [['untouched']],
   })
   const result = await verifyRsvpProbes(env, fake.fetchImpl)
@@ -226,21 +226,21 @@ test('exact marked probes are verified without changing probe, guest, or unrelat
     cleared: 0,
   })
   assert.deepEqual(fake.clearRanges, [])
-  assert.deepEqual(fake.tabs.get('BRIDE_RSVP').rows, [
+  assert.deepEqual(fake.tabs.get('KHACH_CO_DAU').rows, [
     columns,
     guest,
-    probeRow('BRIDE_RSVP'),
+    probeRow('KHACH_CO_DAU'),
     [],
     ['other', '', '', '', '', '', 'WEB'],
   ])
-  assert.deepEqual(fake.tabs.get('GROOM_RSVP').rows, [
+  assert.deepEqual(fake.tabs.get('KHACH_CHU_RE').rows, [
     columns,
-    probeRow('GROOM_RSVP'),
+    probeRow('KHACH_CHU_RE'),
     guest,
   ])
   assert.deepEqual(fake.tabs.get('SUMMARY').rows, [['untouched']])
-  assert.equal(TEST_GUEST_NAME, probeRow('BRIDE_RSVP')[2])
-  assert.equal(TEST_MESSAGE, probeRow('BRIDE_RSVP')[4])
+  assert.equal(TEST_GUEST_NAME, probeRow('KHACH_CO_DAU')[2])
+  assert.equal(TEST_MESSAGE, probeRow('KHACH_CO_DAU')[4])
 })
 
 test('bad marker, client ID, source, headers, or duplicate IDs prevent every Sheets mutation', async () => {
@@ -253,11 +253,11 @@ test('bad marker, client ID, source, headers, or duplicate IDs prevent every She
     'duplicate',
     'wrong-tab',
   ]) {
-    const bride = probeRow('BRIDE_RSVP')
-    const groom = probeRow('GROOM_RSVP')
+    const bride = probeRow('KHACH_CO_DAU')
+    const groom = probeRow('KHACH_CHU_RE')
     if (variant === 'name') bride[2] = 'Actual guest'
     if (variant === 'message') bride[4] = 'Actual message'
-    if (variant === 'client') bride[1] = probes.GROOM_RSVP.clientId
+    if (variant === 'client') bride[1] = probes.KHACH_CHU_RE.clientId
     if (variant === 'source') bride[6] = 'IMPORT'
     const brideRows = [
       variant === 'headers' ? columns.slice(1) : columns,
@@ -266,7 +266,7 @@ test('bad marker, client ID, source, headers, or duplicate IDs prevent every She
     const groomRows = [columns, groom]
     if (variant === 'duplicate') groomRows.push(bride.slice())
     if (variant === 'wrong-tab') groomRows.push(brideRows.pop())
-    const fake = google({ BRIDE_RSVP: brideRows, GROOM_RSVP: groomRows })
+    const fake = google({ KHACH_CO_DAU: brideRows, KHACH_CHU_RE: groomRows })
     await assert.rejects(
       verifyRsvpProbes(env, fake.fetchImpl),
       /RSVP_PROBE_VERIFY stage=probe_validation failed/,
@@ -286,8 +286,8 @@ test('bad marker, client ID, source, headers, or duplicate IDs prevent every She
 
 test('already absent probes and missing target tabs are idempotent and never create resources', async () => {
   for (const tabs of [
-    { BRIDE_RSVP: [columns, guest], GROOM_RSVP: [columns] },
-    { BRIDE_RSVP: [columns, guest] },
+    { KHACH_CO_DAU: [columns, guest], KHACH_CHU_RE: [columns] },
+    { KHACH_CO_DAU: [columns, guest] },
     {},
   ]) {
     const fake = google(tabs)
@@ -310,8 +310,8 @@ test('already absent probes and missing target tabs are idempotent and never cre
 
 test('one absent probe is reported separately from one present probe on repeated read-only runs', async () => {
   const fake = google({
-    BRIDE_RSVP: [columns, probeRow('BRIDE_RSVP')],
-    GROOM_RSVP: [columns, guest],
+    KHACH_CO_DAU: [columns, probeRow('KHACH_CO_DAU')],
+    KHACH_CHU_RE: [columns, guest],
   })
   assert.deepEqual(await verifyRsvpProbes(env, fake.fetchImpl), {
     status: 'complete',
@@ -332,16 +332,16 @@ test('a concurrent row swap after reading never causes Sheets mutation or guest-
   let swapped = false
   const fake = google(
     {
-      BRIDE_RSVP: [columns, probeRow('BRIDE_RSVP'), guest],
-      GROOM_RSVP: [columns, probeRow('GROOM_RSVP')],
+      KHACH_CO_DAU: [columns, probeRow('KHACH_CO_DAU'), guest],
+      KHACH_CHU_RE: [columns, probeRow('KHACH_CHU_RE')],
     },
     ({ url, tabs }) => {
       if (
         !swapped &&
-        decodeURIComponent(url.pathname).includes("'GROOM_RSVP'!A:G")
+        decodeURIComponent(url.pathname).includes("'KHACH_CHU_RE'!A:G")
       ) {
         swapped = true
-        const rows = tabs.get('BRIDE_RSVP').rows
+        const rows = tabs.get('KHACH_CO_DAU').rows
         ;[rows[1], rows[2]] = [rows[2], rows[1]]
       }
     },
@@ -363,14 +363,14 @@ test('a concurrent row swap after reading never causes Sheets mutation or guest-
     0,
     'verification must never mutate Google Sheets',
   )
-  assert.deepEqual(fake.tabs.get('BRIDE_RSVP').rows, [
+  assert.deepEqual(fake.tabs.get('KHACH_CO_DAU').rows, [
     columns,
     guest,
-    probeRow('BRIDE_RSVP'),
+    probeRow('KHACH_CO_DAU'),
   ])
-  assert.deepEqual(fake.tabs.get('GROOM_RSVP').rows, [
+  assert.deepEqual(fake.tabs.get('KHACH_CHU_RE').rows, [
     columns,
-    probeRow('GROOM_RSVP'),
+    probeRow('KHACH_CHU_RE'),
   ])
   assert.equal(failure, undefined)
   assert.deepEqual(result, {
@@ -417,7 +417,7 @@ test('upstream failures expose only fixed stage/status and whitelisted reason en
     ],
   ]) {
     const fake = google(
-      { BRIDE_RSVP: [columns], GROOM_RSVP: [columns] },
+      { KHACH_CO_DAU: [columns], KHACH_CHU_RE: [columns] },
       ({ url }) => {
         if (
           (stage === 'sheets_metadata' && url.pathname === match) ||
