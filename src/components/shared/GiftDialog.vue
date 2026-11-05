@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { PreviewEvent } from '../../config/preview'
+
 defineProps<{ gifts: PreviewEvent['gifts'] }>()
 const dialog = ref<HTMLDialogElement | null>(null)
+const copiedSide = ref<string | null>(null)
+
 function open() {
   if (!dialog.value?.open) dialog.value?.showModal()
 }
+
+async function copyAccount(bankInfo: string, side: string) {
+  const match = bankInfo.match(/[0-9\s]{8,}/)
+  const cleanNumber = match ? match[0].replace(/\s+/g, '') : bankInfo
+  try {
+    await navigator.clipboard.writeText(cleanNumber)
+    copiedSide.value = side
+    setTimeout(() => {
+      if (copiedSide.value === side) copiedSide.value = null
+    }, 2000)
+  } catch {
+    // fallback if clipboard API not available
+  }
+}
+
 defineExpose({ open })
 </script>
 <template>
@@ -39,11 +57,25 @@ defineExpose({ open })
             width="180"
             height="180"
           />
-          <p>{{ gift.bank }}</p>
-          <p>{{ gift.recipient }}</p>
-          <a :href="gift.image" target="_blank" rel="noopener noreferrer"
-            >Mở mã QR để lưu ↗</a
-          >
+          <p class="gift-dialog-bank">{{ gift.bank }}</p>
+          <p class="gift-dialog-recipient">{{ gift.recipient }}</p>
+          <div class="gift-dialog-actions">
+            <button
+              v-if="gift.bank"
+              type="button"
+              class="gift-copy-btn"
+              @click="copyAccount(gift.bank, String(side))"
+            >
+              {{
+                copiedSide === side
+                  ? '✓ Đã sao chép STK'
+                  : 'Sao chép STK'
+              }}
+            </button>
+            <a :href="gift.image" target="_blank" rel="noopener noreferrer"
+              >Mở mã QR để lưu ↗</a
+            >
+          </div>
         </template>
         <p v-else>Thông tin mừng cưới sẽ được cập nhật.</p>
       </article>
@@ -128,6 +160,44 @@ defineExpose({ open })
   margin: 0;
   font-size: 13px;
   color: var(--theme-accent, #707a69);
+}
+.gift-dialog-bank {
+  font-weight: 600;
+  color: var(--theme-accent, #35432f) !important;
+  margin-top: 4px !important;
+  font-size: 13px !important;
+}
+.gift-dialog-recipient {
+  color: var(--theme-accent, #55664d) !important;
+  margin: 2px 0 8px !important;
+  font-size: 13px !important;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.gift-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 8px;
+}
+.gift-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border: 1px solid var(--theme-primary, #4a7c59);
+  border-radius: 9999px;
+  background: var(--theme-outer-bg, #edf3e7);
+  color: var(--theme-primary, #4a7c59);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.gift-copy-btn:hover {
+  background: var(--theme-primary, #4a7c59);
+  color: #fff;
 }
 .gift-dialog-grid img {
   display: block;
