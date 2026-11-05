@@ -38,6 +38,14 @@
     {
       "source": "/thiep-3/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/thiep-hong",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/thiep-hong/",
+      "destination": "/index.html"
     }
   ]
 }

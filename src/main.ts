@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { isDesignPreview } from './utils/preview'
 import './styles/main.css'
 
-if (/^\/thiep-3\/?$/.test(window.location.pathname)) {
+if (/^\/(thiep-hong|thiep-3)\/?$/.test(window.location.pathname)) {
   void import('./pages/ThirdInvitation.vue').then(({ default: Third }) =>
     createApp(Third).mount('#app'),
   )

@@ -56,8 +56,9 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
     expect(source).not.toContain('data-landing-screenshot-id="invite-map"')
   })
 
-  it('routes /thiep-3 and /thiep-3/ in main.ts and vercel.json', () => {
+  it('routes /thiep-hong, /thiep-3 and /thiep-3/ in main.ts and vercel.json', () => {
     const mainTs = readFileSync(resolve('src/main.ts'), 'utf8')
+    expect(mainTs).toContain('thiep-hong')
     expect(mainTs).toContain('thiep-3')
     expect(mainTs).toContain('./pages/ThirdInvitation.vue')
 
@@ -65,6 +66,7 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
       readFileSync(resolve('vercel.json'), 'utf8'),
     ) as { rewrites: Array<{ source: string; destination: string }> }
     const sources = vercelConfig.rewrites.map((r) => r.source)
+    expect(sources).toContain('/thiep-hong')
     expect(sources).toContain('/thiep-3')
     expect(sources).toContain('/thiep-3/')
   })
