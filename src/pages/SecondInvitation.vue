@@ -354,7 +354,11 @@ function getSlideOffset(index: number): number {
 function slideStyle(index: number): CSSProperties {
   const offset = getSlideOffset(index)
   const photo = weddingPhotos[index]
-  const aspectRatio = photo?.group === 'red' ? '0.67 / 1' : '1.2 / 1'
+  const isLandscape =
+    photo?.src.includes('wedding-hero') ||
+    photo?.src.includes('traditional-red-01') ||
+    photo?.src.includes('traditional-red-05')
+  const aspectRatio = isLandscape ? '1.5 / 1' : '0.67 / 1'
   if (offset === 0) {
     return {
       aspectRatio,
@@ -970,8 +974,22 @@ async function replay() {
   shell.value?.querySelector<HTMLElement>('#second-intro')?.focus()
   frame.value?.scrollToTop()
 }
-function showPhoto(key: string) {
-  const fullUrl = asset(key)
+// Map template photo nodes to user's real wedding photos
+const NODE_PHOTO_OVERRIDES: Record<string, string> = {
+  Gfh6fZBUdT: '/images/wedding-photos/white-dress-01.jpeg', // Top arch photo 1
+  pSEot8hEia: '/images/wedding-photos/white-dress-02.jpeg', // Top arch photo 2
+  zcjdCWdlXb: '/images/wedding-photos/white-dress-03.jpeg', // Calendar photo
+  'NUvo3-ss6F': '/images/wedding-photos/traditional-red-02.jpeg', // Red photo left
+  jIOYhoanmR: '/images/wedding-photos/traditional-red-03.jpeg', // Red photo right
+  gurF8jcjvk: '/images/wedding-photos/wedding-hero.jpeg', // Bottom wide landscape photo
+}
+
+function resolvePhotoSrc(node: LayoutNode): string {
+  return NODE_PHOTO_OVERRIDES[node.id] || asset(node.props.imgKey)
+}
+
+function showPhoto(key: string, nodeId?: string) {
+  const fullUrl = (nodeId && NODE_PHOTO_OVERRIDES[nodeId]) || asset(key)
   const idx = weddingPhotos.findIndex((p) => p.src === fullUrl)
   if (idx !== -1) {
     openLightbox(idx)
@@ -1419,15 +1437,16 @@ onUnmounted(() => {
                     <button
                       v-if="
                         node.props.semanticField === 'weddingPhoto' &&
-                        node.props.imgKey?.startsWith('uploads/')
+                        (node.props.imgKey?.startsWith('uploads/') ||
+                          NODE_PHOTO_OVERRIDES[node.id])
                       "
                       type="button"
                       class="clone-photo-button"
                       aria-label="Xem ảnh cưới lớn"
-                      @click="showPhoto(node.props.imgKey!)"
+                      @click="showPhoto(node.props.imgKey!, node.id)"
                     >
                       <img
-                        :src="asset(node.props.imgKey)"
+                        :src="resolvePhotoSrc(node)"
                         alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
                         :loading="node.props.top > 900 ? 'lazy' : 'eager'"
                         :style="{
@@ -1437,7 +1456,7 @@ onUnmounted(() => {
                     </button>
                     <img
                       v-else
-                      :src="asset(node.props.imgKey)"
+                      :src="resolvePhotoSrc(node)"
                       alt=""
                       aria-hidden="true"
                       :loading="node.props.top > 900 ? 'lazy' : 'eager'"
@@ -1660,15 +1679,16 @@ onUnmounted(() => {
                     <button
                       v-if="
                         node.props.semanticField === 'weddingPhoto' &&
-                        node.props.imgKey?.startsWith('uploads/')
+                        (node.props.imgKey?.startsWith('uploads/') ||
+                          NODE_PHOTO_OVERRIDES[node.id])
                       "
                       type="button"
                       class="clone-photo-button"
                       aria-label="Xem ảnh cưới lớn"
-                      @click="showPhoto(node.props.imgKey!)"
+                      @click="showPhoto(node.props.imgKey!, node.id)"
                     >
                       <img
-                        :src="asset(node.props.imgKey)"
+                        :src="resolvePhotoSrc(node)"
                         alt="Ảnh cưới Quốc Trưởng và Lâm Oanh"
                         loading="lazy"
                         :style="{
@@ -1678,7 +1698,7 @@ onUnmounted(() => {
                     </button>
                     <img
                       v-else
-                      :src="asset(node.props.imgKey)"
+                      :src="resolvePhotoSrc(node)"
                       alt=""
                       aria-hidden="true"
                       loading="lazy"

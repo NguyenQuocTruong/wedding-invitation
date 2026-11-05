@@ -230,7 +230,11 @@ function slideStyle(index: number): CSSProperties {
   const offset = getSlideOffset(index)
   const photo = weddingPhotos[index]
   // Match portrait/landscape aspect ratios in coverflow
-  const aspectRatio = photo?.group === 'red' ? '0.67 / 1' : '1.2 / 1'
+  const isLandscape =
+    photo?.src.includes('wedding-hero') ||
+    photo?.src.includes('traditional-red-01') ||
+    photo?.src.includes('traditional-red-05')
+  const aspectRatio = isLandscape ? '1.5 / 1' : '0.67 / 1'
   if (offset === 0) {
     return {
       aspectRatio,
@@ -740,12 +744,12 @@ onUnmounted(() => {
                       class="border-[5px] overflow-hidden aspect-[2/3] relative block w-full p-0 bg-transparent cursor-pointer"
                       style="border-color: rgb(245, 198, 201)"
                       aria-label="Xem ảnh chú rể và cô dâu 1"
-                      @click="openLightbox(0)"
+                      @click="openLightbox(1)"
                     >
                       <img
                         :alt="wedding.couple.groomName"
                         class="w-full h-full object-cover"
-                        :src="weddingPhotos[0]!.src"
+                        :src="weddingPhotos[1]!.src"
                       />
                     </button>
                   </div>
@@ -759,12 +763,12 @@ onUnmounted(() => {
                       class="border-[5px] overflow-hidden aspect-[2/3] relative block w-full p-0 bg-transparent cursor-pointer"
                       style="border-color: rgb(186, 180, 199)"
                       aria-label="Xem ảnh chú rể và cô dâu 2"
-                      @click="openLightbox(1)"
+                      @click="openLightbox(2)"
                     >
                       <img
                         :alt="wedding.couple.brideName"
                         class="w-full h-full object-cover"
-                        :src="weddingPhotos[1]!.src"
+                        :src="weddingPhotos[2]!.src"
                       />
                     </button>
                   </div>

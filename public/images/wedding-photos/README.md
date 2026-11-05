@@ -4,6 +4,7 @@ Bạn hãy tải các ảnh cưới mới vào thư mục này:
 `public/images/wedding-photos/`
 
 ## Gợi ý đặt tên file (tiện lợi và dễ quản lý):
+
 1. **Ảnh bìa / Hero (ảnh mở đầu hoặc ảnh chính):**
    - `hero.jpg` hoặc `hero.webp`
 

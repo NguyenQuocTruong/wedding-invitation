@@ -1,7 +1,6 @@
 import { expect, it } from 'vitest'
 import { event } from '../src/config/event'
 import { countdownParts } from '../src/utils/preview'
-import sourceLayout from '../src/data/template-02-layout.json'
 import sourceAssets from '../src/data/template-02-assets.json'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -63,24 +62,13 @@ it('never offers sample payment QR or an unconfigured RSVP submission', () => {
     ],
   )
   expect(existsSync(resolve('public', event.musicSrc!.slice(1)))).toBe(true)
-  expect(event.photos.length).toBe(9)
+  expect(event.photos.length).toBe(12)
 })
 
-it('reuses real photo assets from the second invitation for the hero and complete album', () => {
-  const keys = sourceLayout
-    .filter(
-      (node) =>
-        node.type === 'PhotoBox' &&
-        node.props.semanticField === 'weddingPhoto' &&
-        node.props.imgKey?.startsWith('uploads/'),
-    )
-    .map((node) => node.props.imgKey!)
-  const assets = sourceAssets as Record<string, string>
-  const sources = new Set(keys.map((key) => assets[key]))
-  expect(sources.has(event.hero)).toBe(true)
-  expect(new Set(event.photos.map((photo) => photo.src)).size).toBe(9)
+it('uses real wedding photos from public/images/wedding-photos for the hero and album', () => {
+  expect(event.hero).toBe('/images/wedding-photos/wedding-hero.jpeg')
+  expect(new Set(event.photos.map((photo) => photo.src)).size).toBe(12)
   for (const photo of event.photos) {
-    expect(sources.has(photo.src)).toBe(true)
     expect(existsSync(resolve('public', photo.src.slice(1)))).toBe(true)
     expect(photo.alt).toContain('Quốc Trưởng')
     expect(photo.alt).toContain('Lâm Oanh')
