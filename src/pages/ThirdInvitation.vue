@@ -1905,10 +1905,6 @@ onUnmounted(() => {
                   font-family: Baskerville, 'Times New Roman', serif;
                 "
               >
-                <a href="/" class="underline hover:opacity-100">Xem thiệp 1</a>
-                <a href="/thiep-2" class="underline hover:opacity-100"
-                  >Xem thiệp 2</a
-                >
                 <button
                   type="button"
                   class="underline bg-transparent border-0 p-0 cursor-pointer hover:opacity-100"

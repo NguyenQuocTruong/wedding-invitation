@@ -1841,8 +1841,7 @@ onUnmounted(() => {
           </div>
 
           <footer class="clone-end">
-            <a href="/">Xem thiệp 1</a
-            ><button type="button" @click="replay">Xem lại mở thiệp</button>
+            <button type="button" @click="replay">Xem lại mở thiệp</button>
           </footer>
         </main>
       </div>
