@@ -49,7 +49,7 @@ it('provides all three confirmed activities at the bride family home', () => {
     expect(activity.mapUrl).toContain('https://www.google.com/maps/search/')
   }
 })
-it('configures confirmed bride gift QR and leaves unconfigured groom gift empty', () => {
+it('configures confirmed bride and groom gift QRs', () => {
   expect(event.rsvpEnabled).toBe(false)
   expect(event.gifts.BRIDE.image).toBe('/images/wedding-photos/IMG_5721.jpeg')
   expect(event.gifts.BRIDE.recipient).toBe('NGHIEM THI LAM OANH')
@@ -59,9 +59,12 @@ it('configures confirmed bride gift QR and leaves unconfigured groom gift empty'
     true,
   )
 
-  expect(event.gifts.GROOM.image).toBe('')
-  expect(event.gifts.GROOM.bank).toBe('')
-  expect(event.gifts.GROOM.recipient).toBe('')
+  expect(event.gifts.GROOM.image).toBe('/images/wedding-photos/IMG_5719.jpeg')
+  expect(event.gifts.GROOM.bank).toBe('TECHCOMBANK')
+  expect(event.gifts.GROOM.recipient).toBe('NGUYEN QUOC TRUONG')
+  expect(existsSync(resolve('public', event.gifts.GROOM.image.slice(1)))).toBe(
+    true,
+  )
   expect(event.musicSrc).toBe(
     (sourceAssets as Record<string, string>)[
       'mp3/3a627e88-dbcc-46bd-8b9d-160e5fe75e14.mp3'

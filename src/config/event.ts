@@ -32,6 +32,11 @@ export const event: PreviewEvent & { rsvpEnabled: false } = {
       recipient: 'NGHIEM THI LAM OANH',
       bank: 'TECHCOMBANK · 1903 6537 9350 11',
     },
-    GROOM: { label: 'Chú rể', image: '', recipient: '', bank: '' },
+    GROOM: {
+      label: 'Chú rể',
+      image: '/images/wedding-photos/IMG_5719.jpeg',
+      recipient: 'NGUYEN QUOC TRUONG',
+      bank: 'TECHCOMBANK',
+    },
   },
 }

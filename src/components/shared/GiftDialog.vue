@@ -27,6 +27,10 @@ const isSingle = computed(
   () => Object.keys(displayedGifts.value).length === 1,
 )
 
+function hasAccountDigits(bankInfo: string): boolean {
+  return /[0-9]{6,}/.test(bankInfo)
+}
+
 function open() {
   if (!dialog.value?.open) dialog.value?.showModal()
 }
@@ -82,7 +86,7 @@ defineExpose({ open })
           <p class="gift-dialog-recipient">{{ gift.recipient }}</p>
           <div class="gift-dialog-actions">
             <button
-              v-if="gift.bank"
+              v-if="hasAccountDigits(gift.bank)"
               type="button"
               class="gift-copy-btn"
               @click="copyAccount(gift.bank, String(giftSide))"

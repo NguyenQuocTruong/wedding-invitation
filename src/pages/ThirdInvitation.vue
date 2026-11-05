@@ -1925,7 +1925,7 @@ onUnmounted(() => {
 
       <!-- Shared RSVP & Gift Dialogs -->
       <RsvpDialog ref="rsvpDialog" side="GROOM" />
-      <GiftDialog ref="giftsDialog" :gifts="event.gifts" />
+      <GiftDialog ref="giftsDialog" :gifts="event.gifts" side="GROOM" />
 
       <!-- Fullscreen Photo Lightbox Dialog -->
       <dialog
