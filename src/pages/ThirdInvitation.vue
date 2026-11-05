@@ -692,10 +692,11 @@ onUnmounted(() => {
               <div class="boho-pink-names">
                 <div class="flex flex-col items-center">
                   <div
-                    class="text-[13px] md:text-[16px] tracking-widest"
+                    class="text-[15px] md:text-[18px] tracking-widest font-bold"
                     style="
                       color: rgb(96, 68, 61);
                       font-family: Baskerville, 'Times New Roman', serif;
+                      font-weight: 700;
                     "
                   >
                     <span dir="auto">Trưởng Nam</span>
@@ -712,10 +713,11 @@ onUnmounted(() => {
                 </div>
                 <div class="flex flex-col items-center mt-1">
                   <div
-                    class="text-[13px] md:text-[16px] tracking-widest"
+                    class="text-[15px] md:text-[18px] tracking-widest font-bold"
                     style="
                       color: rgb(96, 68, 61);
                       font-family: Baskerville, 'Times New Roman', serif;
+                      font-weight: 700;
                     "
                   >
                     <span dir="auto">Ái Nữ</span>
@@ -895,12 +897,12 @@ onUnmounted(() => {
                 {{ wedding.couple.groomName }}
               </h3>
               <div
-                class="text-xs uppercase tracking-[0.2em]"
+                class="uppercase tracking-[0.15em] font-bold text-[13px] md:text-[15px]"
                 style="
                   color: rgb(120, 74, 65);
                   font-family: Baskerville, 'Times New Roman', serif;
-                  font-size: 10px;
-                  letter-spacing: 0.1em;
+                  font-weight: 700;
+                  letter-spacing: 0.12em;
                 "
               >
                 <span dir="auto">Trưởng Nam</span>
@@ -924,12 +926,12 @@ onUnmounted(() => {
                 {{ wedding.couple.brideName }}
               </h3>
               <div
-                class="text-xs uppercase tracking-[0.2em]"
+                class="uppercase tracking-[0.15em] font-bold text-[13px] md:text-[15px]"
                 style="
                   color: rgb(120, 74, 65);
                   font-family: Baskerville, 'Times New Roman', serif;
-                  font-size: 10px;
-                  letter-spacing: 0.1em;
+                  font-weight: 700;
+                  letter-spacing: 0.12em;
                 "
               >
                 <span dir="auto">Ái Nữ</span>
@@ -1022,10 +1024,11 @@ onUnmounted(() => {
                   2026
                 </div>
                 <div
-                  class="text-xs md:text-sm uppercase tracking-[0.25em] px-4"
+                  class="text-[13px] md:text-[15px] uppercase tracking-[0.22em] px-4 font-bold"
                   style="
                     color: rgb(120, 74, 65);
                     font-family: Baskerville, 'Times New Roman', serif;
+                    font-weight: 700;
                   "
                 >
                   (Tức ngày {{ ceremony.lunarDate }})
@@ -1213,7 +1216,7 @@ onUnmounted(() => {
                 class="font-normal uppercase text-[16px] md:text-[20px] flex flex-col items-center"
                 style="color: rgb(120, 74, 65)"
               >
-                <span dir="auto">Tiệc cưới sẽ diễn ra vào&nbsp;lúc:</span>
+                <span dir="auto">Tiệc cưới sẽ diễn ra vào&nbsp;lúc</span>
               </h3>
               <div
                 class="text-[20px] md:text-[30px]"
@@ -1278,10 +1281,11 @@ onUnmounted(() => {
                 2026
               </div>
               <div
-                class="text-xs md:text-sm uppercase tracking-[0.25em] px-4"
+                class="text-[13px] md:text-[15px] uppercase tracking-[0.22em] px-4 font-bold"
                 style="
                   color: rgb(120, 74, 65);
                   font-family: Baskerville, 'Times New Roman', serif;
+                  font-weight: 700;
                 "
               >
                 (Tức ngày {{ meal.lunarDate }})

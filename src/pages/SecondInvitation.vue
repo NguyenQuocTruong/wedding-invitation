@@ -240,7 +240,7 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
       styled.borderColor = themeVars.primary
     }
     if (node.id === 'zWYFkJ4mQw' || node.id === 'e3NpxGM2hl') {
-      styled.fontWeight = '600'
+      styled.fontWeight = 'bold'
     }
   }
 
