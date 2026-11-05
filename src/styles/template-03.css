@@ -36,12 +36,12 @@
 .boho-pink-page {
   --theme-outer-bg: #f6ece8;
   --theme-canvas-bg: #fffaf7;
-  --theme-primary: #9d6d63;
-  --theme-accent: #7a5a52;
-  --timeline-card-border: rgba(157, 109, 99, 0.22);
+  --theme-primary: #784a41;
+  --theme-accent: #60443d;
+  --timeline-card-border: rgba(120, 74, 65, 0.22);
   min-height: calc(100dvh - var(--actions-height, 0px));
   background-color: #fff;
-  color: #9d6d63;
+  color: #784a41;
   overflow-x: clip;
 }
 
@@ -61,7 +61,7 @@
 }
 
 .boho-pink-page :focus-visible {
-  outline: 2px solid #9d6d63;
+  outline: 2px solid #784a41;
   outline-offset: 3px;
 }
 
