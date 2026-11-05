@@ -209,10 +209,33 @@
   font-weight: 600;
 }
 .clone-calendar .wedding-day {
-  border: 2px solid var(--theme-badge-border, #ef9d9b);
-  color: var(--theme-badge-color, inherit);
-  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: #ffffff;
   font-weight: 700;
+}
+.clone-calendar .wedding-heart-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 29px;
+  height: 29px;
+  fill: var(--theme-accent, #2f5d3e);
+  filter: drop-shadow(0 2px 4px rgba(47, 93, 62, 0.28));
+  z-index: 1;
+}
+.clone-calendar .wedding-day-num {
+  position: relative;
+  z-index: 2;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+  transform: translateY(-0.5px);
 }
 .clone-countdown {
   display: flex;
