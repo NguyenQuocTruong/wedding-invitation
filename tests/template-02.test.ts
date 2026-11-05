@@ -80,4 +80,15 @@ describe('template-02 color themes', () => {
       '<GiftDialog ref="giftsDialog" :gifts="event.gifts" side="BRIDE" />',
     )
   })
+
+  it('uses "Thân Mời" on the opening screen matching template 03', () => {
+    const source = readFileSync(
+      resolve('src/pages/SecondInvitation.vue'),
+      'utf8',
+    )
+    expect(source).toContain('Thân Mời')
+    expect(source).not.toContain('Kính mời')
+    expect(source).not.toContain('Bạn &amp; người thương')
+    expect(source).not.toContain('đến dự buổi tiệc chung vui cùng gia đình')
+  })
 })

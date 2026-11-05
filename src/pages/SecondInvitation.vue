@@ -72,6 +72,9 @@ const READABLE_FONT_SIZES: Record<string, number> = {
   // Map links
   'oxea_sD-us': 17,
   bAEsnUsTek: 17,
+  // Lunar dates ("Tức Ngày 06 Tháng 10 Năm Bính Ngọ")
+  zWYFkJ4mQw: 17,
+  e3NpxGM2hl: 17,
 }
 
 // Calibrated vertical rhythm overrides (canvas px) so sections have balanced
@@ -235,6 +238,9 @@ function themedNodeStyle(node: LayoutNode): CSSProperties {
     }
     if (props.borderColor === '#ffffff') {
       styled.borderColor = themeVars.primary
+    }
+    if (node.id === 'zWYFkJ4mQw' || node.id === 'e3NpxGM2hl') {
+      styled.fontWeight = '600'
     }
   }
 
@@ -1255,15 +1261,7 @@ onUnmounted(() => {
                     </div>
                     <div class="slr-ui-invitation">
                       <p class="slr-ui-invitation-label">
-                        <span>Kính mời</span>
-                      </p>
-                      <div class="slr-ui-guest-badge">
-                        <h2>Bạn &amp; người thương</h2>
-                      </div>
-                      <p class="slr-ui-invitation-text">
-                        <span class="slr-ui-invitation-text-content"
-                          >đến dự buổi tiệc chung vui cùng gia đình</span
-                        >
+                        <span dir="auto">Thân Mời</span>
                       </p>
                     </div>
                     <button

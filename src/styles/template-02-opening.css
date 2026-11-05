@@ -666,7 +666,7 @@
   font-size: 15px;
 }
 .slr-ui-invitation {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 .slr-ui-invitation-label {
   color: var(--slr-text-color, #f0d497);
@@ -675,7 +675,7 @@
     Lora,
     Times New Roman,
     serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 300;
 }
 .slr-ui-guest-badge {
