@@ -28,7 +28,7 @@ const isSingle = computed(
 )
 
 function hasAccountDigits(bankInfo: string): boolean {
-  return /[0-9]{6,}/.test(bankInfo)
+  return bankInfo.replace(/\D/g, '').length >= 6
 }
 
 function open() {
@@ -36,8 +36,8 @@ function open() {
 }
 
 async function copyAccount(bankInfo: string, side: string) {
-  const match = bankInfo.match(/[0-9\s]{8,}/)
-  const cleanNumber = match ? match[0].replace(/\s+/g, '') : bankInfo
+  const digits = bankInfo.replace(/\D/g, '')
+  const cleanNumber = digits.length >= 6 ? digits : bankInfo
   try {
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(cleanNumber)
@@ -109,6 +109,7 @@ defineExpose({ open })
               v-if="hasAccountDigits(gift.bank)"
               type="button"
               class="gift-copy-btn"
+              :class="{ 'is-copied': copiedSide === giftSide }"
               @click="copyAccount(gift.bank, String(giftSide))"
             >
               {{
@@ -237,19 +238,25 @@ defineExpose({ open })
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
+  gap: 4px;
+  padding: 6px 16px;
   border: 1px solid var(--theme-primary, #4a7c59);
   border-radius: 9999px;
   background: var(--theme-outer-bg, #edf3e7);
   color: var(--theme-primary, #4a7c59);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .gift-copy-btn:hover {
   background: var(--theme-primary, #4a7c59);
   color: #fff;
+}
+.gift-copy-btn.is-copied {
+  background: #2e7d32 !important;
+  border-color: #2e7d32 !important;
+  color: #fff !important;
 }
 .gift-dialog-grid img {
   display: block;

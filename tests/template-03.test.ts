@@ -82,4 +82,15 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
     expect(sources).toContain('/thiep-3')
     expect(sources).toContain('/thiep-3/')
   })
+
+  it('renders copy account button for bank numbers with or without spaces in GiftDialog', () => {
+    const dialogSource = readFileSync(
+      resolve('src/components/shared/GiftDialog.vue'),
+      'utf8',
+    )
+    expect(dialogSource).toContain('Sao chép STK')
+    expect(dialogSource).toContain('✓ Đã sao chép STK')
+    expect(dialogSource).toContain('hasAccountDigits')
+    expect(dialogSource).toContain("replace(/\\D/g, '').length >= 6")
+  })
 })
