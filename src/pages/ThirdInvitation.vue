@@ -2101,7 +2101,7 @@ onUnmounted(() => {
       <FloatingActions
         class="boho-pink-floating-actions"
         :music-src="weddingMusic"
-        :map-url="''"
+        :map-url="ceremony.mapUrl"
         rsvp
         @rsvp="rsvpDialog?.open()"
         @gifts="giftsDialog?.open()"
