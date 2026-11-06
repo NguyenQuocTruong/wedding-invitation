@@ -953,6 +953,12 @@ onUnmounted(() => {
                     >LỄ THÀNH HÔN ĐƯỢC CỬ HÀNH TẠI TƯ GIA</span
                   >
                   <p
+                    class="text-[14px] md:text-[16px] font-medium tracking-wide"
+                    style="color: rgb(120, 74, 65)"
+                  >
+                    <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
+                  </p>
+                  <p
                     class="font-normal text-[16px] md:text-[18px] mb-2 uppercase"
                     style="color: rgb(120, 74, 65)"
                   >
@@ -1212,6 +1218,23 @@ onUnmounted(() => {
                 color: rgb(120, 74, 65);
               "
             >
+              <div
+                class="flex flex-col items-center gap-2"
+                style="color: rgb(120, 74, 65)"
+              >
+                <span
+                  dir="auto"
+                  class="whitespace-pre-line font-normal text-[16px] md:text-[20px] text-center uppercase"
+                  >Được tổ chức tại tư gia</span
+                >
+                <p
+                  class="text-[14px] md:text-[16px] font-medium tracking-wide"
+                  style="color: rgb(120, 74, 65)"
+                >
+                  <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
+                </p>
+              </div>
+
               <h3
                 class="font-normal uppercase text-[16px] md:text-[20px] flex flex-col items-center"
                 style="color: rgb(120, 74, 65)"
