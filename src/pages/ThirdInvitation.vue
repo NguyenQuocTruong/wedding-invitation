@@ -871,7 +871,7 @@ onUnmounted(() => {
             </div>
 
             <div
-              class="text-center text-[16px] md:text-[20px] flex flex-col gap-1 mb-6 md:mb-8 mx-auto md:max-w-[560px]"
+              class="text-center text-[15px] sm:text-[16px] md:text-[20px] flex flex-col gap-1 mb-6 md:mb-8 mx-auto px-6 md:px-8 max-w-[92%] md:max-w-[560px]"
               style="
                 white-space: pre-line;
                 font-family: Baskerville, 'Times New Roman', serif;
@@ -953,11 +953,41 @@ onUnmounted(() => {
                     >LỄ THÀNH HÔN ĐƯỢC CỬ HÀNH TẠI TƯ GIA</span
                   >
                   <p
-                    class="text-[14px] md:text-[16px] font-medium tracking-wide"
+                    class="text-[16px] md:text-[18px] font-medium tracking-wide"
                     style="color: rgb(120, 74, 65)"
                   >
                     <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
                   </p>
+                  <a
+                    :href="ceremony.mapUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full text-[12px] md:text-[13px] tracking-wider uppercase transition-all duration-200 hover:scale-105 no-underline"
+                    style="
+                      color: rgb(120, 74, 65);
+                      border: 1px solid rgba(120, 74, 65, 0.45);
+                      background-color: rgba(255, 255, 255, 0.7);
+                      font-family: Baskerville, 'Times New Roman', serif;
+                    "
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"
+                      />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span>Xem chỉ đường</span>
+                  </a>
                   <p
                     class="font-normal text-[16px] md:text-[18px] mb-2 uppercase"
                     style="color: rgb(120, 74, 65)"
@@ -1030,7 +1060,7 @@ onUnmounted(() => {
                   2026
                 </div>
                 <div
-                  class="text-[13px] md:text-[15px] uppercase tracking-[0.22em] px-4 font-bold"
+                  class="text-[12px] sm:text-[13px] md:text-[15px] uppercase tracking-[0.08em] px-2 font-bold whitespace-nowrap"
                   style="
                     color: rgb(120, 74, 65);
                     font-family: Baskerville, 'Times New Roman', serif;
@@ -1228,11 +1258,41 @@ onUnmounted(() => {
                   >Được tổ chức tại tư gia</span
                 >
                 <p
-                  class="text-[14px] md:text-[16px] font-medium tracking-wide"
+                  class="text-[16px] md:text-[18px] font-medium tracking-wide"
                   style="color: rgb(120, 74, 65)"
                 >
                   <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
                 </p>
+                <a
+                  :href="meal.mapUrl || ceremony.mapUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-3 py-1 my-0.5 rounded-full text-[12px] md:text-[13px] tracking-wider uppercase transition-all duration-200 hover:scale-105 no-underline"
+                  style="
+                    color: rgb(120, 74, 65);
+                    border: 1px solid rgba(120, 74, 65, 0.45);
+                    background-color: rgba(255, 255, 255, 0.7);
+                    font-family: Baskerville, 'Times New Roman', serif;
+                  "
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"
+                    />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Xem chỉ đường</span>
+                </a>
               </div>
 
               <h3
@@ -1304,7 +1364,7 @@ onUnmounted(() => {
                 2026
               </div>
               <div
-                class="text-[13px] md:text-[15px] uppercase tracking-[0.22em] px-4 font-bold"
+                class="text-[12px] sm:text-[13px] md:text-[15px] uppercase tracking-[0.08em] px-2 font-bold whitespace-nowrap"
                 style="
                   color: rgb(120, 74, 65);
                   font-family: Baskerville, 'Times New Roman', serif;

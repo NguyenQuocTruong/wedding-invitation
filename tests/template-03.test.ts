@@ -57,6 +57,7 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
       source.match(/Xóm 04 - Trung Lập - Phượng Dực - Hà Nội/g) || []
     ).length
     expect(addressOccurrences).toBe(2)
+    expect(source).toContain('Xem chỉ đường')
 
     // Explicitly omitted per user request: Sổ lưu bút (guestbook) & Bản đồ (map)
     expect(source).not.toContain('Sổ lưu bút')
