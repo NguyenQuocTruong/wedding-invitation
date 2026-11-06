@@ -36,7 +36,7 @@ export const event: PreviewEvent & { rsvpEnabled: false } = {
       label: 'Chú rể',
       image: '/images/wedding-photos/IMG_5719.jpeg',
       recipient: 'NGUYEN QUOC TRUONG',
-      bank: 'TECHCOMBANK',
+      bank: 'TECHCOMBANK · 1903 6363 9550 16',
     },
   },
 }

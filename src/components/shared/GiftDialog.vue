@@ -39,13 +39,33 @@ async function copyAccount(bankInfo: string, side: string) {
   const match = bankInfo.match(/[0-9\s]{8,}/)
   const cleanNumber = match ? match[0].replace(/\s+/g, '') : bankInfo
   try {
-    await navigator.clipboard.writeText(cleanNumber)
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(cleanNumber)
+    } else {
+      throw new Error('Clipboard API unavailable')
+    }
     copiedSide.value = side
     setTimeout(() => {
       if (copiedSide.value === side) copiedSide.value = null
     }, 2000)
   } catch {
-    // fallback if clipboard API not available
+    try {
+      const textarea = document.createElement('textarea')
+      textarea.value = cleanNumber
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.focus()
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      copiedSide.value = side
+      setTimeout(() => {
+        if (copiedSide.value === side) copiedSide.value = null
+      }, 2000)
+    } catch {
+      // ignore
+    }
   }
 }
 

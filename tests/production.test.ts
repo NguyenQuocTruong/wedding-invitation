@@ -60,7 +60,8 @@ it('configures confirmed bride and groom gift QRs', () => {
   )
 
   expect(event.gifts.GROOM.image).toBe('/images/wedding-photos/IMG_5719.jpeg')
-  expect(event.gifts.GROOM.bank).toBe('TECHCOMBANK')
+  expect(event.gifts.GROOM.bank).toContain('TECHCOMBANK')
+  expect(event.gifts.GROOM.bank).toContain('1903 6363 9550 16')
   expect(event.gifts.GROOM.recipient).toBe('NGUYEN QUOC TRUONG')
   expect(existsSync(resolve('public', event.gifts.GROOM.image.slice(1)))).toBe(
     true,
