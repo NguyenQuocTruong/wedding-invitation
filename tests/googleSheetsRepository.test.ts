@@ -5,10 +5,7 @@ import {
   readGoogleSheetsConfig,
   type GoogleSheetsConfig,
 } from '../server/infrastructure/googleSheetsRepository'
-import {
-  RSVP_TABS,
-  type RSVPRecord,
-} from '../server/domain/rsvpRepository'
+import { RSVP_TABS, type RSVPRecord } from '../server/domain/rsvpRepository'
 
 const { privateKey, publicKey } = generateKeyPairSync('rsa', {
   modulusLength: 2048,
@@ -255,9 +252,7 @@ describe('Google Sheets RSVP repository', () => {
       })
       expect(api.tabs.get(RSVP_TABS[guestSide])).toHaveLength(2)
       expect(
-        api.tabs.get(
-          guestSide === 'BRIDE' ? RSVP_TABS.GROOM : RSVP_TABS.BRIDE,
-        ),
+        api.tabs.get(guestSide === 'BRIDE' ? RSVP_TABS.GROOM : RSVP_TABS.BRIDE),
       ).toHaveLength(1)
     },
   )
@@ -327,7 +322,10 @@ describe('Google Sheets RSVP repository', () => {
   ])(
     'rejects existing incompatible data without overwriting it: %j',
     async (...rows) => {
-      const api = google({ KHACH_CO_DAU: rows, KHACH_CHU_RE: [columns.slice()] })
+      const api = google({
+        KHACH_CO_DAU: rows,
+        KHACH_CHU_RE: [columns.slice()],
+      })
       const before = structuredClone(rows)
       await expect(
         createGoogleSheetsRepository(config, api.fetchImpl).save(record),

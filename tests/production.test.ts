@@ -55,7 +55,9 @@ it('configures confirmed bride and groom gift QRs', () => {
   expect(event.gifts.BRIDE.recipient).toBe('NGHIEM THI LAM OANH')
   expect(event.gifts.BRIDE.bank).toContain('TECHCOMBANK')
   expect(event.gifts.BRIDE.bank).toContain('1903')
-  expect(event.gifts.BRIDE.bank.replace(/\D/g, '').length).toBeGreaterThanOrEqual(6)
+  expect(
+    event.gifts.BRIDE.bank.replace(/\D/g, '').length,
+  ).toBeGreaterThanOrEqual(6)
   expect(existsSync(resolve('public', event.gifts.BRIDE.image.slice(1)))).toBe(
     true,
   )
@@ -63,7 +65,9 @@ it('configures confirmed bride and groom gift QRs', () => {
   expect(event.gifts.GROOM.image).toBe('/images/wedding-photos/IMG_5719.jpeg')
   expect(event.gifts.GROOM.bank).toContain('TECHCOMBANK')
   expect(event.gifts.GROOM.bank).toContain('1903 6363 9550 16')
-  expect(event.gifts.GROOM.bank.replace(/\D/g, '').length).toBeGreaterThanOrEqual(6)
+  expect(
+    event.gifts.GROOM.bank.replace(/\D/g, '').length,
+  ).toBeGreaterThanOrEqual(6)
   expect(event.gifts.GROOM.recipient).toBe('NGUYEN QUOC TRUONG')
   expect(existsSync(resolve('public', event.gifts.GROOM.image.slice(1)))).toBe(
     true,

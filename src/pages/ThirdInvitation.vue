@@ -909,10 +909,7 @@ onUnmounted(() => {
               </div>
               <div
                 class="text-[35px] md:text-[42px]"
-                style="
-                  color: rgb(120, 74, 65);
-                  font-family: 'Ms Madi', cursive;
-                "
+                style="color: rgb(120, 74, 65); font-family: 'Ms Madi', cursive"
               >
                 &amp;
               </div>
@@ -956,7 +953,9 @@ onUnmounted(() => {
                     class="text-[16px] md:text-[18px] font-medium tracking-wide"
                     style="color: rgb(120, 74, 65)"
                   >
-                    <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
+                    <span dir="auto"
+                      >Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span
+                    >
                   </p>
                   <a
                     :href="ceremony.mapUrl"
@@ -1261,7 +1260,9 @@ onUnmounted(() => {
                   class="text-[16px] md:text-[18px] font-medium tracking-wide"
                   style="color: rgb(120, 74, 65)"
                 >
-                  <span dir="auto">Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span>
+                  <span dir="auto"
+                    >Xóm 04 - Trung Lập - Phượng Dực - Hà Nội</span
+                  >
                 </p>
                 <a
                   :href="meal.mapUrl || ceremony.mapUrl"
@@ -1286,9 +1287,7 @@ onUnmounted(() => {
                     stroke-linejoin="round"
                     aria-hidden="true"
                   >
-                    <path
-                      d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"
-                    />
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Xem chỉ đường</span>

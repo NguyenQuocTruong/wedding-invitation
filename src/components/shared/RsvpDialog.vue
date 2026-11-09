@@ -251,9 +251,7 @@ defineExpose({ open })
         </div>
       </fieldset>
       <fieldset class="rsvp-options" :disabled="locked">
-        <legend>
-          Tham dự <span aria-hidden="true">*</span>
-        </legend>
+        <legend>Tham dự <span aria-hidden="true">*</span></legend>
         <div>
           <label :class="{ selected: form.attendance === 'YES' }"
             ><input

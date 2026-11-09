@@ -23,9 +23,7 @@ const displayedGifts = computed(() => {
   return props.gifts
 })
 
-const isSingle = computed(
-  () => Object.keys(displayedGifts.value).length === 1,
-)
+const isSingle = computed(() => Object.keys(displayedGifts.value).length === 1)
 
 function hasAccountDigits(bankInfo: string): boolean {
   return bankInfo.replace(/\D/g, '').length >= 6
@@ -113,9 +111,7 @@ defineExpose({ open })
               @click="copyAccount(gift.bank, String(giftSide))"
             >
               {{
-                copiedSide === giftSide
-                  ? '✓ Đã sao chép STK'
-                  : 'Sao chép STK'
+                copiedSide === giftSide ? '✓ Đã sao chép STK' : 'Sao chép STK'
               }}
             </button>
             <a :href="gift.image" target="_blank" rel="noopener noreferrer"
