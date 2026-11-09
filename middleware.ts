@@ -1,5 +1,5 @@
 // Danh sách quốc gia được phép truy cập (ISO 3166-1 alpha-2)
-const ALLOWED_COUNTRIES = ['VN', 'DE', 'CZ']
+const ALLOWED_COUNTRIES = ['VN', 'DE', 'CZ', 'JP', 'KR']
 
 export default function middleware(request: Request) {
   const url = new URL(request.url)
@@ -72,7 +72,7 @@ export default function middleware(request: Request) {
         <body>
           <div class="card">
             <h1>403 - Giới hạn khu vực truy cập</h1>
-            <p>Trang web này hiện chỉ mở phục vụ người dùng tại <b>Việt Nam, Đức và Cộng hòa Séc</b>.</p>
+            <p>Trang web này hiện chỉ mở phục vụ người dùng tại <b>Việt Nam, Đức, Cộng hòa Séc, Nhật Bản và Hàn Quốc</b>.</p>
             <div class="badge">Vị trí nhận diện: ${country || 'Không xác định'} (${city})</div>
           </div>
         </body>

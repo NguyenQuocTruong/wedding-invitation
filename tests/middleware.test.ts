@@ -57,6 +57,30 @@ describe('Vercel Edge Geoblocking Middleware', () => {
     expect(warnSpy).not.toHaveBeenCalled()
   })
 
+  it('allows access for whitelisted country JP (Japan)', () => {
+    const request = createRequest('/thiep-3', {
+      'x-vercel-ip-country': 'JP',
+      'x-vercel-ip-city': 'Tokyo',
+      'x-forwarded-for': '133.242.0.1',
+    })
+
+    const response = middleware(request)
+    expect(response).toBeUndefined()
+    expect(warnSpy).not.toHaveBeenCalled()
+  })
+
+  it('allows access for whitelisted country KR (South Korea)', () => {
+    const request = createRequest('/thiep-2', {
+      'x-vercel-ip-country': 'KR',
+      'x-vercel-ip-city': 'Seoul',
+      'x-forwarded-for': '211.234.0.1',
+    })
+
+    const response = middleware(request)
+    expect(response).toBeUndefined()
+    expect(warnSpy).not.toHaveBeenCalled()
+  })
+
   it('blocks non-whitelisted countries (e.g. US) with HTTP 403 and warning log', async () => {
     const request = createRequest('/thiep-3', {
       'x-vercel-ip-country': 'US',
@@ -72,7 +96,7 @@ describe('Vercel Edge Geoblocking Middleware', () => {
     const html = await response!.text()
     expect(html).toContain('403 - Giới hạn khu vực truy cập')
     expect(html).toContain(
-      'Trang web này hiện chỉ mở phục vụ người dùng tại <b>Việt Nam, Đức và Cộng hòa Séc</b>.',
+      'Trang web này hiện chỉ mở phục vụ người dùng tại <b>Việt Nam, Đức, Cộng hòa Séc, Nhật Bản và Hàn Quốc</b>.',
     )
     expect(html).toContain('US (New York)')
 
