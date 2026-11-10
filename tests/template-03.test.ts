@@ -51,6 +51,8 @@ describe('template-03 (Hoa Mộc Hồng / boho-floral-pink)', () => {
       '<GiftDialog ref="giftsDialog" :gifts="event.gifts" side="GROOM" />',
     )
     expect(source).toContain(':map-url="ceremony.mapUrl"')
+    expect(source).toContain('ref="floatingActions"')
+    expect(source).toContain('floatingActions.value?.play()')
 
     // Venue address confirmed in ceremony and reception sections
     expect(source).toContain('Xóm 04 - Trung Lập - Phượng Dực - Hà Nội')

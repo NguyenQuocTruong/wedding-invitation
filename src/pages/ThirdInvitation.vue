@@ -23,6 +23,7 @@ const content = ref<HTMLElement | null>(null)
 const rsvpDialog = ref<InstanceType<typeof RsvpDialog> | null>(null)
 const giftsDialog = ref<InstanceType<typeof GiftDialog> | null>(null)
 const lightboxDialog = ref<HTMLDialogElement | null>(null)
+const floatingActions = ref<InstanceType<typeof FloatingActions> | null>(null)
 
 const ceremony = wedding.events.find((item) => item.id === 'ceremony')!
 const meal = wedding.events.find((item) => item.id === 'meal')!
@@ -157,6 +158,8 @@ const burstParticles = Array.from({ length: 30 }, (_, index) => {
 
 async function openInvitation() {
   if (opening.value) return
+  // Try gentle music autoplay on envelope open with safe default volume
+  void floatingActions.value?.play()
   opening.value = true
   const reduced =
     typeof window !== 'undefined' &&
@@ -171,6 +174,8 @@ async function openInvitation() {
   await nextTick()
   content.value?.focus({ preventScroll: true })
   frame.value?.scrollToTop()
+  // Ensure audio starts if user interaction wasn't caught before
+  void floatingActions.value?.play()
 }
 
 async function replay() {
@@ -2098,9 +2103,11 @@ onUnmounted(() => {
 
     <template #actions>
       <FloatingActions
+        ref="floatingActions"
         class="boho-pink-floating-actions"
         :music-src="weddingMusic"
         :map-url="ceremony.mapUrl"
+        :volume="0.4"
         rsvp
         @rsvp="rsvpDialog?.open()"
         @gifts="giftsDialog?.open()"
